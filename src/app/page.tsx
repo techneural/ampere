@@ -7,12 +7,12 @@ import HighPerformance from "@/components/Home/HighPerformance";
 import MainServices from "@/components/Home/MainServices";
 import ResearchPortfolio from "@/components/Home/ResearchPortfolio";
 import SmarterDecisions from "@/components/Home/SmarterDecisions";
-import TrustedCompanies from "@/components/Home/TrustedCompanies";
+import TrustedCompanies from "@/components/common/TrustedCompanies";
 import WhyChooseUs from "@/components/Home/WhyChooseUs";
 
 export default function Home() {
   return (
-    <div className="bg-[url('@/assets/images/bg-fixed.png')] bg-fixed bg-no-repeat bg-cover bg-center">
+    <>
       <Banner />
       <HighPerformance />
       <TrustedCompanies />
@@ -24,6 +24,6 @@ export default function Home() {
       <ResearchPortfolio />
       <SmarterDecisions />
       <Faq />
-    </div>
+    </>
   );
 }

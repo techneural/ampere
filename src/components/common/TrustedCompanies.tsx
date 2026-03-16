@@ -20,7 +20,7 @@ const TrustedCompanies = () => {
   const loopCompanies = [...companies, ...companies];
 
   return (
-    <section className="bg-neutral-200 py-10 relative overflow-hidden">
+    <section className="bg-neutral-300 py-10 relative overflow-hidden">
       <div className=" text-center">
         <h4 className="heading_b_border text-center">
           Trusted By 250+ Companies

@@ -46,7 +46,7 @@ const Footer = () => {
           </h1>
         </div>
         {/* Menu */}
-        <ul className="flex-1 flex gap-6">
+        <ul className="flex-1 flex gap-6 max-sm:flex-wrap max-sm:justify-center">
           {menu.map((item, index) => (
             <li key={index}>
               <Link
