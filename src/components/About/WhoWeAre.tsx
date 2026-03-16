@@ -2,9 +2,9 @@
 
 import Image from "next/image";
 import Marquee from "react-fast-marquee";
-import girl from "@/assets/images/about/WhoWeAre/girl.png";
-import projectIcon from "@/assets/images/about/WhoWeAre/projectIcon.svg";
-import successIcon from "@/assets/images/about/WhoWeAre/successIcon.svg";
+import girl from "@/assets/images/About/WhoWeAre/girl.png";
+import projectIcon from "@/assets/images/About/WhoWeAre/projectIcon.svg";
+import successIcon from "@/assets/images/About/WhoWeAre/successIcon.svg";
 
 const whoWeAreData = [
   {

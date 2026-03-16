@@ -1,83 +1,95 @@
 import Image from "next/image";
-import React from "react";
+import ameerBarker from "@/assets/images/About/TalentedTeam/ameer-barker.png";
+import davidLee from "@/assets/images/About/TalentedTeam/david-lee.png";
+import eliseSchwartz from "@/assets/images/About/TalentedTeam/elise-schwartz.png";
+import jamesAnderson from "@/assets/images/About/TalentedTeam/james-anderson.png";
+import jessicaMercedes from "@/assets/images/About/TalentedTeam/jessica-mercedes.png";
+import kalelOlsen from "@/assets/images/About/TalentedTeam/kalel-olsen.png";
+import rosalieMeza from "@/assets/images/About/TalentedTeam/rosalie-meza.png";
+import williamsChristidass from "@/assets/images/About/TalentedTeam/williams-christidass.png";
 
 const teamData = [
   {
     id: 1,
     name: "James Anderson",
     role: "CEO & Co-Founder",
-    image: "/images/team/james-anderson.jpg",
+    image: ameerBarker,
   },
   {
     id: 2,
     name: "David Lee",
     role: "Co-Founder & COO",
-    image: "/images/team/david-lee.jpg",
+    image: davidLee,
   },
   {
     id: 3,
     name: "Jessica Mercedes",
     role: "Director of Data Systems",
-    image: "/images/team/jessica-mercedes.jpg",
+    image: jessicaMercedes,
   },
   {
     id: 4,
     name: "Williams Christidass",
     role: "Innovation & Research Lead",
-    image: "/images/team/williams-christidass.jpg",
+    image: williamsChristidass,
   },
   {
     id: 5,
     name: "Ameer Barker",
     role: "Head of Strategy",
-    image: "/images/team/ameer-barker.jpg",
+    image: ameerBarker,
   },
   {
     id: 6,
     name: "Elise Schwartz",
     role: "Project Manager",
-    image: "/images/team/elise-schwartz.jpg",
+    image: eliseSchwartz,
   },
   {
     id: 7,
     name: "Rosalie Meza",
     role: "Director of Data Systems",
-    image: "/images/team/rosalie-meza.jpg",
+    image: rosalieMeza,
   },
   {
     id: 8,
     name: "Kalel Olsen",
     role: "Client Engagement Lead",
-    image: "/images/team/kalel-olsen.jpg",
+    image: kalelOlsen,
   },
 ];
 
 const TalentedTeam = () => {
   return (
     <section className="bg-neutral-300 py-10 relative overflow-hidden">
-      <div className="text-center">
-        <h4 className="heading_b_border text-center">Our Talented Team </h4>
-      </div>
-      <div className="relative mt-10">
-        <div className="grid grid-cols-4 gap-6">
-          {teamData.map((member) => (
-            <div
-              key={member.id}
-              className="rounded-xl overflow-hidden bg-neutral-900"
-            >
-              <Image
-                src={member.image}
-                alt={member.name}
-                width={300}
-                height={300}
-                className="w-full h-auto"
-              />
-              <div className="p-4">
-                <h4>{member.name}</h4>
-                <p className="text-sm text-gray-400">{member.role}</p>
+      <div className="container">
+        <div className="text-center">
+          <h4 className="heading_b_border text-center">Our Talented Team </h4>
+        </div>
+        <div className="relative mt-10">
+          <div className="grid grid-cols-4 gap-6">
+            {teamData.map((member) => (
+              <div
+                key={member.id}
+                className="rounded-t-lg overflow-hidden bg-neutral-900"
+              >
+                <div className="h-72.5">
+                  <Image
+                    src={member.image}
+                    alt={member.name}
+                    width={300}
+                    height={290}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+
+                <div className="rounded-b-lg bg-neutral-200 p-4 border-x-2 border-b-2 border-neutral-500">
+                  <h4 className="text-card-content">{member.name}</h4>
+                  <p className="font-avenirLtStd text-neutral-400">{member.role}</p>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </section>
