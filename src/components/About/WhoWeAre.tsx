@@ -3,8 +3,8 @@
 import Image from "next/image";
 import Marquee from "react-fast-marquee";
 import girl from "@/assets/images/about/WhoWeAre/girl.png";
-import projectIcon from "@/assets/images/about/whoWeAre/projectIcon.svg";
-import successIcon from "@/assets/images/about/whoWeAre/successIcon.svg";
+import projectIcon from "@/assets/images/about/WhoWeAre/projectIcon.svg";
+import successIcon from "@/assets/images/about/WhoWeAre/successIcon.svg";
 
 const whoWeAreData = [
   {
