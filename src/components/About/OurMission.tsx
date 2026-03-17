@@ -1,5 +1,5 @@
 import Image from "next/image";
-import ourMission from "@/assets/images/About/our-mission.png";
+import ourMission from "@/assets/images/about/our-mission.png";
 
 const OurMission = () => {
   return (

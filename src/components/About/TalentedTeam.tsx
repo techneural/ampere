@@ -1,12 +1,12 @@
 import Image from "next/image";
-import ameerBarker from "@/assets/images/About/TalentedTeam/ameer-barker.png";
-import davidLee from "@/assets/images/About/TalentedTeam/david-lee.png";
-import eliseSchwartz from "@/assets/images/About/TalentedTeam/elise-schwartz.png";
-import jamesAnderson from "@/assets/images/About/TalentedTeam/james-anderson.png";
-import jessicaMercedes from "@/assets/images/About/TalentedTeam/jessica-mercedes.png";
-import kalelOlsen from "@/assets/images/About/TalentedTeam/kalel-olsen.png";
-import rosalieMeza from "@/assets/images/About/TalentedTeam/rosalie-meza.png";
-import williamsChristidass from "@/assets/images/About/TalentedTeam/williams-christidass.png";
+import ameerBarker from "@/assets/images/about/talentedTeam/ameer-barker.png";
+import davidLee from "@/assets/images/about/talentedTeam/david-lee.png";
+import eliseSchwartz from "@/assets/images/about/talentedTeam/elise-schwartz.png";
+import jamesAnderson from "@/assets/images/about/talentedTeam/james-anderson.png";
+import jessicaMercedes from "@/assets/images/about/talentedTeam/jessica-mercedes.png";
+import kalelOlsen from "@/assets/images/about/talentedTeam/kalel-olsen.png";
+import rosalieMeza from "@/assets/images/about/talentedTeam/rosalie-meza.png";
+import williamsChristidass from "@/assets/images/about/talentedTeam/williams-christidass.png";
 
 const teamData = [
   {
