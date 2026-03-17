@@ -42,7 +42,7 @@ const statsData = [
 
 const WhoWeAre = () => {
   return (
-    <section className="pt-14 overflow-clip">
+    <section className="py-14 overflow-clip">
       <div className="container flex flex-col-reverse md:grid grid-cols-3 items-center max-md:text-center">
         <div className="md:col-span-2">
           <h3 className="md:text-start">
@@ -57,7 +57,7 @@ const WhoWeAre = () => {
       </div>
 
       <div className="mt-10">
-        <Marquee speed={50} loop={0}>
+        <Marquee speed={50} loop={0} autoFill>
           {whoWeAreData.map((item) => (
             <div key={item.id} className="mx-2">
               <Image
@@ -88,7 +88,7 @@ const WhoWeAre = () => {
                   height={48}
                 />
               </div>
-              <h1 className="xl:text-6xl font-avenirLtStd font-normal">
+              <h1 className="xl:text-6xl font-avenirLtStd font-medium mt-5">
                 {item.value}
               </h1>
             </div>
@@ -102,7 +102,7 @@ const WhoWeAre = () => {
             >
               {item.title}
             </h4>
-            <h6 className="font-avenirLtStd text-neutral-400 mt-5">
+            <h6 className="font-avenirLtStd text-neutral-400 mt-5 max-w-82.5">
               {item.description}
             </h6>
           </div>

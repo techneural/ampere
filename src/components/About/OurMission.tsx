@@ -4,7 +4,7 @@ import ourMission from "@/assets/images/About/our-mission.png";
 const OurMission = () => {
   return (
     <section className="py-14 flex items-center">
-      <div className="container grid max-md:grid-cols-1 grid-cols-2 gap-2 max-md:gap-8">
+      <div className="container grid max-md:grid-cols-1 grid-cols-2 gap-10 max-md:gap-8">
         <div className="flex max-md:text-center">
           <div className="space-y-3">
             <h4 className="heading_b_border">Our Mission </h4>
@@ -13,7 +13,7 @@ const OurMission = () => {
                 Acceoerating high-performance and sustainable AI
               </h6>
             </div>
-            <h3>
+            <h3 className="text-justify">
               We design and engineer the physical infrastructure powering AI
               data centers from high-density cooling systems to advanced power
               systems enabling faster, greener, and more resilient computing.

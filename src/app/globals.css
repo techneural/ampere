@@ -106,3 +106,16 @@
 .animate-scroll {
   animation: scroll 55s linear infinite;
 }
+
+.workflow_scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.workflow_scroll::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
+.workflow_scroll::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+  border-radius: 10px;
+}

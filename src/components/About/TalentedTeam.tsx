@@ -67,25 +67,26 @@ const TalentedTeam = () => {
           <h4 className="heading_b_border text-center">Our Talented Team </h4>
         </div>
         <div className="relative mt-10">
-          <div className="grid grid-cols-4 gap-6">
+          <div className="grid grid-cols-4 gap-6 max-lg:grid-cols-2 max-md:grid-cols-1">
             {teamData.map((member) => (
               <div
                 key={member.id}
                 className="rounded-t-lg overflow-hidden bg-neutral-900"
               >
-                <div className="h-72.5">
+                <div className="relative h-72 w-full">
                   <Image
                     src={member.image}
                     alt={member.name}
-                    width={300}
-                    height={290}
-                    className="w-full h-full object-cover"
+                    fill
+                    className="object-cover"
                   />
                 </div>
 
-                <div className="rounded-b-lg bg-neutral-200 p-4 border-x-2 border-b-2 border-neutral-500">
+                <div className="rounded-b-lg bg-neutral-200 px-4 py-3 border-x-2 border-b-2 border-neutral-500">
                   <h4 className="text-card-content">{member.name}</h4>
-                  <p className="font-avenirLtStd text-neutral-400">{member.role}</p>
+                  <p className="font-avenirLtStd text-neutral-400">
+                    {member.role}
+                  </p>
                 </div>
               </div>
             ))}
