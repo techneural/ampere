@@ -1,4 +1,5 @@
 import React from "react";
+import Button from "../ui/Button";
 
 const Banner = () => {
   return (
@@ -18,9 +19,13 @@ const Banner = () => {
           <div className="absolute inset-0 -z-10 blur-3xl bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.9)_0%,rgba(0,0,0,0)_90%)]"></div>
           <h1>Rapid Prototyping & Deployable Design</h1>
           <h2 className="font-avenirLtStd mt-2">$10bn Deployed Projects</h2>
-          <button className="btn-primary w-29.5 min-h-11 mt-8">
-            Get Started
-          </button>
+
+          <Button
+            label="Get Started"
+            variant="primary"
+            size="md"
+            className="max-md:hidden mt-6"
+          />
         </div>
       </div>
     </section>

@@ -10,8 +10,8 @@ import Button from "../ui/Button";
 const menu = [
   { name: "Home", path: "/" },
   { name: "About", path: "/about" },
-  { name: "Research", path: "/research" },
-  { name: "Blockchain", path: "/blockchain" },
+  { name: "Research", path: "/" },
+  { name: "Blockchain", path: "/" },
   { name: "Contact", path: "/contact" },
 ];
 
