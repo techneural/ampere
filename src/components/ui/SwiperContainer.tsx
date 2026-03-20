@@ -1,37 +1,38 @@
-"use client";
+'use client'
 
-import React, { useId } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Navigation, Autoplay, Keyboard } from "swiper/modules";
+import React, { useId } from 'react'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import { Pagination, Navigation, Autoplay, Keyboard } from 'swiper/modules'
 
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
+import 'swiper/css'
+import 'swiper/css/navigation'
+import 'swiper/css/pagination'
 
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 type SwiperContainerProps<T> = {
-  items: T[];
-  slidesPerView?: number;
-  space?: number;
-  delay?: number;
-  autoplay?: boolean;
-  loop?: boolean;
-  showPagination?: boolean;
-  showNavigation?: boolean;
-  centeredSlides?: boolean;
-  pauseOnMouseEnter?: boolean;
-  slidesOffsetBefore?: number;
-  slidesOffsetAfter?: number;
-  breakpoints?: any;
-  renderItem: (item: T) => React.ReactNode;
-  className?: string;
-  prevClass?: string;
-  nextClass?: string;
-  navigationIconSize?: number;
-  navigationIconClass?: string;
-  paginationClassName?: string;
-};
+  items: T[]
+  slidesPerView?: number
+  space?: number
+  delay?: number
+  autoplay?: boolean
+  loop?: boolean
+  showPagination?: boolean
+  showNavigation?: boolean
+  centeredSlides?: boolean
+  pauseOnMouseEnter?: boolean
+  slidesOffsetBefore?: number
+  slidesOffsetAfter?: number
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  breakpoints?: any
+  renderItem: (item: T) => React.ReactNode
+  className?: string
+  prevClass?: string
+  nextClass?: string
+  navigationIconSize?: number
+  navigationIconClass?: string
+  paginationClassName?: string
+}
 
 function SwiperContainer<T>({
   items = [],
@@ -48,15 +49,15 @@ function SwiperContainer<T>({
   slidesOffsetAfter = 0,
   breakpoints = {},
   renderItem,
-  className = "",
-  prevClass = "swiper-button-prev-custom",
-  nextClass = "swiper-button-next-custom",
+  className = '',
+  prevClass = 'swiper-button-prev-custom',
+  nextClass = 'swiper-button-next-custom',
   navigationIconSize = 25,
-  navigationIconClass = "",
-  paginationClassName = "",
+  navigationIconClass = '',
+  paginationClassName = '',
 }: SwiperContainerProps<T>) {
-  const uid = useId().replace(/:/g, "");
-  const paginationEl = `swiper-pagination-${uid}`;
+  const uid = useId().replace(/:/g, '')
+  const paginationEl = `swiper-pagination-${uid}`
 
   return (
     <div className="relative">
@@ -82,22 +83,10 @@ function SwiperContainer<T>({
         slidesPerView={slidesPerView}
         spaceBetween={space}
         keyboard={{ enabled: true }}
-        autoplay={
-          autoplay
-            ? { delay, pauseOnMouseEnter, disableOnInteraction: false }
-            : false
-        }
+        autoplay={autoplay ? { delay, pauseOnMouseEnter, disableOnInteraction: false } : false}
         loop={loop}
-        pagination={
-          showPagination
-            ? { clickable: true, el: `.${paginationEl}` }
-            : false
-        }
-        navigation={
-          showNavigation
-            ? { prevEl: `.${prevClass}`, nextEl: `.${nextClass}` }
-            : false
-        }
+        pagination={showPagination ? { clickable: true, el: `.${paginationEl}` } : false}
+        navigation={showNavigation ? { prevEl: `.${prevClass}`, nextEl: `.${nextClass}` } : false}
         centeredSlides={centeredSlides}
         breakpoints={breakpoints}
         slidesOffsetBefore={slidesOffsetBefore}
@@ -117,7 +106,7 @@ function SwiperContainer<T>({
         />
       )}
     </div>
-  );
+  )
 }
 
-export default SwiperContainer;
+export default SwiperContainer
