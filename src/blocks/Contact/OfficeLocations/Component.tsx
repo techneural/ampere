@@ -34,7 +34,7 @@ const OfficeLocations = ({ heading, description, contacts, locations }: Props) =
                 className="group flex max-sm:flex-col items-center bg-neutral-800 border-2 border-neutral-500 rounded-2xl overflow-hidden"
               >
                 <div className="relative min-w-32.5 min-h-34.75 max-sm:w-full max-sm:h-72">
-                  <Image src={item.image.url} alt={item.name} fill className="object-cover" />
+                  <Image src={item.image?.url} alt={item.name} fill className="object-cover" />
                 </div>
 
                 <div className="w-full flex justify-between p-5 max-sm:gap-4 max-sm:p-3">

@@ -20,7 +20,7 @@ const Header = ({ data }: any) => {
           <div className="flex-1">
             <h1>
               <Link href="/">
-                {data?.logo?.url && <Image src={data.logo.url} alt="logo" width={70} height={70} />}
+                {data?.logo?.url && <Image src={data.logo.url} alt="logo" width={70} height={70} unoptimized/>}
               </Link>
             </h1>
           </div>

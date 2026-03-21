@@ -20,7 +20,7 @@ const AboutBanner: React.FC<Props> = ({ title, backgroundImage }) => {
       }}
     >
       <div className="container z-10">
-        <BlurStagger>
+        <BlurStagger className='max-w-2xl'>
           <motion.h1 variants={blurChild} className="whitespace-pre-line">
             {title}
           </motion.h1>

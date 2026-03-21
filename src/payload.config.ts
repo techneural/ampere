@@ -4,6 +4,7 @@ import path from 'path'
 import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
+import { s3Storage } from '@payloadcms/storage-s3'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
@@ -23,7 +24,6 @@ export default buildConfig({
     },
     user: Users.slug,
     livePreview: {
-      // This tells the admin panel which URL to load in the live preview iframe
       url: ({ data }) => {
         const serverURL = getServerSideURL()
         const slug = data?.slug as string | undefined
@@ -68,4 +68,28 @@ export default buildConfig({
     url: process.env.DATABASE_URL || '',
   }),
   sharp,
+
+  plugins: [
+    s3Storage({
+      collections: {
+        media: {
+          prefix: 'media',
+          // ✅ FIX 1: Serve files directly from S3, not through Payload's local proxy
+          disablePayloadAccessControl: true,
+          // ✅ FIX 2: Generate direct S3 public URLs for all uploaded files
+          generateFileURL: ({ filename, prefix }) => {
+            return `https://${process.env.AWS_S3_BUCKET}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/${prefix}/${filename}`
+          },
+        },
+      },
+      bucket: process.env.AWS_S3_BUCKET!,
+      config: {
+        credentials: {
+          accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
+          secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
+        },
+        region: process.env.AWS_S3_REGION!,
+      },
+    }),
+  ],
 })
