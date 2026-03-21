@@ -27,6 +27,10 @@ import { Insights } from '@/blocks/About/Insights/config'
 //Contact
 import { ContactForm } from '@/blocks/Contact/ContactForm/config'
 import { OfficeLocations } from '@/blocks/Contact/OfficeLocations/config'
+
+//Reseach
+import { KeyNotesBlock } from '@/blocks/Research/KeyNotesBlock/config'
+
 import { authenticated } from '@/access/authenticated'
 import { authenticatedOrPublished } from '@/access/authenticatedOrPublished'
 
@@ -37,6 +41,8 @@ import {
   OverviewField,
   PreviewField,
 } from '@payloadcms/plugin-seo/fields'
+import { PatentSection } from '@/blocks/Research/PatentCards/config'
+
 
 export const Pages: CollectionConfig = {
   slug: 'pages',
@@ -116,6 +122,9 @@ export const Pages: CollectionConfig = {
                 //Contact
                 ContactForm,
                 OfficeLocations,
+                //Research
+                PatentSection,
+                KeyNotesBlock
               ],
               required: true,
             },

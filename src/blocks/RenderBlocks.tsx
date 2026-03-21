@@ -21,6 +21,8 @@ import Banner from './Home/Banner/Component'
 import AboutBanner from './About/AboutBanner/Component'
 import ContactForm from './Contact/ContactForm/Component'
 import OfficeLocations from './Contact/OfficeLocations/Component'
+import KeyNotes from './Research/KeyNotesBlock/Component'
+import PatentCards from './Research/PatentCards/Component'
 
 const blockComponents = {
   banner: Banner,
@@ -44,6 +46,9 @@ const blockComponents = {
   //Contact
   contactForm: ContactForm,
   officeLocations: OfficeLocations,
+  //Research
+  patentCards: PatentCards,
+  keyNotes: KeyNotes,
 }
 
 export const RenderBlocks: React.FC<{

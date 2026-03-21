@@ -584,6 +584,47 @@ export interface Page {
         blockName?: string | null;
         blockType: 'officeLocations';
       }
+    | {
+        title: string;
+        type: 'software' | 'hardware';
+        images?:
+          | {
+              image: string | Media;
+              id?: string | null;
+            }[]
+          | null;
+        patentNumbers?:
+          | {
+              number?: string | null;
+              id?: string | null;
+            }[]
+          | null;
+        highlights?:
+          | {
+              text: string;
+              variant: 'primary' | 'secondary' | 'accent' | 'muted';
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'patentCards';
+      }
+    | {
+        title: string;
+        description: string;
+        image: {
+          image: string | Media;
+        };
+        highlights: {
+          text: string;
+          variant: 'primary' | 'secondary' | 'accent' | 'muted';
+          id?: string | null;
+        }[];
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'keyNotes';
+      }
   )[];
   meta?: {
     title?: string | null;
@@ -1201,6 +1242,53 @@ export interface PagesSelect<T extends boolean = true> {
                 | T
                 | {
                     name?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        patentCards?:
+          | T
+          | {
+              title?: T;
+              type?: T;
+              images?:
+                | T
+                | {
+                    image?: T;
+                    id?: T;
+                  };
+              patentNumbers?:
+                | T
+                | {
+                    number?: T;
+                    id?: T;
+                  };
+              highlights?:
+                | T
+                | {
+                    text?: T;
+                    variant?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        keyNotes?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              image?:
+                | T
+                | {
+                    image?: T;
+                  };
+              highlights?:
+                | T
+                | {
+                    text?: T;
+                    variant?: T;
                     id?: T;
                   };
               id?: T;
