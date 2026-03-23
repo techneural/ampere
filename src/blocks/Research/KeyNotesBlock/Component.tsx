@@ -26,13 +26,15 @@ type Props = {
   description: string
   image: {
     image: Media
-    label?: string
+    alt?: string
   }
   highlights: Highlight[]
 }
 
 const KeyNotes = ({ title, description, image, highlights }: Props) => {
   let primaryIndex = 0
+
+  console.log(image)
 
   return (
     <section className="py-7">
@@ -44,11 +46,12 @@ const KeyNotes = ({ title, description, image, highlights }: Props) => {
             <div className="bg-base-200 rounded-2xl p-9 border-2 border-neutral-500">
               <div className="rounded-2xl flex items-center justify-center">
                 <Image
-                  src={`${process.env.NEXT_PUBLIC_SERVER_URL}${image?.image?.url}`}
-                  alt={image?.label || ''}
+                  src={image?.image?.url}
+                  alt={image?.alt || ''}
                   width={500}
                   height={300}
                   className="object-contain"
+                  unoptimized
                 />
               </div>
 

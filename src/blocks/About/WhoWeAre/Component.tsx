@@ -53,7 +53,7 @@ const WhoWeAre: React.FC<Props> = ({ heading, description, members = [], stats =
             return (
               <BlurStagger
                 key={index}
-                className="grid grid-cols-2 gap-6 max-lg:grid-cols-1 items-start"
+                className="grid grid-cols-2 gap-6 lg:gap-0 max-lg:grid-cols-1 items-start"
               >
                 <div
                   className={`max-lg:order-2 ${
@@ -89,9 +89,9 @@ const WhoWeAre: React.FC<Props> = ({ heading, description, members = [], stats =
                     <Image
                       src={imageUrl}
                       alt={item.name}
-                      width={630}
-                      height={500}
-                      className="w-full h-auto rounded-2xl"
+                      width={530}
+                      height={400}
+                      className="w-[70%] h-auto rounded-2xl mx-auto"
                     />
                   )}
                 </div>

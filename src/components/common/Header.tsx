@@ -6,11 +6,13 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { Menu, X } from 'lucide-react'
 import AppButton from '../ui/AppButton'
+import { usePathname } from 'next/navigation'
 
 const Header = ({ data }: any) => {
   const [open, setOpen] = useState(false)
 
   const menu = data?.menu || []
+  const pathname = usePathname()
 
   return (
     <>
@@ -20,7 +22,9 @@ const Header = ({ data }: any) => {
           <div className="flex-1">
             <h1>
               <Link href="/">
-                {data?.logo?.url && <Image src={data.logo.url} alt="logo" width={70} height={70} unoptimized/>}
+                {data?.logo?.url && (
+                  <Image src={data.logo.url} alt="logo" width={70} height={70} unoptimized />
+                )}
               </Link>
             </h1>
           </div>
@@ -28,14 +32,20 @@ const Header = ({ data }: any) => {
           {/* DESKTOP MENU */}
           <div className="flex-1">
             <ul className="flex gap-3 max-md:hidden max-lg:gap-1">
-              {menu.map((item: any, index: number) => (
-                <li
-                  key={index}
-                  className="font-avenirLtStd rounded-sm hover:bg-neutral-200 px-4 py-1 cursor-pointer"
-                >
-                  <Link href={item.path || '#'}>{item.name}</Link>
-                </li>
-              ))}
+              {menu.map((item: any, index: number) => {
+                const isActive = pathname === item.path
+
+                return (
+                  <li
+                    key={index}
+                    className={`font-avenirLtStd rounded-sm px-4 py-1 cursor-pointer ${
+                      isActive ? 'bg-neutral-200 text-white' : 'hover:bg-neutral-200'
+                    }`}
+                  >
+                    <Link href={item.path || '#'}>{item.name}</Link>
+                  </li>
+                )
+              })}
             </ul>
           </div>
 
@@ -75,17 +85,23 @@ const Header = ({ data }: any) => {
         </div>
 
         <ul className="flex flex-col pt-10 px-6 pb-6 gap-6">
-          {menu.map((item: any, index: number) => (
-            <li key={index}>
-              <Link
-                href={item.path || '#'}
-                onClick={() => setOpen(false)}
-                className="block text-lg max-md:text-sm"
-              >
-                {item.name}
-              </Link>
-            </li>
-          ))}
+          {menu.map((item: any, index: number) => {
+            const isActive = pathname === item.path
+
+            return (
+              <li key={index}>
+                <Link
+                  href={item.path || '#'}
+                  onClick={() => setOpen(false)}
+                  className={`block text-lg max-md:text-sm ${
+                    isActive ? 'text-neutral-200 font-semibold' : ''
+                  }`}
+                >
+                  {item.name}
+                </Link>
+              </li>
+            )
+          })}
         </ul>
 
         <div className="p-6">
