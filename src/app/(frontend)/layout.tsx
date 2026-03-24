@@ -50,9 +50,6 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
 
   return (
     <html lang="en">
-      <head>
-        <link href="/favicon.ico" rel="icon" sizes="32x32" />
-      </head>
       <body className={`${montserrat.variable} ${avenirLtStd.variable} antialiased`}>
         <PageTransition className="flex flex-col min-h-dvh">
           <Header data={header} />
@@ -69,4 +66,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
 export const metadata: Metadata = {
   metadataBase: new URL(getServerSideURL()),
   openGraph: mergeOpenGraph(),
+  icons: {
+    icon: [{ url: '/favicon.ico', sizes: '32x32' }],
+  },
 }

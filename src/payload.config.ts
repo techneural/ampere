@@ -12,6 +12,8 @@ import { Pages } from './collections/Pages/Pages'
 import { Header } from './globals/Header'
 import { Footer } from './globals/Footer'
 import { getServerSideURL } from './utilities/getURL'
+import { Appointments } from './collections/Appointments'
+import { ContactSubmissions } from './collections/ContactSubmissions'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -57,7 +59,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Pages],
+  collections: [Users, Media, Pages, Appointments, ContactSubmissions],
   globals: [Header, Footer],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',

@@ -216,5 +216,10 @@
 
 .animate-glow {
   animation: glow-medium 1.8s ease-in-out infinite;
-  display: inline-block;
+  /* display: inline-block; */
+}
+
+.calendly-overlay .calendly-popup {
+  height: 100% !important;
+  max-height: 100% !important;
 }

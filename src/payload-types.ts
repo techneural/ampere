@@ -70,6 +70,8 @@ export interface Config {
     users: User;
     media: Media;
     pages: Page;
+    appointments: Appointment;
+    'contact-submissions': ContactSubmission;
     'payload-kv': PayloadKv;
     'payload-jobs': PayloadJob;
     'payload-folders': FolderInterface;
@@ -86,6 +88,8 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
+    appointments: AppointmentsSelect<false> | AppointmentsSelect<true>;
+    'contact-submissions': ContactSubmissionsSelect<false> | ContactSubmissionsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
     'payload-folders': PayloadFoldersSelect<false> | PayloadFoldersSelect<true>;
@@ -641,6 +645,70 @@ export interface Page {
   _status?: ('draft' | 'published') | null;
 }
 /**
+ * Appointments booked via Calendly. Client details are read-only — only Status and Notes can be changed.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "appointments".
+ */
+export interface Appointment {
+  id: string;
+  /**
+   * Set by Calendly — cannot be edited.
+   */
+  name: string;
+  /**
+   * Set by Calendly — cannot be edited.
+   */
+  email: string;
+  /**
+   * Set by Calendly — cannot be edited.
+   */
+  date?: string | null;
+  /**
+   * Set by Calendly — cannot be edited.
+   */
+  eventType?: string | null;
+  /**
+   * Unique Calendly event URI — set automatically by webhook.
+   */
+  eventUri?: string | null;
+  /**
+   * Unique Calendly invitee URI — used to match cancellation events.
+   */
+  inviteeUri?: string | null;
+  /**
+   * Only this field and Notes can be changed by the admin.
+   */
+  status?: ('scheduled' | 'completed' | 'cancelled') | null;
+  /**
+   * Internal notes visible only to admins.
+   */
+  notes?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Messages submitted via the Contact Us form on the website.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-submissions".
+ */
+export interface ContactSubmission {
+  id: string;
+  name: string;
+  email: string;
+  phone?: string | null;
+  subject?: string | null;
+  message: string;
+  status?: ('new' | 'in_progress' | 'resolved' | 'spam') | null;
+  /**
+   * Internal notes — not visible to the user.
+   */
+  adminNotes?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
@@ -767,6 +835,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'pages';
         value: string | Page;
+      } | null)
+    | ({
+        relationTo: 'appointments';
+        value: string | Appointment;
+      } | null)
+    | ({
+        relationTo: 'contact-submissions';
+        value: string | ContactSubmission;
       } | null)
     | ({
         relationTo: 'payload-folders';
@@ -1311,6 +1387,37 @@ export interface PagesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "appointments_select".
+ */
+export interface AppointmentsSelect<T extends boolean = true> {
+  name?: T;
+  email?: T;
+  date?: T;
+  eventType?: T;
+  eventUri?: T;
+  inviteeUri?: T;
+  status?: T;
+  notes?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-submissions_select".
+ */
+export interface ContactSubmissionsSelect<T extends boolean = true> {
+  name?: T;
+  email?: T;
+  phone?: T;
+  subject?: T;
+  message?: T;
+  status?: T;
+  adminNotes?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv_select".
  */
 export interface PayloadKvSelect<T extends boolean = true> {
@@ -1409,6 +1516,10 @@ export interface Header {
   cta: {
     label: string;
     href: string;
+    /**
+     * Your Calendly scheduling link (e.g. https://calendly.com/your-name/30min). When set, the CTA button will open a Calendly popup instead of navigating to a URL.
+     */
+    calendlyUrl?: string | null;
   };
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -1460,6 +1571,7 @@ export interface HeaderSelect<T extends boolean = true> {
     | {
         label?: T;
         href?: T;
+        calendlyUrl?: T;
       };
   updatedAt?: T;
   createdAt?: T;

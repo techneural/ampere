@@ -5,14 +5,17 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
 import { Menu, X } from 'lucide-react'
-import AppButton from '../ui/AppButton'
 import { usePathname } from 'next/navigation'
+import CalendlyButton from './CalendlyButton'
 
 const Header = ({ data }: any) => {
   const [open, setOpen] = useState(false)
 
   const menu = data?.menu || []
   const pathname = usePathname()
+
+  const ctaLabel = data?.cta?.label || 'Book an Appointment'
+  const calendlyUrl = data?.cta?.calendlyUrl || ''
 
   return (
     <>
@@ -38,11 +41,13 @@ const Header = ({ data }: any) => {
                 return (
                   <li
                     key={index}
-                    className={`font-avenirLtStd rounded-sm px-4 py-1 cursor-pointer ${
+                    className={`rounded-sm cursor-pointer ${
                       isActive ? 'bg-neutral-200 text-white' : 'hover:bg-neutral-200'
                     }`}
                   >
-                    <Link href={item.path || '#'}>{item.name}</Link>
+                    <Link href={item.path || '#'} className="font-avenirLtStd px-4 py-2 block">
+                      {item.name}
+                    </Link>
                   </li>
                 )
               })}
@@ -51,12 +56,7 @@ const Header = ({ data }: any) => {
 
           {/* CTA */}
           <div className="flex-1 text-end">
-            <AppButton
-              label={data?.ctaLabel || 'Book an Appointment'}
-              variant="primary"
-              size="lg"
-              className="max-md:hidden"
-            />
+            <CalendlyButton label={ctaLabel} calendlyUrl={calendlyUrl} className="max-md:hidden" />
           </div>
 
           {/* MOBILE MENU BTN */}
@@ -84,18 +84,19 @@ const Header = ({ data }: any) => {
           <X size={26} />
         </div>
 
-        <ul className="flex flex-col pt-10 px-6 pb-6 gap-6">
+        <ul className="flex flex-col pt-10 px-6 pb-6 gap-3">
           {menu.map((item: any, index: number) => {
             const isActive = pathname === item.path
 
             return (
-              <li key={index}>
+              <li
+                key={index}
+                className={`rounded-sm ${isActive ? 'bg-neutral-200 text-white font-semibold' : 'hover:bg-neutral-200'}`}
+              >
                 <Link
                   href={item.path || '#'}
                   onClick={() => setOpen(false)}
-                  className={`block text-lg max-md:text-sm ${
-                    isActive ? 'text-neutral-200 font-semibold' : ''
-                  }`}
+                  className="block text-lg max-md:text-sm px-4 py-2"
                 >
                   {item.name}
                 </Link>
@@ -104,13 +105,8 @@ const Header = ({ data }: any) => {
           })}
         </ul>
 
-        <div className="p-6">
-          <AppButton
-            label={data?.ctaLabel || 'Book an Appointment'}
-            variant="primary"
-            size="lg"
-            className="w-full"
-          />
+        <div className="px-6 py-3">
+          <CalendlyButton label={ctaLabel} calendlyUrl={calendlyUrl} className="w-full" />
         </div>
       </div>
     </>

@@ -1,9 +1,11 @@
 type Props = {
   label: string
   options: string[]
+  value?: string
+  onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void
 }
 
-const FormSelect = ({ label, options }: Props) => {
+const FormSelect = ({ label, options, value, onChange }: Props) => {
   return (
     <div className="flex flex-col gap-2">
       <label className="label">
@@ -11,7 +13,8 @@ const FormSelect = ({ label, options }: Props) => {
       </label>
 
       <select
-        defaultValue=""
+        value={value ?? ''}
+        onChange={onChange}
         className="w-full select select-bordered text-neutral-400 select-primary bg-base-100"
       >
         <option value="" disabled>

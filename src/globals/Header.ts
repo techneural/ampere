@@ -34,6 +34,15 @@ export const Header: GlobalConfig = {
           type: 'text',
           required: true,
         },
+        {
+          name: 'calendlyUrl',
+          type: 'text',
+          label: 'Calendly URL',
+          admin: {
+            description:
+              'Your Calendly scheduling link (e.g. https://calendly.com/your-name/30min). When set, the CTA button will open a Calendly popup instead of navigating to a URL.',
+          },
+        },
       ],
     },
   ],

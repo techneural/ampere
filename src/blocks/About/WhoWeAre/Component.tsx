@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image'
+import { useState } from 'react'
 import type { Media } from '@/payload-types'
 import { motion } from 'framer-motion'
 import { blurChild, BlurStagger, FadeWrapper } from '@/components/animations'
@@ -21,6 +22,80 @@ type Props = {
     description?: string
     icon: string | Media
   }[]
+}
+
+const CONTENT1_CHAR_LIMIT = 750
+
+const MemberCard = ({
+  item,
+  index,
+}: {
+  item: NonNullable<Props['members']>[number]
+  index: number
+}) => {
+  const [expanded, setExpanded] = useState(false)
+
+  const isEven = index % 2 === 0
+  const imageUrl = typeof item.image === 'object' ? item.image?.url : item.image
+
+  const content1 = item.content1 ?? ''
+  const isTruncatable = content1.length > CONTENT1_CHAR_LIMIT
+  const displayedContent1 =
+    isTruncatable && !expanded ? content1.slice(0, CONTENT1_CHAR_LIMIT).trimEnd() + '…' : content1
+
+  return (
+    <BlurStagger className="grid grid-cols-2 gap-6 lg:gap-0 max-lg:grid-cols-1 items-center">
+      <div
+        className={`max-lg:order-2 ${
+          isEven ? 'order-2 text-start max-lg:text-center' : 'order-1 text-end max-lg:text-center'
+        }`}
+      >
+        <motion.h3 variants={blurChild} className="text-primary">
+          {item.name}
+        </motion.h3>
+        <motion.p variants={blurChild} className="font-avenirLtStd text-gray-300">
+          {item.role}
+        </motion.p>
+
+        {content1 && (
+          <div>
+            <p className="font-avenirLtStd text-neutral-400 mt-3 leading-snug text-justify">
+              {displayedContent1}
+            </p>
+
+            {expanded && item.content2 && (
+              <p className="font-avenirLtStd text-[0.938rem] text-neutral-400 leading-snug text-justify overflow-hidden mt-2">
+                {item.content2}
+              </p>
+            )}
+
+            {(isTruncatable || item.content2) && (
+              <button
+                onClick={() => setExpanded((prev) => !prev)}
+                className={`mt-3 text-sm font-avenirLtStd font-medium text-primary underline underline-offset-4 transition-opacity duration-200 hover:opacity-70 focus:outline-none ${
+                  isEven ? 'text-start' : 'text-start'
+                } block w-full`}
+              >
+                {expanded ? 'Read less' : 'Read more'}
+              </button>
+            )}
+          </div>
+        )}
+      </div>
+
+      <div className={`max-lg:order-1 ${isEven ? 'order-1' : 'order-2'}`}>
+        {imageUrl && (
+          <Image
+            src={imageUrl}
+            alt={item.name}
+            width={530}
+            height={400}
+            className="w-[70%] h-auto rounded-2xl mx-auto"
+          />
+        )}
+      </div>
+    </BlurStagger>
+  )
 }
 
 const WhoWeAre: React.FC<Props> = ({ heading, description, members = [], stats = [] }) => {
@@ -45,59 +120,9 @@ const WhoWeAre: React.FC<Props> = ({ heading, description, members = [], stats =
         </div>
 
         <div className="mt-16 flex flex-col gap-10">
-          {members?.map((item, index) => {
-            const isEven = index % 2 === 0
-
-            const imageUrl = typeof item.image === 'object' ? item.image?.url : item.image
-
-            return (
-              <BlurStagger
-                key={index}
-                className="grid grid-cols-2 gap-6 lg:gap-0 max-lg:grid-cols-1 items-start"
-              >
-                <div
-                  className={`max-lg:order-2 ${
-                    isEven
-                      ? 'order-2 text-start max-lg:text-center'
-                      : 'order-1 text-end max-lg:text-center'
-                  }`}
-                >
-                  <motion.h3 variants={blurChild} className="text-primary">
-                    {item.name}
-                  </motion.h3>
-                  <motion.p variants={blurChild} className="font-avenirLtStd text-gray-300">
-                    {item.role}
-                  </motion.p>
-
-                  <motion.p
-                    variants={blurChild}
-                    className="font-avenirLtStd text-neutral-400 mt-3 leading-snug text-justify"
-                  >
-                    {item?.content1}
-                  </motion.p>
-
-                  <motion.p
-                    variants={blurChild}
-                    className="font-avenirLtStd text-[0.938rem] text-neutral-400 mt-3 leading-snug text-justify"
-                  >
-                    {item?.content2}
-                  </motion.p>
-                </div>
-
-                <div className={`max-lg:order-1 ${isEven ? 'order-1' : 'order-2'}`}>
-                  {imageUrl && (
-                    <Image
-                      src={imageUrl}
-                      alt={item.name}
-                      width={530}
-                      height={400}
-                      className="w-[70%] h-auto rounded-2xl mx-auto"
-                    />
-                  )}
-                </div>
-              </BlurStagger>
-            )
-          })}
+          {members?.map((item, index) => (
+            <MemberCard key={index} item={item} index={index} />
+          ))}
         </div>
 
         <div className="grid md:grid-cols-2 gap-6 mt-16 max-md:mt-6">

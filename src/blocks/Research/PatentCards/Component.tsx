@@ -1,8 +1,8 @@
 'use client'
 
+import { HighlightsList } from '@/components/common/Highlightslist'
 import SwiperContainer from '@/components/ui/SwiperContainer'
 import Image from 'next/image'
-import Marquee from 'react-fast-marquee'
 
 export const highlightVariants = {
   primary: 'text-white font-semibold text-xl uppercase',
@@ -39,8 +39,6 @@ type Props = {
 }
 
 const PatentCards = ({ title, images, patentNumbers, highlights }: Props) => {
-  let primaryIndex = 0
-
   return (
     <section className="py-7">
       <div className="container">
@@ -48,7 +46,7 @@ const PatentCards = ({ title, images, patentNumbers, highlights }: Props) => {
           <h4 className="heading_b_border mb-6">{title}</h4>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl w-full">
-            <div className="bg-base-200 rounded-2xl p-9 border-2 border-neutral-500">
+            <div className="bg-base-200 rounded-2xl p-6 border-2 border-neutral-500 max-md:p-4">
               <SwiperContainer
                 items={images}
                 slidesPerView={1}
@@ -56,6 +54,7 @@ const PatentCards = ({ title, images, patentNumbers, highlights }: Props) => {
                 loop
                 autoplay
                 showPagination
+                paginationClassName="mt-5!"
                 renderItem={(img: ImageItem) => (
                   <div className="bg-white w-full h-85 rounded-2xl p-3 flex items-center justify-center">
                     <Image
@@ -82,43 +81,11 @@ const PatentCards = ({ title, images, patentNumbers, highlights }: Props) => {
               </div>
             </div>
 
-            <div className="bg-base-200 rounded-2xl py-4 border-2 border-neutral-500 overflow-hidden">
-              {highlights?.map((highlight, i) => {
-                let isPrimaryEven = false
-
-                if (highlight.variant === 'primary') {
-                  isPrimaryEven = primaryIndex % 2 === 0
-                  primaryIndex++
-                }
-
-                const isEven = i % 2 === 0
-
-                if (highlight.variant === 'primary') {
-                  return (
-                    <div key={i} className={`flex ${isPrimaryEven ? 'text-start' : 'text-end'}`}>
-                      <p className={`${highlightVariants[highlight.variant]} px-4`}>
-                        {highlight.text}
-                      </p>
-                    </div>
-                  )
-                }
-
-                return (
-                  <Marquee
-                    key={i}
-                    speed={40}
-                    gradient={false}
-                    autoFill
-                    direction={isEven ? 'left' : 'right'}
-                    pauseOnHover
-                  >
-                    <p className={`${highlightVariants[highlight.variant]} px-6 whitespace-nowrap`}>
-                      {highlight.text}
-                    </p>
-                  </Marquee>
-                )
-              })}
-            </div>
+            <HighlightsList
+              highlights={highlights}
+              variantClassMap={highlightVariants}
+              marqueeSpeed={50}
+            />
           </div>
         </div>
       </div>
