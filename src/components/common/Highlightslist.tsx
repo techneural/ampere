@@ -6,6 +6,7 @@ export interface Highlight<TVariant extends string = string> {
 }
 
 export interface HighlightsListProps<TVariant extends string = string> {
+  maxHeight?: string
   highlights: Highlight<TVariant>[]
   variantClassMap: Record<TVariant, string>
   primaryVariant?: TVariant
@@ -13,6 +14,7 @@ export interface HighlightsListProps<TVariant extends string = string> {
 }
 
 export function HighlightsList<TVariant extends string = string>({
+  maxHeight = 'max-h-150 max-xl:max-h-[36.5rem] max-md:max-h-[400px]',
   highlights,
   variantClassMap,
   primaryVariant = 'primary' as TVariant,
@@ -21,7 +23,9 @@ export function HighlightsList<TVariant extends string = string>({
   let primaryIndex = 0
 
   return (
-    <div className="bg-base-200 rounded-2xl py-4 border-2 border-neutral-500 overflow-hidden">
+    <div
+      className={`${maxHeight} overflow-y-auto scrollbar-none bg-base-200 rounded-2xl py-4 border-2 border-neutral-500 overflow-hidden`}
+    >
       <div>
         {highlights.map((highlight, i) => {
           if (highlight.variant === primaryVariant) {
@@ -34,7 +38,7 @@ export function HighlightsList<TVariant extends string = string>({
                 className={`flex w-full ${isAlignedLeft ? 'justify-start text-start' : 'justify-end text-end'}`}
               >
                 <p
-                  className={`${variantClassMap[highlight.variant]} px-4 animate-glow line-clamp-2 leading-relaxed`}
+                  className={`${variantClassMap[highlight.variant]} px-4 animate-glow leading-relaxed`}
                 >
                   {highlight.text}
                 </p>

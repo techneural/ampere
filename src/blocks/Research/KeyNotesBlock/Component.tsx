@@ -58,6 +58,7 @@ const KeyNotes = ({ title, description, image, highlights }: Props) => {
               highlights={highlights}
               variantClassMap={highlightVariants}
               marqueeSpeed={50}
+              maxHeight='max-h-[28.125rem] max-xl:max-h-[25rem]'
             />
           </div>
         </div>
