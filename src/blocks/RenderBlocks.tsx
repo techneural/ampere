@@ -23,6 +23,14 @@ import ContactForm from './Contact/ContactForm/Component'
 import OfficeLocations from './Contact/OfficeLocations/Component'
 import KeyNotes from './Research/KeyNotesBlock/Component'
 import PatentCards from './Research/PatentCards/Component'
+import BlockchainBanner from './Blockchain/BlockchainBanner/Component'
+import Revolution from './Blockchain/Revolution/Component'
+import AmpereExpo from './Blockchain/AmpereExpo/Component'
+import WeBuild from './Blockchain/WeBuild/Component'
+import Innovation from './Blockchain/Innovation/Component'
+import Services from './Blockchain/Services/Component'
+import TransformingBusiness from './Blockchain/TransformingBusiness/Component'
+import DecentralizingFinance from './Blockchain/DecentralizingFinance/Component'
 
 const blockComponents = {
   banner: Banner,
@@ -49,6 +57,15 @@ const blockComponents = {
   //Research
   patentCards: PatentCards,
   keyNotes: KeyNotes,
+  //Blockchain
+  blockchainBanner: BlockchainBanner,
+  revolution: Revolution,
+  ampereExpo: AmpereExpo,
+  weBuild: WeBuild,
+  innovation: Innovation,
+  services: Services,
+  transformingBusiness: TransformingBusiness,
+  decentralizingFinance: DecentralizingFinance,
 }
 
 export const RenderBlocks: React.FC<{

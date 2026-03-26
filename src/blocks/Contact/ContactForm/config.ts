@@ -26,12 +26,12 @@ export const ContactForm: Block = {
     {
       name: 'authorName',
       type: 'text',
-      defaultValue: 'James Anderson',
+      defaultValue: 'Ashu Swami',
     },
     {
       name: 'authorRole',
       type: 'text',
-      defaultValue: 'CFO & Co-Founder',
+      defaultValue: 'Founder & CTO',
     },
     {
       name: 'authorImage',

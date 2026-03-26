@@ -94,7 +94,7 @@
   }
 
   p {
-    @apply text-base max-2xl:text-sm max-xl:text-sm max-lg:text-xs max-md:text-xs max-sm:text-xs leading-relaxed;
+    @apply font-avenirLtStd text-base max-2xl:text-sm max-xl:text-sm max-lg:text-xs max-md:text-xs max-sm:text-xs leading-relaxed;
   }
 
   button {
@@ -167,6 +167,10 @@
 
   .custom-pagination .swiper-pagination-bullet-active {
     @apply size-7.5! rounded-sm! bg-primary!;
+  }
+
+  .card {
+    @apply bg-neutral-200 border-2 border-neutral-500;
   }
 }
 

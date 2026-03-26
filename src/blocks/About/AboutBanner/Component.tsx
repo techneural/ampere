@@ -1,8 +1,6 @@
 'use client'
 
 import React from 'react'
-import { motion } from 'framer-motion'
-import { blurChild, BlurStagger } from '@/components/animations'
 
 type Props = {
   title: string
@@ -20,11 +18,9 @@ const AboutBanner: React.FC<Props> = ({ title, backgroundImage }) => {
       }}
     >
       <div className="container z-10">
-        <BlurStagger className='max-w-2xl'>
-          <motion.h1 variants={blurChild} className="whitespace-pre-line">
-            {title}
-          </motion.h1>
-        </BlurStagger>
+        <div className="max-w-2xl">
+          <h1 className="whitespace-pre-line">{title}</h1>
+        </div>
       </div>
 
       <div className="w-full h-[17.563rem] absolute bottom-0 bg-linear-to-t from-black to-transparent max-md:h-[37.563rem]" />

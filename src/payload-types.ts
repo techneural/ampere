@@ -70,7 +70,6 @@ export interface Config {
     users: User;
     media: Media;
     pages: Page;
-    appointments: Appointment;
     'contact-submissions': ContactSubmission;
     'payload-kv': PayloadKv;
     'payload-jobs': PayloadJob;
@@ -88,7 +87,6 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
-    appointments: AppointmentsSelect<false> | AppointmentsSelect<true>;
     'contact-submissions': ContactSubmissionsSelect<false> | ContactSubmissionsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
@@ -149,6 +147,9 @@ export interface UserAuthOperations {
  */
 export interface User {
   id: string;
+  totpSecret?: string | null;
+  totpEnabled?: boolean | null;
+  totpPendingSecret?: string | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -504,6 +505,7 @@ export interface Page {
       }
     | {
         heading: string;
+        subheading?: string | null;
         members?:
           | {
               name: string;
@@ -630,6 +632,112 @@ export interface Page {
         blockName?: string | null;
         blockType: 'keyNotes';
       }
+    | {
+        title: string;
+        subtitle: string;
+        buttonLabel?: string | null;
+        bannerImage: string | Media;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'blockchainBanner';
+      }
+    | {
+        heading: string;
+        subheading: string;
+        image: string | Media;
+        cards?:
+          | {
+              title: string;
+              description: string;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'revolution';
+      }
+    | {
+        heading: string;
+        expoCards?:
+          | {
+              title: string;
+              subtitle: string;
+              image: string | Media;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'ampereExpo';
+      }
+    | {
+        heading: string;
+        subheading: string;
+        buttonLabel?: string | null;
+        image: string | Media;
+        stats?:
+          | {
+              title: string;
+              description: string;
+              icon: string | Media;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'weBuild';
+      }
+    | {
+        heading: string;
+        locations?:
+          | {
+              location: string;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'innovation';
+      }
+    | {
+        heading: string;
+        testimonials?:
+          | {
+              quote: string;
+              icon?: (string | null) | Media;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'services';
+      }
+    | {
+        heading: string;
+        subheading: string;
+        ratingText?: string | null;
+        buttonLabel?: string | null;
+        features?:
+          | {
+              title: string;
+              description: string;
+              image?: (string | null) | Media;
+              value?: string | null;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'transformingBusiness';
+      }
+    | {
+        heading: string;
+        description: string;
+        image: string | Media;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'decentralizingFinance';
+      }
   )[];
   meta?: {
     title?: string | null;
@@ -643,49 +751,6 @@ export interface Page {
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
-}
-/**
- * Appointments booked via Calendly. Client details are read-only — only Status and Notes can be changed.
- *
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "appointments".
- */
-export interface Appointment {
-  id: string;
-  /**
-   * Set by Calendly — cannot be edited.
-   */
-  name: string;
-  /**
-   * Set by Calendly — cannot be edited.
-   */
-  email: string;
-  /**
-   * Set by Calendly — cannot be edited.
-   */
-  date?: string | null;
-  /**
-   * Set by Calendly — cannot be edited.
-   */
-  eventType?: string | null;
-  /**
-   * Unique Calendly event URI — set automatically by webhook.
-   */
-  eventUri?: string | null;
-  /**
-   * Unique Calendly invitee URI — used to match cancellation events.
-   */
-  inviteeUri?: string | null;
-  /**
-   * Only this field and Notes can be changed by the admin.
-   */
-  status?: ('scheduled' | 'completed' | 'cancelled') | null;
-  /**
-   * Internal notes visible only to admins.
-   */
-  notes?: string | null;
-  updatedAt: string;
-  createdAt: string;
 }
 /**
  * Messages submitted via the Contact Us form on the website.
@@ -837,10 +902,6 @@ export interface PayloadLockedDocument {
         value: string | Page;
       } | null)
     | ({
-        relationTo: 'appointments';
-        value: string | Appointment;
-      } | null)
-    | ({
         relationTo: 'contact-submissions';
         value: string | ContactSubmission;
       } | null)
@@ -895,6 +956,9 @@ export interface PayloadMigration {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
+  totpSecret?: T;
+  totpEnabled?: T;
+  totpPendingSecret?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -1237,6 +1301,7 @@ export interface PagesSelect<T extends boolean = true> {
           | T
           | {
               heading?: T;
+              subheading?: T;
               members?:
                 | T
                 | {
@@ -1372,6 +1437,120 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
+        blockchainBanner?:
+          | T
+          | {
+              title?: T;
+              subtitle?: T;
+              buttonLabel?: T;
+              bannerImage?: T;
+              id?: T;
+              blockName?: T;
+            };
+        revolution?:
+          | T
+          | {
+              heading?: T;
+              subheading?: T;
+              image?: T;
+              cards?:
+                | T
+                | {
+                    title?: T;
+                    description?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        ampereExpo?:
+          | T
+          | {
+              heading?: T;
+              expoCards?:
+                | T
+                | {
+                    title?: T;
+                    subtitle?: T;
+                    image?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        weBuild?:
+          | T
+          | {
+              heading?: T;
+              subheading?: T;
+              buttonLabel?: T;
+              image?: T;
+              stats?:
+                | T
+                | {
+                    title?: T;
+                    description?: T;
+                    icon?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        innovation?:
+          | T
+          | {
+              heading?: T;
+              locations?:
+                | T
+                | {
+                    location?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        services?:
+          | T
+          | {
+              heading?: T;
+              testimonials?:
+                | T
+                | {
+                    quote?: T;
+                    icon?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        transformingBusiness?:
+          | T
+          | {
+              heading?: T;
+              subheading?: T;
+              ratingText?: T;
+              buttonLabel?: T;
+              features?:
+                | T
+                | {
+                    title?: T;
+                    description?: T;
+                    image?: T;
+                    value?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        decentralizingFinance?:
+          | T
+          | {
+              heading?: T;
+              description?: T;
+              image?: T;
+              id?: T;
+              blockName?: T;
+            };
       };
   meta?:
     | T
@@ -1384,22 +1563,6 @@ export interface PagesSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "appointments_select".
- */
-export interface AppointmentsSelect<T extends boolean = true> {
-  name?: T;
-  email?: T;
-  date?: T;
-  eventType?: T;
-  eventUri?: T;
-  inviteeUri?: T;
-  status?: T;
-  notes?: T;
-  updatedAt?: T;
-  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

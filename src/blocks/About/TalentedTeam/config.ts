@@ -15,7 +15,10 @@ export const TalentedTeam: Block = {
       defaultValue: 'Our Talented Team',
       required: true,
     },
-
+    {
+      name: "subheading",
+      type: "textarea",
+    },
     {
       name: 'members',
       type: 'array',

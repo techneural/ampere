@@ -42,6 +42,14 @@ import {
   PreviewField,
 } from '@payloadcms/plugin-seo/fields'
 import { PatentSection } from '@/blocks/Research/PatentCards/config'
+import { BlockchainBanner } from '@/blocks/Blockchain/BlockchainBanner/config'
+import { Revolution } from '@/blocks/Blockchain/Revolution/config'
+import { AmpereExpo } from '@/blocks/Blockchain/AmpereExpo/config'
+import { WeBuild } from '@/blocks/Blockchain/WeBuild/config'
+import { Innovation } from '@/blocks/Blockchain/Innovation/config'
+import { Services } from '@/blocks/Blockchain/Services/config'
+import { TransformingBusiness } from '@/blocks/Blockchain/TransformingBusiness/config'
+import { DecentralizingFinance } from '@/blocks/Blockchain/DecentralizingFinance/config'
 
 
 export const Pages: CollectionConfig = {
@@ -124,7 +132,16 @@ export const Pages: CollectionConfig = {
                 OfficeLocations,
                 //Research
                 PatentSection,
-                KeyNotesBlock
+                KeyNotesBlock,
+                //Blockchain
+                BlockchainBanner,
+                Revolution,
+                AmpereExpo,
+                WeBuild,
+                Innovation,
+                Services,
+                TransformingBusiness,
+                DecentralizingFinance
               ],
               required: true,
             },

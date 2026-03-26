@@ -12,7 +12,6 @@ import { Pages } from './collections/Pages/Pages'
 import { Header } from './globals/Header'
 import { Footer } from './globals/Footer'
 import { getServerSideURL } from './utilities/getURL'
-import { Appointments } from './collections/Appointments'
 import { ContactSubmissions } from './collections/ContactSubmissions'
 
 const filename = fileURLToPath(import.meta.url)
@@ -23,6 +22,9 @@ export default buildConfig({
     components: {
       beforeLogin: ['@/components/BeforeLogin'],
       beforeDashboard: ['@/components/BeforeDashboard'],
+      afterNavLinks: ['@/components/AfterNavLinks'],
+      afterLogin: ['@/components/AfterLogin'],
+
     },
     user: Users.slug,
     livePreview: {
@@ -59,7 +61,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Pages, Appointments, ContactSubmissions],
+  collections: [Users, Media, Pages, ContactSubmissions],
   globals: [Header, Footer],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
@@ -70,7 +72,6 @@ export default buildConfig({
     url: process.env.DATABASE_URL || '',
   }),
   sharp,
-
   plugins: [
     s3Storage({
       collections: {

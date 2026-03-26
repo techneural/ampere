@@ -7,6 +7,7 @@ import { blurChild, BlurStagger, FadeWrapper } from '@/components/animations'
 
 type Props = {
   heading?: string
+  subheading?: string
   members?: {
     name: string
     role: string
@@ -14,7 +15,7 @@ type Props = {
   }[]
 }
 
-const TalentedTeam: React.FC<Props> = ({ heading, members = [] }) => {
+const TalentedTeam: React.FC<Props> = ({ heading, subheading, members = [] }) => {
   return (
     <section className="bg-neutral-300 py-10 relative overflow-hidden">
       <div className="container">
@@ -23,6 +24,9 @@ const TalentedTeam: React.FC<Props> = ({ heading, members = [] }) => {
           <div className="text-center">
             <FadeWrapper>
               <h4 className="heading_b_border">{heading}</h4>
+            </FadeWrapper>
+            <FadeWrapper delay={0.2} className='mt-10 max-w-234 mx-auto'>
+              <h3>{subheading}</h3>
             </FadeWrapper>
           </div>
         )}

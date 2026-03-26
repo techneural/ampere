@@ -34,6 +34,16 @@ export const MainServicesBlock: React.FC<Props> = ({ title, description, service
       </div>
       <div className="bg-neutral-300 mt-14 py-14 max-xl:py-10">
         <div className="container grid grid-cols-3 gap-21 relative max-md:grid-cols-1 max-md:gap-10">
+          <div className="absolute left-1/3 top-1/2 -translate-y-1/2 h-52.25 flex justify-center pointer-events-none max-md:hidden">
+            <div className="absolute w-1.5 h-full bg-primary blur-xl opacity-40"></div>
+            <div className="w-0.5 h-full bg-linear-to-b from-transparent via-primary to-transparent"></div>
+          </div>
+
+          <div className="absolute left-2/3 top-1/2 -translate-y-1/2 h-52.25 flex justify-center pointer-events-none max-md:hidden">
+            <div className="absolute w-1.5 h-full bg-primary blur-xl opacity-40"></div>
+            <div className="w-0.5 h-full bg-linear-to-b from-transparent via-primary to-transparent"></div>
+          </div>
+
           {services?.map((item, index) => (
             <div key={index} className="group flex flex-col max-md:text-center">
               <div className="flex-1">

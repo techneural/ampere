@@ -10,6 +10,7 @@ import Footer from '@/components/common/Footer'
 import { PageTransition } from '@/components/animations'
 import { getServerSideURL } from '@/utilities/getURL'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
+import { Toaster } from 'react-hot-toast'
 
 const montserrat = Montserrat({
   subsets: ['latin'],
@@ -50,11 +51,15 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
 
   return (
     <html lang="en">
-      <body className={`${montserrat.variable} ${avenirLtStd.variable} antialiased`}>
+      <body
+        className={`${montserrat.variable} ${avenirLtStd.variable} antialiased`}
+        suppressHydrationWarning
+      >
         <PageTransition className="flex flex-col min-h-dvh">
           <Header data={header} />
           <main className="flex-1 bg-[url('/images/bg-fixed.png')] bg-fixed bg-no-repeat bg-cover bg-center">
             {children}
+            <Toaster position="top-right" reverseOrder={false} />
           </main>
           <Footer data={footer} />
         </PageTransition>

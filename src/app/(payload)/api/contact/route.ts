@@ -2,6 +2,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
+import { sendAdminNotification, sendUserConfirmation } from '@/lib/sendContactEmail'
 
 // ── reCAPTCHA v3 verification ─────────────────────────────────────────────────
 async function verifyRecaptcha(token: string): Promise<boolean> {
@@ -82,6 +83,25 @@ export async function POST(req: NextRequest) {
             status: 'new',
         },
     })
+
+    // 4. Send emails (fire-and-forget with error logging so a mail failure
+    //    never blocks the user getting a 201 back)
+    const emailData = {
+        name: name.trim(),
+        email: email.trim().toLowerCase(),
+        phone: phone?.trim() || undefined,
+        subject: subject?.trim() || undefined,
+        message: message.trim(),
+    }
+
+    await Promise.allSettled([
+        sendAdminNotification(emailData).catch((err) =>
+            console.error('[contact] Admin notification failed:', err),
+        ),
+        sendUserConfirmation(emailData).catch((err) =>
+            console.error('[contact] User confirmation failed:', err),
+        ),
+    ])
 
     return NextResponse.json({ message: 'Message received. We will be in touch soon!' }, { status: 201 })
 }

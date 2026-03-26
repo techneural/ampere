@@ -20,7 +20,7 @@ export function HighlightsList<TVariant extends string = string>({
   primaryVariant = 'primary' as TVariant,
   marqueeSpeed = 40,
 }: HighlightsListProps<TVariant>) {
-  let primaryIndex = 0
+  // let primaryIndex = 0
 
   return (
     <div
@@ -29,20 +29,24 @@ export function HighlightsList<TVariant extends string = string>({
       <div>
         {highlights.map((highlight, i) => {
           if (highlight.variant === primaryVariant) {
-            const currentPrimaryIndex = primaryIndex++
-            const isAlignedLeft = currentPrimaryIndex % 2 === 0
+            // const currentPrimaryIndex = primaryIndex++
+            const isEven = i % 2 === 0
 
             return (
-              <div
+              <Marquee
                 key={i}
-                className={`flex w-full ${isAlignedLeft ? 'justify-start text-start' : 'justify-end text-end'}`}
+                speed={marqueeSpeed}
+                gradient={false}
+                autoFill
+                direction={isEven ? 'left' : 'right'}
+                pauseOnHover
               >
                 <p
                   className={`${variantClassMap[highlight.variant]} px-4 animate-glow leading-relaxed`}
                 >
                   {highlight.text}
                 </p>
-              </div>
+              </Marquee>
             )
           }
 

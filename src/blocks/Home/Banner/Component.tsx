@@ -2,8 +2,6 @@
 
 import React from 'react'
 import AppButton from '@/components/ui/AppButton'
-import { motion } from 'framer-motion'
-import { blurChild, BlurStagger, FadeWrapper } from '@/components/animations'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const Banner = (props: any) => {
@@ -27,24 +25,12 @@ const Banner = (props: any) => {
         <div className="max-w-137.5 mx-auto relative">
           <div className="absolute inset-0 -z-10 blur-3xl bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.9)_0%,rgba(0,0,0,0)_90%)]"></div>
 
-          {title && (
-            <BlurStagger>
-              <motion.h1 variants={blurChild}>{title}</motion.h1>
-            </BlurStagger>
-          )}
+          {title && <h1>{title}</h1>}
 
-          {subtitle && (
-            <BlurStagger>
-              <motion.h2 variants={blurChild} className="mb-6">
-                {subtitle}
-              </motion.h2>
-            </BlurStagger>
-          )}
+          {subtitle && <h2 className="mb-6">{subtitle}</h2>}
 
           {buttonText && (
-            <FadeWrapper delay={0.3}>
-              <AppButton label={buttonText} variant="primary" size="md" href={buttonLink || '#'} />
-            </FadeWrapper>
+            <AppButton label={buttonText} variant="primary" size="md" href={buttonLink || '#'} />
           )}
         </div>
       </div>

@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import Script from 'next/script'
 import FormCheckbox from '@/components/ui/FormCheckbox'
 import FormTextarea from '@/components/ui/FormTextarea'
@@ -11,6 +11,7 @@ import FormInput from '@/components/ui/FormInput'
 import AppButton from '@/components/ui/AppButton'
 import { motion } from 'framer-motion'
 import { blurChild, BlurStagger, FadeWrapper } from '@/components/animations'
+import toast from 'react-hot-toast'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 type Props = {
@@ -74,6 +75,16 @@ const ContactForm = (props: Props) => {
   const [errors, setErrors] = useState<FieldErrors>({})
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [serverError, setServerError] = useState('')
+
+  useEffect(() => {
+    if (status === 'success') {
+      toast.success('Your message has been sent! We will be in touch soon.')
+    }
+
+    if (status === 'error' && serverError) {
+      toast.error(serverError)
+    }
+  }, [status, serverError])
 
   // ── Field handlers ────────────────────────────────────────────────────────
   const handleChange = useCallback(
@@ -206,18 +217,6 @@ const ContactForm = (props: Props) => {
           <div className="2xl:w-[55%] bg-base-300 border-2 border-neutral-500 rounded-xl p-6 md:p-8">
             <h3 className="mb-2">{formTitle}</h3>
             <p className="font-avenirLtStd text-neutral-400 mb-8">{formDescription}</p>
-
-            {/* Success banner */}
-            {status === 'success' && (
-              <div className="alert alert-success mb-6 text-sm font-medium">
-                ✅ Your message has been sent! We&apos;ll be in touch soon.
-              </div>
-            )}
-
-            {/* Server error banner */}
-            {status === 'error' && serverError && (
-              <div className="alert alert-error mb-6 text-sm font-medium">⚠️ {serverError}</div>
-            )}
 
             <form className="space-y-4" onSubmit={handleSubmit} noValidate>
               {/* Name */}
