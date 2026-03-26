@@ -44,10 +44,10 @@ const MemberCard = ({
     isTruncatable && !expanded ? content1.slice(0, CONTENT1_CHAR_LIMIT).trimEnd() + '…' : content1
 
   return (
-    <BlurStagger className="grid grid-cols-2 gap-6 lg:gap-0 max-lg:grid-cols-1 items-center">
+    <BlurStagger className="flex gap-10 max-lg:grid-cols-1 items-center max-md:flex-col">
       <div
-        className={`max-lg:order-2 ${
-          isEven ? 'order-2 text-start max-lg:text-center' : 'order-1 text-end max-lg:text-center'
+        className={`max-lg:order-2 w-[60%] max-md:w-full ${
+          isEven ? 'order-2 text-start max-md:text-center' : 'order-1 text-end max-md:text-center'
         }`}
       >
         <motion.h3 variants={blurChild} className="text-primary">
@@ -83,14 +83,14 @@ const MemberCard = ({
         )}
       </div>
 
-      <div className={`max-lg:order-1 ${isEven ? 'order-1' : 'order-2'}`}>
+      <div className={`max-lg:order-1 ${isEven ? 'order-1' : 'order-2'} w-[40%] max-sm:w-full`}>
         {imageUrl && (
           <Image
             src={imageUrl}
             alt={item.name}
             width={530}
             height={400}
-            className="w-[70%] h-auto rounded-2xl mx-auto"
+            className="h-auto rounded-2xl"
           />
         )}
       </div>
