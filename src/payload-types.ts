@@ -636,6 +636,7 @@ export interface Page {
         title: string;
         subtitle: string;
         buttonLabel?: string | null;
+        buttonLink?: string | null;
         bannerImage: string | Media;
         id?: string | null;
         blockName?: string | null;
@@ -1449,6 +1450,7 @@ export interface PagesSelect<T extends boolean = true> {
               title?: T;
               subtitle?: T;
               buttonLabel?: T;
+              buttonLink?: T;
               bannerImage?: T;
               id?: T;
               blockName?: T;

@@ -5,7 +5,7 @@ import Image from 'next/image'
 import AppButton from '@/components/ui/AppButton'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const BlockchainBanner = ({ title, subtitle, buttonLabel, bannerImage }: any) => {
+const BlockchainBanner = ({ title, subtitle, buttonLabel, bannerImage, buttonLink }: any) => {
   const imageUrl = bannerImage?.url
 
   return (
@@ -19,7 +19,7 @@ const BlockchainBanner = ({ title, subtitle, buttonLabel, bannerImage }: any) =>
           <h1>{title}</h1>
           <h2>{subtitle}</h2>
 
-          <AppButton label={buttonLabel} variant="primary" size="md" />
+          <AppButton label={buttonLabel} variant="primary" size="md" href={buttonLink || '#'} />
         </div>
         <div></div>
       </div>

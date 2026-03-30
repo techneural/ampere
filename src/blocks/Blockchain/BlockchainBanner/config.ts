@@ -26,6 +26,10 @@ export const BlockchainBanner: Block = {
             defaultValue: "Unlock Solutions",
         },
         {
+            name: 'buttonLink',
+            type: 'text',
+        },
+        {
             name: "bannerImage",
             type: "upload",
             relationTo: "media", // make sure you have media collection
