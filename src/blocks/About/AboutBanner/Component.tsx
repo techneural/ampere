@@ -14,7 +14,7 @@ const AboutBanner: React.FC<Props> = ({ title, backgroundImage }) => {
     <section
       className="relative min-h-[calc(100vh-71px)] flex items-end py-18 max-md:items-center max-md:text-center bg-cover bg-center"
       style={{
-        backgroundImage: `url(${backgroundImage?.url || ''})`,
+        backgroundImage: `url(${backgroundImage?.url || ''})`, 
       }}
     >
       <div className="container z-10">
