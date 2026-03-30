@@ -1,37 +1,30 @@
 'use client'
-// src/components/AfterLogin/index.tsx
-
 import React, { useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@payloadcms/ui'
 
 const AfterLogin: React.FC = () => {
-  const router = useRouter()
+  const router  = useRouter()
   const { user } = useAuth()
-  const checkedRef = useRef(false)
+  const checked  = useRef(false)
 
   useEffect(() => {
-    if (!user || checkedRef.current) return
-    checkedRef.current = true
-
-    const run = async () => {
+    if (!user || checked.current) return
+    checked.current = true
+    ;(async () => {
       try {
-        const res = await fetch('/api/totp-check', { credentials: 'include' })
+        await fetch('/api/totp-session-clear', { method: 'POST', credentials: 'include' })
+
+        const res  = await fetch('/api/totp-check', { credentials: 'include' })
         if (!res.ok) return
-
         const data = await res.json()
-
         if (data.totpEnabled && data.userId) {
           router.replace(
             `/admin/totp-verify?userId=${encodeURIComponent(data.userId)}&redirect=/admin`,
           )
         }
-      } catch {
-        // fail open — let normal login proceed
-      }
-    }
-
-    run()
+      } catch {}
+    })()
   }, [user, router])
 
   return null

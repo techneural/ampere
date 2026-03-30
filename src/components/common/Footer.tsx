@@ -59,6 +59,7 @@ const Footer = ({ data }: any) => {
             {data?.email && (
               <Link
                 href={`mailto:${data.email}`}
+                target="_blank"
                 className="flex items-center gap-1 hover:underline"
               >
                 <Image src="/images/icons/mail.png" alt="mail" width={30} height={30} />

@@ -3,10 +3,18 @@ type Props = {
   placeholder?: string
   type?: string
   value?: string
+  maxLength?: number
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
-const FormInput = ({ label, placeholder, type = 'text', value, onChange }: Props) => {
+const FormInput = ({
+  label,
+  placeholder,
+  type = 'text',
+  value,
+  onChange,
+  maxLength = 50,
+}: Props) => {
   return (
     <div className="flex flex-col gap-2">
       <label className="label">
@@ -17,6 +25,7 @@ const FormInput = ({ label, placeholder, type = 'text', value, onChange }: Props
         placeholder={placeholder}
         value={value}
         onChange={onChange}
+        maxLength={maxLength}
         className="w-full input input-primary input-bordered bg-base-100 max-sm:input-md"
       />
     </div>

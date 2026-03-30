@@ -42,7 +42,7 @@ const WeBuild = ({ heading, subheading, buttonLabel, image, stats }: any) => {
                 </>
               }
               size="md"
-              className="mt-10 max-md:mt-6"
+              className="mt-10 max-md:mt-6 px-3"
             />
           </div>
         </div>
@@ -55,7 +55,7 @@ const WeBuild = ({ heading, subheading, buttonLabel, image, stats }: any) => {
             const iconUrl = item?.icon?.url
 
             return (
-              <div key={index} className="card rounded-2xl overflow-hidden p-6">
+              <div key={index} className="card group rounded-2xl overflow-hidden p-6">
                 <BlurStagger className="flex justify-between items-center">
                   <div className="size-15.75 flex items-center justify-center bg-primary rounded-lg">
                     {iconUrl && <Image src={iconUrl} alt={item.title} width={45} height={45} />}
@@ -63,7 +63,7 @@ const WeBuild = ({ heading, subheading, buttonLabel, image, stats }: any) => {
 
                   <motion.h1
                     variants={blurChild}
-                    className="font-avenirLtStd text-gray-300 lg:text-6xl"
+                    className="font-avenirLtStd text-gray-300 lg:text-6xl group-hover:text-primary transition-colors duration-300"
                   >
                     {item.title}
                   </motion.h1>

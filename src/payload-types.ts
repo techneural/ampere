@@ -740,12 +740,18 @@ export interface Page {
       }
   )[];
   meta?: {
+    /**
+     * Title shown in search engine results. Recommended: 50–60 characters.
+     */
     title?: string | null;
     /**
-     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     * Description shown in search engine results. Recommended: 150–160 characters.
+     */
+    description?: string | null;
+    /**
+     * Image shown when shared on social media. Recommended: 1200×630px.
      */
     image?: (string | null) | Media;
-    description?: string | null;
   };
   publishedAt?: string | null;
   updatedAt: string;
@@ -1556,8 +1562,8 @@ export interface PagesSelect<T extends boolean = true> {
     | T
     | {
         title?: T;
-        image?: T;
         description?: T;
+        image?: T;
       };
   publishedAt?: T;
   updatedAt?: T;

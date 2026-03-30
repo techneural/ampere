@@ -63,6 +63,7 @@ const OfficeLocations = ({ heading, description, contacts, locations }: Props) =
 
                     <Link
                       href={`mailto:${item.email}`}
+                      target="_blank"
                       className="bg-neutral-200 size-11 rounded-sm flex justify-center items-center border border-neutral-500 max-sm:size-8 hover:bg-white hover:border-white transition-colors duration-300"
                     >
                       <Image src="/images/mail.png" alt="mail-icon" width={30} height={30} />

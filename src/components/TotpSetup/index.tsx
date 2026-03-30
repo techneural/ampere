@@ -1,9 +1,7 @@
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 import Image from 'next/image'
-// src/components/TotpSetup/index.tsx
-// Rendered inside the Payload admin as a custom field or via AfterNavLinks.
-// Allows admins to enable / disable TOTP on their own account.
 
 import React, { useEffect, useState } from 'react'
 
@@ -11,24 +9,24 @@ type SetupState = 'idle' | 'loading' | 'scanning' | 'confirming' | 'done' | 'dis
 
 const TotpSetup: React.FC = () => {
   const [state, setState] = useState<SetupState>('idle')
-  const [enabled, setEnabled] = useState(false)
+  const [enabled, setEnabled] = useState<boolean | null>(null)
   const [qrDataUrl, setQrDataUrl] = useState('')
   const [secret, setSecret] = useState('')
   const [otp, setOtp] = useState('')
   const [message, setMessage] = useState('')
   const [error, setError] = useState('')
 
-  // Check current TOTP status on mount
   useEffect(() => {
-    fetch('/api/totp-setup')
+    fetch('/api/totp-check', { credentials: 'include' })
       .then((r) => r.json())
       .then((d) => {
-        setEnabled(!!d.enabled)
+        setEnabled(!!d.totpEnabled)
       })
-      .catch(() => {})
+      .catch(() => {
+        setEnabled(false)
+      })
   }, [])
 
-  // ── Start setup ───────────────────────────────────────────────────────────
   const startSetup = async () => {
     setState('loading')
     setError('')
@@ -46,7 +44,6 @@ const TotpSetup: React.FC = () => {
     }
   }
 
-  // ── Confirm OTP to activate ───────────────────────────────────────────────
   const confirmOtp = async () => {
     setState('confirming')
     setError('')
@@ -64,12 +61,12 @@ const TotpSetup: React.FC = () => {
       setOtp('')
     } catch (e: any) {
       setError(e.message)
-      setState('scanning') // go back so they can retry
+      setState('scanning')
     }
   }
 
-  // ── Disable TOTP ──────────────────────────────────────────────────────────
   const disableTotp = async () => {
+    setState('disabling')
     setError('')
     try {
       const res = await fetch('/api/totp-disable', {
@@ -85,10 +82,10 @@ const TotpSetup: React.FC = () => {
       setOtp('')
     } catch (e: any) {
       setError(e.message)
+      setState('idle')
     }
   }
 
-  // ── Styles (inline — no Tailwind in Payload admin) ────────────────────────
   const card: React.CSSProperties = {
     border: '1px solid var(--theme-elevation-200, #e5e7eb)',
     borderRadius: 8,
@@ -107,6 +104,16 @@ const TotpSetup: React.FC = () => {
     color: active ? '#15803d' : '#b91c1c',
     marginLeft: 8,
   })
+  const loadingBadge: React.CSSProperties = {
+    display: 'inline-block',
+    padding: '2px 10px',
+    borderRadius: 999,
+    fontSize: 12,
+    fontWeight: 600,
+    background: '#f3f4f6',
+    color: '#6b7280',
+    marginLeft: 8,
+  }
   const inputStyle: React.CSSProperties = {
     width: '100%',
     padding: '8px 12px',
@@ -139,7 +146,11 @@ const TotpSetup: React.FC = () => {
     <div style={card}>
       <div style={{ display: 'flex', alignItems: 'center', marginBottom: 4 }}>
         <strong style={{ fontSize: 16 }}>Two-Factor Authentication (TOTP)</strong>
-        <span style={badge(enabled)}>{enabled ? 'Enabled' : 'Disabled'}</span>
+        {/* Show loading indicator until real status is known — no flicker */}
+        {enabled === null
+          ? <span style={loadingBadge}>Loading…</span>
+          : <span style={badge(enabled)}>{enabled ? 'Enabled' : 'Disabled'}</span>
+        }
       </div>
       <p style={{ color: 'var(--theme-elevation-500, #6b7280)', fontSize: 13, marginBottom: 12 }}>
         Use an authenticator app (Google Authenticator, Authy, etc.) to add an extra layer of
@@ -149,17 +160,20 @@ const TotpSetup: React.FC = () => {
       {message && <p style={{ color: '#15803d', fontWeight: 600, marginBottom: 8 }}>{message}</p>}
       {error && <p style={{ color: '#b91c1c', fontWeight: 600, marginBottom: 8 }}>⚠️ {error}</p>}
 
-      {/* ── Not enabled: show setup button ─────────────────────────────── */}
-      {!enabled && state === 'idle' && (
+      {/* Show nothing until status is loaded to avoid flicker */}
+      {enabled === null && (
+        <p style={{ fontSize: 13, color: '#6b7280' }}>Checking status…</p>
+      )}
+
+      {/* Not enabled: show setup button */}
+      {enabled === false && state === 'idle' && (
         <button style={btn('primary')} onClick={startSetup}>
           Enable TOTP
         </button>
       )}
 
-      {/* ── Loading ─────────────────────────────────────────────────────── */}
       {state === 'loading' && <p style={{ fontSize: 13 }}>Generating QR code…</p>}
 
-      {/* ── Scanning: show QR + secret ──────────────────────────────────── */}
       {state === 'scanning' && (
         <div>
           <p style={{ fontSize: 13, marginBottom: 8 }}>
@@ -203,8 +217,8 @@ const TotpSetup: React.FC = () => {
             />
           </label>
           <div>
-            <button style={btn('primary')} onClick={confirmOtp} disabled={otp.length !== 6}>
-              Confirm & Enable
+            <button style={btn('primary')} onClick={confirmOtp} disabled={otp.length !== 6 || (state as string) === 'confirming'}>
+              {(state as string) === 'confirming' ? '⏳ Enabling…' : 'Confirm & Enable'}
             </button>
             <button
               style={btn('ghost')}
@@ -220,11 +234,10 @@ const TotpSetup: React.FC = () => {
         </div>
       )}
 
-      {/* ── Confirming spinner ───────────────────────────────────────────── */}
       {state === 'confirming' && <p style={{ fontSize: 13 }}>Verifying…</p>}
 
-      {/* ── Enabled: show disable section ───────────────────────────────── */}
-      {enabled && (state === 'idle' || state === 'done' || state === 'disabling') && (
+      {/* Enabled: show disable section */}
+      {enabled === true && (state === 'idle' || state === 'done' || state === 'disabling') && (
         <div style={{ marginTop: 8 }}>
           <p style={{ fontSize: 13, marginBottom: 6 }}>
             Enter your current OTP to disable two-factor authentication.
@@ -240,8 +253,8 @@ const TotpSetup: React.FC = () => {
             onKeyDown={(e) => e.key === 'Enter' && otp.length === 6 && disableTotp()}
           />
           <div>
-            <button style={btn('danger')} onClick={disableTotp} disabled={otp.length !== 6}>
-              Disable TOTP
+            <button style={btn('danger')} onClick={disableTotp} disabled={otp.length !== 6 || state === 'disabling'}>
+              {state === 'disabling' ? '⏳ Disabling…' : 'Disable TOTP'}
             </button>
           </div>
         </div>

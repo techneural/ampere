@@ -12,15 +12,18 @@ const AmpereExpo = ({ heading, expoCards }: any) => {
         <h4 className="heading_b_border">{heading}</h4>
       </div>
 
-      <div className="bg-neutral-300 py-12 mt-20">
+      <div className="bg-neutral-300 py-12 mt-12">
         <div className="container grid grid-cols-4 gap-6 max-lg:grid-cols-2 max-md:grid-cols-1">
           {expoCards?.map((item: any, index: number) => {
             const imageUrl = item?.image?.url
 
             return (
-              <div key={index} className="card rounded-2xl flex flex-col overflow-hidden">
-                <BlurStagger className="p-2.5 flex-1 space-y-2">
-                  <motion.h4 variants={blurChild} className="text-gray-300">
+              <div key={index} className="card group rounded-2xl flex flex-col overflow-hidden">
+                <BlurStagger className="p-4 flex-1 space-y-2">
+                  <motion.h4
+                    variants={blurChild}
+                    className="text-gray-300 group-hover:text-primary transition-colors duration-300"
+                  >
                     {item.title}
                   </motion.h4>
                   <motion.p variants={blurChild} className="text-neutral-400">

@@ -54,7 +54,7 @@ const TransformingBusiness = ({ heading, subheading, ratingText, buttonLabel, fe
             const imageUrl = item?.image?.url
 
             return (
-              <div key={index} className="card rounded-xl overflow-hidden">
+              <div key={index} className="card group rounded-xl overflow-hidden">
                 <div className="h-67 flex items-center justify-center bg-primary max-xl:h-60">
                   {imageUrl ? (
                     <Image
@@ -72,7 +72,7 @@ const TransformingBusiness = ({ heading, subheading, ratingText, buttonLabel, fe
                 </div>
 
                 <BlurStagger className="p-2.5 pb-3 max-sm:p-3">
-                  <motion.h4 variants={blurChild} className="text-gray-300 mb-2">
+                  <motion.h4 variants={blurChild} className="text-gray-300 mb-2 group-hover:text-primary transition-colors duration-300">
                     {item.title}
                   </motion.h4>
                   <motion.p variants={blurChild} className="text-neutral-400 leading-tight">

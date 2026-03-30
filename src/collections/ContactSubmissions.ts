@@ -14,7 +14,7 @@ export const ContactSubmissions: CollectionConfig = {
   },
   access: {
     read: authenticated,
-    create: () => true, // public API creates records
+    create: () => false, // public API creates records
     update: authenticated,
     delete: authenticated,
   },

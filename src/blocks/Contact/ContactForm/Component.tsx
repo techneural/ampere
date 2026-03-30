@@ -9,11 +9,10 @@ import FormTextarea from '@/components/ui/FormTextarea'
 import FormSelect from '@/components/ui/FormSelect'
 import FormInput from '@/components/ui/FormInput'
 import AppButton from '@/components/ui/AppButton'
-import { motion } from 'framer-motion'
-import { blurChild, BlurStagger, FadeWrapper } from '@/components/animations'
+import { FadeWrapper } from '@/components/animations'
 import toast from 'react-hot-toast'
 
-// ── Types ─────────────────────────────────────────────────────────────────────
+// ── Types ─────────────────────────────────────────────────────────────
 type Props = {
   heading: string
   subheading: string
@@ -38,7 +37,7 @@ type FormState = {
 
 type FieldErrors = Partial<Record<keyof FormState, string>>
 
-// ── reCAPTCHA helper ──────────────────────────────────────────────────────────
+// ── reCAPTCHA helper ──────────────────────────────────────────────────
 declare global {
   interface Window {
     grecaptcha: {
@@ -48,7 +47,7 @@ declare global {
   }
 }
 
-// ── Component ─────────────────────────────────────────────────────────────────
+// ── Component ─────────────────────────────────────────────────────────
 const ContactForm = (props: Props) => {
   const {
     heading,
@@ -72,62 +71,122 @@ const ContactForm = (props: Props) => {
     message: '',
     agreed: false,
   })
+
   const [errors, setErrors] = useState<FieldErrors>({})
+  const [touched, setTouched] = useState<Partial<Record<keyof FormState, boolean>>>({})
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [serverError, setServerError] = useState('')
 
+  // ── Toasts ─────────────────────────────────────────────────────────
   useEffect(() => {
     if (status === 'success') {
       toast.success('Your message has been sent! We will be in touch soon.')
     }
-
     if (status === 'error' && serverError) {
       toast.error(serverError)
     }
   }, [status, serverError])
 
-  // ── Field handlers ────────────────────────────────────────────────────────
+  // ── Validation ─────────────────────────────────────────────────────
+  const validate = (): FieldErrors => {
+    const errs: FieldErrors = {}
+
+    const name = form.name.trim()
+    const email = form.email.trim()
+    const phone = form.phone.replace(/\D/g, '')
+    const subject = form.subject.trim()
+    const message = form.message.trim()
+
+    if (!name) errs.name = 'Name is required.'
+    else if (name.length < 3) errs.name = 'Name must be at least 3 characters.'
+    else if (name.length > 50) errs.name = 'Name must be less than 50 characters.'
+    else if (!/^[a-zA-Z\s]+$/.test(name)) errs.name = 'Name can only contain letters and spaces.'
+
+    if (!email) errs.email = 'Email is required.'
+    else if (!/^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i.test(email))
+      errs.email = 'Enter a valid email address.'
+
+    if (!phone) errs.phone = 'Phone number is required.'
+    else if (!/^\d{10}$/.test(phone)) errs.phone = 'Enter a valid 10-digit phone number.'
+
+    if (!subject) errs.subject = 'Please select a subject.'
+
+    if (!message) errs.message = 'Message is required.'
+    else if (message.length < 10) errs.message = 'Message must be at least 10 characters.'
+    else if (message.length > 500) errs.message = 'Message must not exceed 500 characters.'
+
+    if (!form.agreed) errs.agreed = 'You must agree to the Terms and Privacy Policy.'
+
+    return errs
+  }
+
+  // ── Real-time validation (safe now) ─────────────────────────────────
+  useEffect(() => {
+    const errs = validate()
+    setErrors(errs)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [form])
+
+  // ── Handlers ───────────────────────────────────────────────────────
   const handleChange = useCallback(
     (field: keyof FormState) =>
       (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-        setForm((prev) => ({ ...prev, [field]: e.target.value }))
-        setErrors((prev) => ({ ...prev, [field]: undefined }))
+        const value = e.target.value
+
+        setForm((prev) => ({
+          ...prev,
+          [field]: field === 'phone' ? value.replace(/\D/g, '') : value,
+        }))
+
+        setTouched((prev) => ({ ...prev, [field]: true }))
       },
     [],
   )
 
   const handleCheckbox = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setForm((prev) => ({ ...prev, agreed: e.target.checked }))
-    setErrors((prev) => ({ ...prev, agreed: undefined }))
+    setTouched((prev) => ({ ...prev, agreed: true }))
   }, [])
 
-  // ── Client-side validation ────────────────────────────────────────────────
-  const validate = (): FieldErrors => {
-    const errs: FieldErrors = {}
-    if (!form.name.trim()) errs.name = 'Name is required.'
-    if (!form.email.trim()) errs.email = 'Email is required.'
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email))
-      errs.email = 'Enter a valid email address.'
-    if (!form.message.trim()) errs.message = 'Message is required.'
-    if (!form.agreed) errs.agreed = 'You must agree to the Terms and Privacy Policy.'
-    return errs
+  const isFormValidExceptCheckbox = () => {
+    const name = form.name.trim()
+    const email = form.email.trim()
+    const phone = form.phone.replace(/\D/g, '')
+    const subject = form.subject.trim()
+    const message = form.message.trim()
+
+    if (!name || name.length < 3 || name.length > 50 || !/^[a-zA-Z\s]+$/.test(name)) return false
+    if (!email || !/^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i.test(email)) return false
+    if (!phone || !/^[6-9]\d{9}$/.test(phone)) return false
+    if (!subject) return false
+    if (!message || message.length < 10 || message.length > 500) return false
+
+    return true
   }
 
-  // ── Submit ────────────────────────────────────────────────────────────────
+  // ── Submit ─────────────────────────────────────────────────────────
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setServerError('')
 
     const errs = validate()
-    if (Object.keys(errs).length > 0) {
-      setErrors(errs)
-      return
-    }
+    setErrors(errs)
+
+    // mark all fields touched
+    setTouched({
+      name: true,
+      email: true,
+      phone: true,
+      subject: true,
+      message: true,
+      agreed: true,
+    })
+
+    if (Object.keys(errs).length > 0) return
 
     setStatus('loading')
 
     try {
-      // Get reCAPTCHA v3 token
       let recaptchaToken = ''
       if (siteKey) {
         recaptchaToken = await new Promise<string>((resolve, reject) => {
@@ -135,8 +194,8 @@ const ContactForm = (props: Props) => {
             try {
               const token = await window.grecaptcha.execute(siteKey, { action: 'contact_form' })
               resolve(token)
-            } catch (err) {
-              reject(err)
+            } catch {
+              reject('')
             }
           })
         })
@@ -158,22 +217,29 @@ const ContactForm = (props: Props) => {
       const data = await res.json()
 
       if (!res.ok) {
-        setServerError(data?.error ?? 'Something went wrong. Please try again.')
+        setServerError(data?.error ?? 'Something went wrong.')
         setStatus('error')
         return
       }
 
       setStatus('success')
-      setForm({ name: '', email: '', phone: '', subject: '', message: '', agreed: false })
+      setForm({
+        name: '',
+        email: '',
+        phone: '',
+        subject: '',
+        message: '',
+        agreed: false,
+      })
+      setTouched({})
     } catch {
-      setServerError('Network error. Please check your connection and try again.')
+      setServerError('Network error. Please try again.')
       setStatus('error')
     }
   }
 
   return (
     <>
-      {/* Load reCAPTCHA v3 script */}
       {siteKey && (
         <Script
           src={`https://www.google.com/recaptcha/api.js?render=${siteKey}`}
@@ -183,7 +249,7 @@ const ContactForm = (props: Props) => {
 
       <section className="relative py-22 max-sm:py-10">
         <div className="container relative grid grid-cols-2 2xl:flex z-10 max-lg:grid-cols-1 max-2xl:gap-5 max-lg:gap-10">
-          {/* ── Left column ─────────────────────────────────────────────── */}
+          {/* LEFT (UNCHANGED) */}
           <div className="2xl:w-[45%] flex flex-col justify-between">
             <FadeWrapper className="space-y-5">
               <h1>{heading}</h1>
@@ -203,23 +269,20 @@ const ContactForm = (props: Props) => {
                     className="rounded-full w-11.25 h-11.25 object-cover"
                   />
                 )}
-                <BlurStagger>
-                  <motion.h4 variants={blurChild}>{authorName}</motion.h4>
-                  <motion.p variants={blurChild} className="text-neutral-400">
-                    {authorRole}
-                  </motion.p>
-                </BlurStagger>
+                <div>
+                  <h4>{authorName}</h4>
+                  <p className="text-neutral-400">{authorRole}</p>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* ── Right column – Form ──────────────────────────────────────── */}
+          {/* RIGHT FORM (UI SAME) */}
           <div className="2xl:w-[55%] bg-base-300 border-2 border-neutral-500 rounded-xl p-6 md:p-8">
             <h3 className="mb-2">{formTitle}</h3>
             <p className="font-avenirLtStd text-neutral-400 mb-8">{formDescription}</p>
 
             <form className="space-y-4" onSubmit={handleSubmit} noValidate>
-              {/* Name */}
               <div>
                 <FormInput
                   label="Name"
@@ -227,10 +290,11 @@ const ContactForm = (props: Props) => {
                   value={form.name}
                   onChange={handleChange('name')}
                 />
-                {errors.name && <p className="text-error text-xs mt-1">{errors.name}</p>}
+                {touched.name && errors.name && (
+                  <p className="text-error text-xs mt-1">{errors.name}</p>
+                )}
               </div>
 
-              {/* Email */}
               <div>
                 <FormInput
                   label="Email"
@@ -239,10 +303,11 @@ const ContactForm = (props: Props) => {
                   value={form.email}
                   onChange={handleChange('email')}
                 />
-                {errors.email && <p className="text-error text-xs mt-1">{errors.email}</p>}
+                {touched.email && errors.email && (
+                  <p className="text-error text-xs mt-1">{errors.email}</p>
+                )}
               </div>
 
-              {/* Phone */}
               <div>
                 <FormInput
                   label="Phone Number"
@@ -250,9 +315,11 @@ const ContactForm = (props: Props) => {
                   value={form.phone}
                   onChange={handleChange('phone')}
                 />
+                {touched.phone && errors.phone && (
+                  <p className="text-error text-xs mt-1">{errors.phone}</p>
+                )}
               </div>
 
-              {/* Subject */}
               <div>
                 <FormSelect
                   label="Subject"
@@ -260,9 +327,11 @@ const ContactForm = (props: Props) => {
                   value={form.subject}
                   onChange={handleChange('subject')}
                 />
+                {touched.subject && errors.subject && (
+                  <p className="text-error text-xs mt-1">{errors.subject}</p>
+                )}
               </div>
 
-              {/* Message */}
               <div>
                 <FormTextarea
                   label="Message"
@@ -270,15 +339,17 @@ const ContactForm = (props: Props) => {
                   value={form.message}
                   onChange={handleChange('message')}
                 />
-                {errors.message && <p className="text-error text-xs mt-1">{errors.message}</p>}
+                {touched.message && errors.message && (
+                  <p className="text-error text-xs mt-1">{errors.message}</p>
+                )}
               </div>
 
-              {/* Terms checkbox */}
               <div>
                 <FormCheckbox
                   className="my-5"
                   checked={form.agreed}
                   onChange={handleCheckbox}
+                  disabled={!isFormValidExceptCheckbox()}
                   label={
                     <>
                       By sending this form, I agree to the{' '}
@@ -298,7 +369,9 @@ const ContactForm = (props: Props) => {
                     </>
                   }
                 />
-                {errors.agreed && <p className="text-error text-xs mt-1">{errors.agreed}</p>}
+                {touched.agreed && errors.agreed && (
+                  <p className="text-error text-xs mt-1">{errors.agreed}</p>
+                )}
               </div>
 
               {/* reCAPTCHA v3 badge note */}
@@ -330,7 +403,6 @@ const ContactForm = (props: Props) => {
                 label={status === 'loading' ? 'Sending…' : 'Submit'}
                 variant="primary"
                 size="lg"
-                className="max-md:w-full"
                 type="submit"
                 isLoading={status === 'loading'}
                 disabled={status === 'loading'}
