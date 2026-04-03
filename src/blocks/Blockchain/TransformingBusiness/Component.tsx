@@ -7,7 +7,14 @@ import AppButton from '@/components/ui/AppButton'
 import { ArrowRight, Star } from 'lucide-react'
 import Image from 'next/image'
 
-const TransformingBusiness = ({ heading, subheading, ratingText, buttonLabel, features }: any) => {
+const TransformingBusiness = ({
+  heading,
+  subheading,
+  ratingText,
+  buttonLabel,
+  features,
+  buttonLink,
+}: any) => {
   return (
     <section className="pt-14 relative">
       <div className="container">
@@ -42,6 +49,7 @@ const TransformingBusiness = ({ heading, subheading, ratingText, buttonLabel, fe
               </>
             }
             size="md"
+            href={buttonLink || '#'}
             className="px-4"
           />
         </div>
@@ -72,7 +80,10 @@ const TransformingBusiness = ({ heading, subheading, ratingText, buttonLabel, fe
                 </div>
 
                 <BlurStagger className="p-2.5 pb-3 max-sm:p-3">
-                  <motion.h4 variants={blurChild} className="text-gray-300 mb-2 group-hover:text-primary transition-colors duration-300">
+                  <motion.h4
+                    variants={blurChild}
+                    className="text-gray-300 mb-2 group-hover:text-primary transition-colors duration-300"
+                  >
                     {item.title}
                   </motion.h4>
                   <motion.p variants={blurChild} className="text-neutral-400 leading-tight">

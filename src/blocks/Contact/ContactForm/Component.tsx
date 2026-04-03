@@ -87,6 +87,11 @@ const ContactForm = (props: Props) => {
     }
   }, [status, serverError])
 
+  const allowedDomains = ['gmail.com', 'yahoo.com', 'outlook.com', 'hotmail.com', 'icloud.com']
+
+  const emailRegex =
+    /^(?!.*\.\.)([a-zA-Z0-9]+([._%+-]?[a-zA-Z0-9]+)*)@([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$/
+
   // ── Validation ─────────────────────────────────────────────────────
   const validate = (): FieldErrors => {
     const errs: FieldErrors = {}
@@ -101,11 +106,17 @@ const ContactForm = (props: Props) => {
     else if (name.length < 3) errs.name = 'Name must be at least 3 characters.'
     else if (name.length > 50) errs.name = 'Name must be less than 50 characters.'
     else if (!/^[a-zA-Z\s]+$/.test(name)) errs.name = 'Name can only contain letters and spaces.'
-
-    if (!email) errs.email = 'Email is required.'
-    else if (!/^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i.test(email))
+    if (!email) {
+      errs.email = 'Email is required.'
+    } else if (!emailRegex.test(email)) {
       errs.email = 'Enter a valid email address.'
+    } else {
+      const domain = email.split('@')[1]?.toLowerCase()
 
+      if (!allowedDomains.includes(domain)) {
+        errs.email = 'Please enter a valid email provider (e.g., gmail.com)'
+      }
+    }
     if (!phone) errs.phone = 'Phone number is required.'
     else if (!/^\d{10}$/.test(phone)) errs.phone = 'Enter a valid 10-digit phone number.'
 
@@ -156,7 +167,9 @@ const ContactForm = (props: Props) => {
     const message = form.message.trim()
 
     if (!name || name.length < 3 || name.length > 50 || !/^[a-zA-Z\s]+$/.test(name)) return false
-    if (!email || !/^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i.test(email)) return false
+    const domain = email.split('@')[1]?.toLowerCase()
+
+    if (!email || !emailRegex.test(email) || !allowedDomains.includes(domain)) return false
     if (!phone || !/^[6-9]\d{9}$/.test(phone)) return false
     if (!subject) return false
     if (!message || message.length < 10 || message.length > 500) return false

@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import { RenderBlocks } from '@/blocks/RenderBlocks'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 import { getPage } from '@/lib/getPage'
@@ -6,9 +8,24 @@ import { notFound } from 'next/navigation'
 import { Metadata } from 'next'
 import { getServerSideURL } from '@/utilities/getURL'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
+import configPromise from '@/payload.config'
+import { getPayload } from 'payload'
 
 type Args = {
   params: Promise<{ slug: string }>
+}
+
+export async function generateStaticParams() {
+  const payload = await getPayload({ config: configPromise })
+  const pages = await payload.find({
+    collection: 'pages',
+    draft: false,
+    limit: 1000,
+    overrideAccess: false,
+    pagination: false,
+    select: { slug: true },
+  })
+  return pages.docs?.filter((doc) => doc.slug !== 'home').map(({ slug }) => ({ slug }))
 }
 
 export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {

@@ -33,6 +33,10 @@ export const TransformingBusiness: Block = {
             type: "text",
             defaultValue: "Reach Out Now!",
         },
+        {
+            name: 'buttonLink',
+            type: 'text',
+        },
 
         // FEATURES GRID
         {

@@ -27,6 +27,10 @@ export const WeBuild: Block = {
       defaultValue: "Get Powered Now",
     },
     {
+      name: 'buttonLink',
+      type: 'text',
+    },
+    {
       name: "image",
       type: "upload",
       relationTo: "media",

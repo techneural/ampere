@@ -7,7 +7,7 @@ import localFont from 'next/font/local'
 import { getGlobals } from '@/lib/getGlobals'
 import Header from '@/components/common/Header'
 import Footer from '@/components/common/Footer'
-import { PageTransition } from '@/components/animations'
+import { NavigationLoader, PageTransition } from '@/components/animations'
 import { getServerSideURL } from '@/utilities/getURL'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 import { Toaster } from 'react-hot-toast'
@@ -55,6 +55,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
         className={`${montserrat.variable} ${avenirLtStd.variable} antialiased`}
         suppressHydrationWarning
       >
+        <NavigationLoader />
         <PageTransition className="flex flex-col min-h-dvh">
           <Header data={header} />
           <main className="flex-1 bg-[url('/images/bg-fixed.png')] bg-fixed bg-no-repeat bg-cover bg-center">

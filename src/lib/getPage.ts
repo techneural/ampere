@@ -11,7 +11,7 @@ export const getPage = async (slug: string) => {
     draft,
     limit: 1,
     pagination: false,
-    overrideAccess: true,
+    overrideAccess: draft,
     where: {
       slug: {
         equals: slug,

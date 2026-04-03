@@ -7,7 +7,7 @@ import AppButton from '@/components/ui/AppButton'
 import { motion } from 'framer-motion'
 import { blurChild, BlurStagger } from '@/components/animations'
 
-const WeBuild = ({ heading, subheading, buttonLabel, image, stats }: any) => {
+const WeBuild = ({ heading, subheading, buttonLabel, image, stats, buttonLink }: any) => {
   const imageUrl = image?.url
 
   return (
@@ -42,6 +42,7 @@ const WeBuild = ({ heading, subheading, buttonLabel, image, stats }: any) => {
                 </>
               }
               size="md"
+              href={buttonLink || '#'}
               className="mt-10 max-md:mt-6 px-3"
             />
           </div>

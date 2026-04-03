@@ -11,8 +11,8 @@ import { Media } from './collections/Media'
 import { Pages } from './collections/Pages/Pages'
 import { Header } from './globals/Header'
 import { Footer } from './globals/Footer'
-import { getServerSideURL } from './utilities/getURL'
 import { ContactSubmissions } from './collections/ContactSubmissions'
+import { generatePreviewPath } from './utilities/generatePreviewPath'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -28,14 +28,12 @@ export default buildConfig({
     },
     user: Users.slug,
     livePreview: {
-      url: ({ data }) => {
-        const serverURL = getServerSideURL()
-        const slug = data?.slug as string | undefined
-        if (!slug) return serverURL
-        const normalizedSlug = slug.replace(/^\/+/, '') || 'home'
-        const path = normalizedSlug === 'home' ? '/' : `/${normalizedSlug}`
-        return `${serverURL}${path}`
-      },
+      url: ({ data, req }) =>
+        generatePreviewPath({
+          slug: typeof data?.slug === 'string' ? data.slug : '',
+          collection: 'pages',
+          req,
+        }),
       breakpoints: [
         {
           label: 'Mobile',

@@ -1,7 +1,8 @@
 'use client'
 
 import { motion, AnimatePresence } from 'framer-motion'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { usePathname } from 'next/navigation'
 
 // ── Animated circuit node ─────────────────────────────────────────────────────
 const Node = ({ x, y, delay }: { x: number; y: number; delay: number }) => (
@@ -114,12 +115,24 @@ const ProgressBar = ({ progress }: { progress: number }) => (
 )
 
 // ── Main component ────────────────────────────────────────────────────────────
-export default function PageLoader() {
+export default function NavigationLoader() {
+  const pathname = usePathname()
   const [progress, setProgress] = useState(0)
-  const [visible, setVisible] = useState(true)
+  const [visible, setVisible] = useState(false)
   const [statusText, setStatusText] = useState('Initializing')
+  const isMounted = useRef(false)
 
   useEffect(() => {
+    // Skip the very first mount — only show on actual route changes
+    if (!isMounted.current) {
+      isMounted.current = true
+      return
+    }
+
+    setVisible(true)
+    setProgress(0)
+    setStatusText('Initializing')
+
     const steps = [
       { to: 30, delay: 0, text: 'Initializing' },
       { to: 60, delay: 400, text: 'Loading assets' },
@@ -127,15 +140,20 @@ export default function PageLoader() {
       { to: 100, delay: 1400, text: 'Ready' },
     ]
 
-    steps.forEach(({ to, delay, text }) => {
+    const timers = steps.map(({ to, delay, text }) =>
       setTimeout(() => {
         setProgress(to)
         setStatusText(text)
-      }, delay)
-    })
+      }, delay),
+    )
 
-    setTimeout(() => setVisible(false), 2000)
-  }, [])
+    const hideTimer = setTimeout(() => setVisible(false), 2000)
+
+    return () => {
+      timers.forEach(clearTimeout)
+      clearTimeout(hideTimer)
+    }
+  }, [pathname])
 
   return (
     <AnimatePresence>
@@ -179,23 +197,21 @@ export default function PageLoader() {
               transition={{ delay: 0.3, duration: 0.6 }}
             >
               <div
-                className="w-18 h-18 flex items-center justify-center rounded-lg"
+                className="w-28 h-28 flex items-center justify-center rounded-lg"
                 style={{
                   background: '#0a0a0a',
                   border: '1px solid rgba(228,90,71,0.5)',
                   boxShadow: '0 0 24px rgba(228,90,71,0.2), inset 0 0 12px rgba(228,90,71,0.05)',
                 }}
               >
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
-                  <motion.path
-                    d="M13 2L4.09344 12.6879C3.74463 13.1064 3.57023 13.3157 3.56756 13.4925C3.56524 13.6461 3.63372 13.7923 3.75324 13.8889C3.89073 14 4.16195 14 4.70436 14H12L11 22L19.9066 11.3121C20.2554 10.8936 20.4298 10.6843 20.4324 10.5075C20.4348 10.3539 20.3663 10.2077 20.2468 10.1111C20.1093 10 19.8381 10 19.2956 10H12L13 2Z"
-                    stroke="#e45a47"
-                    strokeWidth="1.5"
-                    initial={{ pathLength: 0 }}
-                    animate={{ pathLength: 1 }}
-                    transition={{ delay: 0.5, duration: 0.8 }}
-                  />
-                </svg>
+                <motion.img
+                  src="images/logo.png" // put your logo inside /public
+                  alt="Ampere Labs Logo"
+                  className="w-24 h-24 object-contain"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.5, duration: 0.6 }}
+                />
               </div>
             </motion.div>
           </div>

@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import { getPayload } from 'payload'
 import config from '@/payload.config'
 import { RenderBlocks } from '@/blocks/RenderBlocks'
@@ -8,6 +10,8 @@ import { getServerSideURL } from '@/utilities/getURL'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 
 export async function generateMetadata(): Promise<Metadata> {
+  const { isEnabled: draft } = await draftMode()
+
   const payload = await getPayload({ config })
 
   const page = await payload.find({
@@ -15,7 +19,7 @@ export async function generateMetadata(): Promise<Metadata> {
     draft: false,
     limit: 1,
     pagination: false,
-    overrideAccess: false,
+    overrideAccess: draft,
     where: {
       or: [{ slug: { equals: 'home' } }, { slug: { equals: '/home' } }, { slug: { equals: '/' } }],
     },
@@ -60,7 +64,7 @@ export default async function HomePage() {
     draft,
     limit: 1,
     pagination: false,
-    overrideAccess: true,
+    overrideAccess: draft,
     where: {
       or: [{ slug: { equals: 'home' } }, { slug: { equals: '/home' } }, { slug: { equals: '/' } }],
     },

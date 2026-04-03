@@ -203,7 +203,7 @@
 import { generatePreviewPath } from '@/utilities/generatePreviewPath'
 import { CollectionConfig } from 'payload'
 import { revalidateDelete, revalidatePage } from './hooks/revalidatePage'
-import { populatePublishedAt } from '@/app/hooks/populatePublishedAt'
+import { populatePublishedAt } from '@/hooks/populatePublishedAt'
 
 //Home
 import { Banner } from '@/blocks/Home/Banner/config'
@@ -247,6 +247,8 @@ import { DecentralizingFinance } from '@/blocks/Blockchain/DecentralizingFinance
 import { authenticated } from '@/access/authenticated'
 import { authenticatedOrPublished } from '@/access/authenticatedOrPublished'
 
+import { slugField } from 'payload'
+
 export const Pages: CollectionConfig = {
   slug: 'pages',
   access: {
@@ -283,15 +285,16 @@ export const Pages: CollectionConfig = {
       type: 'text',
       required: true,
     },
-    {
-      name: 'slug',
-      type: 'text',
-      required: true,
-      unique: true,
-      admin: {
-        description: 'Use "home" for the homepage. Do NOT use "/" — use "home" instead.',
-      },
-    },
+    slugField(),
+    // {
+    //   name: 'slug',
+    //   type: 'text',
+    //   required: true,
+    //   unique: true,
+    //   admin: {
+    //     description: 'Use "home" for the homepage. Do NOT use "/" — use "home" instead.',
+    //   },
+    // },
     {
       type: 'tabs',
       tabs: [

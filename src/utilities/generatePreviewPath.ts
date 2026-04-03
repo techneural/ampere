@@ -1,4 +1,5 @@
 import { PayloadRequest, CollectionSlug } from 'payload'
+import { getServerSideURL } from './getURL'
 
 const collectionPrefixMap: Partial<Record<CollectionSlug, string>> = {
   pages: '',
@@ -10,7 +11,7 @@ type Props = {
   req: PayloadRequest
 }
 
-export const generatePreviewPath = ({ collection, slug }: Props) => {
+export const generatePreviewPath = ({ collection, slug, req }: Props) => {
   if (slug === undefined || slug === null) {
     return null
   }
@@ -18,7 +19,7 @@ export const generatePreviewPath = ({ collection, slug }: Props) => {
   // Normalize slug: strip leading slash and treat empty/home as homepage
   const normalizedSlug = slug.replace(/^\/+/, '') || 'home'
 
-  // For homepage (slug is "home" or was "/" or "/home"), preview path is "/"
+  // For homepage preview path is "/"
   const previewPath =
     normalizedSlug === 'home' ? '/' : `${collectionPrefixMap[collection]}/${normalizedSlug}`
 
@@ -29,7 +30,9 @@ export const generatePreviewPath = ({ collection, slug }: Props) => {
     previewSecret: process.env.PREVIEW_SECRET || '',
   })
 
-  const url = `/next/preview?${encodedParams.toString()}`
+  // ✅ Return FULL absolute URL so the Preview button opens the correct port
+  const serverURL = getServerSideURL()
+  const url = `${serverURL}/next/preview?${encodedParams.toString()}`
 
   return url
 }

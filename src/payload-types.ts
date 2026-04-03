@@ -297,8 +297,9 @@ export interface Page {
   id: string;
   title: string;
   /**
-   * Use "home" for the homepage. Do NOT use "/" — use "home" instead.
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
    */
+  generateSlug?: boolean | null;
   slug: string;
   layout: (
     | {
@@ -675,6 +676,7 @@ export interface Page {
         heading: string;
         subheading: string;
         buttonLabel?: string | null;
+        buttonLink?: string | null;
         image: string | Media;
         stats?:
           | {
@@ -718,6 +720,7 @@ export interface Page {
         subheading: string;
         ratingText?: string | null;
         buttonLabel?: string | null;
+        buttonLink?: string | null;
         features?:
           | {
               title: string;
@@ -1084,6 +1087,7 @@ export interface MediaSelect<T extends boolean = true> {
  */
 export interface PagesSelect<T extends boolean = true> {
   title?: T;
+  generateSlug?: T;
   slug?: T;
   layout?:
     | T
@@ -1492,6 +1496,7 @@ export interface PagesSelect<T extends boolean = true> {
               heading?: T;
               subheading?: T;
               buttonLabel?: T;
+              buttonLink?: T;
               image?: T;
               stats?:
                 | T
@@ -1538,6 +1543,7 @@ export interface PagesSelect<T extends boolean = true> {
               subheading?: T;
               ratingText?: T;
               buttonLabel?: T;
+              buttonLink?: T;
               features?:
                 | T
                 | {
