@@ -302,6 +302,7 @@ const ContactForm = (props: Props) => {
                   placeholder="Williams Christidass"
                   value={form.name}
                   onChange={handleChange('name')}
+                  required
                 />
                 {touched.name && errors.name && (
                   <p className="text-error text-xs mt-1">{errors.name}</p>
@@ -315,6 +316,7 @@ const ContactForm = (props: Props) => {
                   placeholder="wills234@gmail.com"
                   value={form.email}
                   onChange={handleChange('email')}
+                  required
                 />
                 {touched.email && errors.email && (
                   <p className="text-error text-xs mt-1">{errors.email}</p>
@@ -327,6 +329,7 @@ const ContactForm = (props: Props) => {
                   placeholder="Enter your number"
                   value={form.phone}
                   onChange={handleChange('phone')}
+                  required
                 />
                 {touched.phone && errors.phone && (
                   <p className="text-error text-xs mt-1">{errors.phone}</p>
@@ -339,6 +342,7 @@ const ContactForm = (props: Props) => {
                   options={subjects?.map((s) => s.label) || []}
                   value={form.subject}
                   onChange={handleChange('subject')}
+                  required
                 />
                 {touched.subject && errors.subject && (
                   <p className="text-error text-xs mt-1">{errors.subject}</p>
@@ -351,6 +355,7 @@ const ContactForm = (props: Props) => {
                   placeholder="Enter your message"
                   value={form.message}
                   onChange={handleChange('message')}
+                  required
                 />
                 {touched.message && errors.message && (
                   <p className="text-error text-xs mt-1">{errors.message}</p>
@@ -418,7 +423,7 @@ const ContactForm = (props: Props) => {
                 size="lg"
                 type="submit"
                 isLoading={status === 'loading'}
-                disabled={status === 'loading'}
+                disabled={status === 'loading' || !isFormValidExceptCheckbox() || !form.agreed}
               />
             </form>
           </div>

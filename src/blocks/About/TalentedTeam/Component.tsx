@@ -25,7 +25,7 @@ const TalentedTeam: React.FC<Props> = ({ heading, subheading, members = [] }) =>
             <FadeWrapper>
               <h4 className="heading_b_border">{heading}</h4>
             </FadeWrapper>
-            <FadeWrapper delay={0.2} className='mt-10 max-w-234 mx-auto'>
+            <FadeWrapper delay={0.2} className="mt-10 max-w-234 mx-auto">
               <h3>{subheading}</h3>
             </FadeWrapper>
           </div>
@@ -34,7 +34,7 @@ const TalentedTeam: React.FC<Props> = ({ heading, subheading, members = [] }) =>
         {/* Team Grid */}
         <div className="relative mt-10">
           <div className="grid grid-cols-4 gap-6 max-lg:grid-cols-2 max-md:grid-cols-1">
-            {members.map((member, i) => {
+            {members.slice(0, 4).map((member, i) => {
               const imageUrl = typeof member.image === 'object' ? member.image?.url : null
 
               return (

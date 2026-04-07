@@ -9,6 +9,7 @@ type Props = {
   description?: string
   services: {
     title: string
+    slug?: string
     description: string
     link?: string
     icon: {
@@ -44,45 +45,50 @@ export const MainServicesBlock: React.FC<Props> = ({ title, description, service
             <div className="w-0.5 h-full bg-linear-to-b from-transparent via-primary to-transparent"></div>
           </div>
 
-          {services?.map((item, index) => (
-            <div key={index} className="group flex flex-col max-md:text-center">
-              <div className="flex-1">
-                <div className="relative flex items-center justify-center size-15 rounded-lg bg-neutral-300 border border-neutral-800 mb-8 max-md:mx-auto">
-                  {item.icon?.url && (
-                    <Image
-                      src={item.icon.url}
-                      alt={item.title}
-                      width={50}
-                      height={50}
-                      className="size-12.5"
-                    />
-                  )}
+          {services?.map((item, index) => {
+            // const href = item.slug ? `/services/${item.slug}` : item.link || '#'
+            return (
+              <div key={index} className="group flex flex-col max-md:text-center">
+                <div className="flex-1">
+                  <div className="relative flex items-center justify-center size-15 rounded-lg bg-neutral-300 border border-neutral-800 mb-8 max-md:mx-auto">
+                    {item.icon?.url && (
+                      <Image
+                        src={item.icon.url}
+                        alt={item.title}
+                        width={50}
+                        height={50}
+                        className="size-12.5"
+                      />
+                    )}
+                  </div>
+
+                  {/* <Link href={href}> */}
+                  <Link href="/coming-soon">
+                    <FadeWrapper delay={0.4}>
+                      <h3 className="max-xl:mb-3 mb-5 group-hover:text-primary">{item.title}</h3>
+                    </FadeWrapper>
+                  </Link>
+                  <FadeWrapper delay={0.5}>
+                    <p className="font-avenirLtStd text-neutral-400">{item.description}</p>
+                  </FadeWrapper>
                 </div>
 
-                <Link href={item.link || '#'}>
-                  <FadeWrapper delay={0.4}>
-                    <h3 className="max-xl:mb-3 mb-5 group-hover:text-primary">{item.title}</h3>
-                  </FadeWrapper>
-                </Link>
-                <FadeWrapper delay={0.5}>
-                  <p className="font-avenirLtStd text-neutral-400">{item.description}</p>
+                <FadeWrapper delay={0.6}>
+                  <AppButton
+                    // href={href}
+                    href="/coming-soon"
+                    label={
+                      <>
+                        Learn more
+                        <ArrowRight className="size-5 transition-transform duration-300 group-hover:translate-x-1" />
+                      </>
+                    }
+                    className="max-xl:mt-6 mt-12 bg-neutral-200! hover:bg-neutral-200/60 border-0 w-full group-hover:bg-primary!"
+                  />
                 </FadeWrapper>
               </div>
-
-              <FadeWrapper delay={0.6}>
-                <AppButton
-                  href={item.link}
-                  label={
-                    <>
-                      Learn more
-                      <ArrowRight className="size-5 transition-transform duration-300 group-hover:translate-x-1" />
-                    </>
-                  }
-                  className="max-xl:mt-6 mt-12 bg-neutral-200! hover:bg-neutral-200/60 border-0 w-full group-hover:bg-primary!"
-                />
-              </FadeWrapper>
-            </div>
-          ))}
+            )
+          })}
         </div>
       </div>
     </section>

@@ -3,6 +3,8 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
 import { usePathname } from 'next/navigation'
+import logo from '@/assets/logo.png'
+import Image from 'next/image'
 
 // ── Animated circuit node ─────────────────────────────────────────────────────
 const Node = ({ x, y, delay }: { x: number; y: number; delay: number }) => (
@@ -204,13 +206,12 @@ export default function NavigationLoader() {
                   boxShadow: '0 0 24px rgba(228,90,71,0.2), inset 0 0 12px rgba(228,90,71,0.05)',
                 }}
               >
-                <motion.img
-                  src="images/logo.png" // put your logo inside /public
+                <Image
+                  src={logo}
                   alt="Ampere Labs Logo"
+                  width={96}
+                  height={96}
                   className="w-24 h-24 object-contain"
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.5, duration: 0.6 }}
                 />
               </div>
             </motion.div>

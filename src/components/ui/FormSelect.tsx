@@ -3,13 +3,16 @@ type Props = {
   options: string[]
   value?: string
   onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void
+  required?: boolean
 }
 
-const FormSelect = ({ label, options, value, onChange }: Props) => {
+const FormSelect = ({ label, options, value, onChange, required = false }: Props) => {
   return (
     <div className="flex flex-col gap-2">
       <label className="label">
-        <span className="font-avenirLtStd text-neutral-400 uppercase text-sm">{label}</span>
+        <span className="font-avenirLtStd text-neutral-400 uppercase text-sm">
+          {label} {required && <span className="text-error">*</span>}
+        </span>
       </label>
 
       <select

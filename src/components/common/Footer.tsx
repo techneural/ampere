@@ -57,21 +57,21 @@ const Footer = ({ data }: any) => {
         <div className="container flex flex-col md:flex-row items-center justify-between gap-6 text-sm">
           <div className="flex items-center gap-6 flex-wrap justify-center">
             {data?.email && (
-              <Link
-                href={`mailto:${data.email}`}
+              <a
+                href={`https://mail.google.com/mail/?view=cm&to=${data.email}`}
                 target="_blank"
                 className="flex items-center gap-1 hover:underline"
               >
                 <Image src="/images/icons/mail.png" alt="mail" width={30} height={30} />
                 {data.email}
-              </Link>
+              </a>
             )}
 
             {data?.phone && (
-              <Link href={`tel:${data.phone}`} className="flex items-center gap-1 hover:underline">
+              <a href={`tel:${data.phone}`} className="flex items-center gap-1 hover:underline">
                 <Image src="/images/icons/phone.png" alt="phone" width={30} height={30} />
                 {data.phone}
-              </Link>
+              </a>
             )}
 
             {data?.address && (

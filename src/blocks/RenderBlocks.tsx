@@ -10,7 +10,7 @@ import DeploymentReady from './Home/DeploymentReady/Component'
 import CustomHardwarePortfolio from './Home/CustomHardwarePortfolio/Component'
 import WhyChooseUs from './Home/WhyChooseUs/Component'
 import ResearchPortfolio from './Home/ResearchPortfolio/Component'
-import SmarterDecisions from './Home/SmarterDecisions/Component'
+import Blog from './Home/Blog/Component'
 import Faq from './Home/Faq/Component'
 import OurMission from './About/OurMission/Component'
 import WhoWeAre from './About/WhoWeAre/Component'
@@ -42,7 +42,7 @@ const blockComponents = {
   customHardwarePortfolio: CustomHardwarePortfolio,
   whyChooseUs: WhyChooseUs,
   researchPortfolio: ResearchPortfolio,
-  smarterDecisions: SmarterDecisions,
+  blog: Blog,
   faq: Faq,
   //About
   aboutBanner: AboutBanner,

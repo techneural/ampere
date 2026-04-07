@@ -1,3 +1,4 @@
+import { formatSlug } from '@/utilities/formatSlug';
 import type { Block } from 'payload'
 
 export const MainServices: Block = {
@@ -29,8 +30,27 @@ export const MainServices: Block = {
           required: true,
         },
         {
+          name: 'slug',
+          type: 'text',
+          admin: { hidden: true },
+          hooks: {
+            beforeChange: [
+              ({ value, siblingData }: { value?: string; siblingData?: Record<string, unknown> }) =>
+                formatSlug((siblingData?.title as string) ?? value ?? ''),
+            ],
+          },
+        },
+        {
           name: 'description',
           type: 'textarea',
+        },
+        {
+          name: 'excerpt',
+          type: 'textarea',
+          label: 'Short Excerpt',
+          admin: {
+            description: 'A short summary shown on the service detail page below the title.',
+          },
         },
         {
           name: 'icon',
@@ -39,8 +59,26 @@ export const MainServices: Block = {
           required: true,
         },
         {
+          name: 'image',
+          type: 'upload',
+          relationTo: 'media',
+          label: 'Detail Page Banner Image',
+          admin: {
+            description: 'Hero image shown on the service detail page.',
+          },
+        },
+        {
+          name: 'content',
+          type: 'richText',
+          label: 'Service Content',
+          admin: {
+            description: 'Full service detail content shown on the detail page.',
+          },
+        },
+        {
           name: 'link',
           type: 'text',
+          admin: { hidden: true }, // kept for backward compat but link now uses slug
         },
       ],
     },

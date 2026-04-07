@@ -72,7 +72,6 @@ const Page = async ({ params: paramsPromise }: Args) => {
   const page = await getPage(decodedSlug)
 
   if (!page) return notFound()
-
   return (
     <>
       {draft && <LivePreviewListener />}

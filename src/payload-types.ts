@@ -340,8 +340,35 @@ export interface Page {
         services?:
           | {
               title: string;
+              slug?: string | null;
               description?: string | null;
+              /**
+               * A short summary shown on the service detail page below the title.
+               */
+              excerpt?: string | null;
               icon: string | Media;
+              /**
+               * Hero image shown on the service detail page.
+               */
+              image?: (string | null) | Media;
+              /**
+               * Full service detail content shown on the detail page.
+               */
+              content?: {
+                root: {
+                  type: string;
+                  children: {
+                    type: any;
+                    version: number;
+                    [k: string]: unknown;
+                  }[];
+                  direction: ('ltr' | 'rtl') | null;
+                  format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                  indent: number;
+                  version: number;
+                };
+                [k: string]: unknown;
+              } | null;
               link?: string | null;
               id?: string | null;
             }[]
@@ -436,16 +463,38 @@ export interface Page {
         posts?:
           | {
               title: string;
+              slug?: string | null;
               source?: string | null;
               date?: string | null;
+              /**
+               * A short summary shown on the blog detail page below the title.
+               */
+              excerpt?: string | null;
               image: string | Media;
-              link?: string | null;
+              /**
+               * Full blog article content shown on the detail page.
+               */
+              content?: {
+                root: {
+                  type: string;
+                  children: {
+                    type: any;
+                    version: number;
+                    [k: string]: unknown;
+                  }[];
+                  direction: ('ltr' | 'rtl') | null;
+                  format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                  indent: number;
+                  version: number;
+                };
+                [k: string]: unknown;
+              } | null;
               id?: string | null;
             }[]
           | null;
         id?: string | null;
         blockName?: string | null;
-        blockType: 'smarterDecisions';
+        blockType: 'blog';
       }
     | {
         heading?: string | null;
@@ -1136,8 +1185,12 @@ export interface PagesSelect<T extends boolean = true> {
                 | T
                 | {
                     title?: T;
+                    slug?: T;
                     description?: T;
+                    excerpt?: T;
                     icon?: T;
+                    image?: T;
+                    content?: T;
                     link?: T;
                     id?: T;
                   };
@@ -1229,7 +1282,7 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
-        smarterDecisions?:
+        blog?:
           | T
           | {
               heading?: T;
@@ -1238,10 +1291,12 @@ export interface PagesSelect<T extends boolean = true> {
                 | T
                 | {
                     title?: T;
+                    slug?: T;
                     source?: T;
                     date?: T;
+                    excerpt?: T;
                     image?: T;
-                    link?: T;
+                    content?: T;
                     id?: T;
                   };
               id?: T;

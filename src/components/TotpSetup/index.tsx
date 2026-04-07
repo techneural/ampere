@@ -90,7 +90,7 @@ const TotpSetup: React.FC = () => {
     border: '1px solid var(--theme-elevation-200, #e5e7eb)',
     borderRadius: 8,
     padding: '1.5rem',
-    marginTop: '1.5rem',
+    marginTop: '0.5rem',
     maxWidth: 480,
     background: 'var(--theme-elevation-0, #fff)',
   }

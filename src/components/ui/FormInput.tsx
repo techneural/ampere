@@ -4,6 +4,7 @@ type Props = {
   type?: string
   value?: string
   maxLength?: number
+  required?: boolean
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
@@ -14,11 +15,14 @@ const FormInput = ({
   value,
   onChange,
   maxLength = 50,
+  required = false,
 }: Props) => {
   return (
     <div className="flex flex-col gap-2">
       <label className="label">
-        <span className="font-avenirLtStd text-neutral-400 uppercase text-sm">{label}</span>
+        <span className="font-avenirLtStd text-neutral-400 uppercase text-sm">
+          {label} {required && <span className="text-error">*</span>}
+        </span>
       </label>
       <input
         type={type}

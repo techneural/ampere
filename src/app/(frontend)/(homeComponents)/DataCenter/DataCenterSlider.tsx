@@ -59,7 +59,7 @@ const DataCenterSlider = ({ items }: Props) => {
 
               <Link
                 href={item.link || '/'}
-                className="bg-neutral-200 size-11 flex justify-center items-center border border-neutral-500 rounded-sm group-hover:bg-white transition-colors duration-300"
+                className="bg-neutral-200 min-w-11 h-11 flex justify-center items-center border border-neutral-500 rounded-sm group-hover:bg-white transition-colors duration-300"
               >
                 <ArrowUpRight className="text-primary" />
               </Link>

@@ -10,7 +10,7 @@ const AfterNavLinks: React.FC = () => {
   const [open, setOpen] = useState(false)
 
   return (
-    <div style={{ padding: '0 16px 16px' }}>
+    <div style={{ padding: '0' }}>
       <button
         onClick={() => setOpen((o) => !o)}
         style={{
@@ -28,16 +28,11 @@ const AfterNavLinks: React.FC = () => {
           textAlign: 'left',
         }}
       >
-        <span>🔐</span>
         <span>Security / 2FA</span>
         <span style={{ marginLeft: 'auto', fontSize: 10 }}>{open ? '▲' : '▼'}</span>
       </button>
 
-      {open && (
-        <div style={{ marginTop: 4 }}>
-          <TotpSetup />
-        </div>
-      )}
+      {open && <TotpSetup />}
     </div>
   )
 }

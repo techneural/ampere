@@ -70,11 +70,11 @@
   }
 
   h1 {
-    @apply font-bold text-[3.125rem] max-md:text-3xl max-sm:text-3xl leading-tight;
+    @apply font-bold text-[3.125rem] max-md:text-3xl max-sm:text-3xl leading-tight wrap-break-word;
   }
 
   h2 {
-    @apply font-avenirLtStd text-3xl max-2xl:text-3xl max-xl:text-2xl max-lg:text-2xl max-md:text-2xl max-sm:text-xl leading-snug;
+    @apply font-avenirLtStd text-3xl max-2xl:text-3xl max-xl:text-2xl max-lg:text-2xl max-md:text-2xl max-sm:text-xl leading-snug wrap-break-word;
   }
 
   h3 {
@@ -210,6 +210,10 @@ select:-webkit-autofill {
 .workflow_scroll::-webkit-scrollbar-thumb {
   background: #e45a47;
   border-radius: 10px;
+}
+
+.grecaptcha-badge {
+  z-index: 10;
 }
 
 @keyframes glow-medium {

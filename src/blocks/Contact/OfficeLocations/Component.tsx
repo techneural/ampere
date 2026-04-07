@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
-import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { BlurStagger } from '@/components/animations'
 
@@ -54,20 +53,20 @@ const OfficeLocations = ({ heading, description, contacts, locations }: Props) =
                   </BlurStagger>
 
                   <div className="flex gap-2 max-sm:justify-start">
-                    <Link
+                    <a
                       href={`tel:${item.phone}`}
                       className="bg-neutral-200 size-11 rounded-sm flex justify-center items-center border border-neutral-500 max-sm:size-8 hover:bg-white hover:border-white transition-colors duration-300"
                     >
                       <Image src="/images/phone.png" alt="phone-icon" width={30} height={30} />
-                    </Link>
+                    </a>
 
-                    <Link
-                      href={`mailto:${item.email}`}
+                    <a
+                      href={`https://mail.google.com/mail/?view=cm&to=${item.email}`}
                       target="_blank"
                       className="bg-neutral-200 size-11 rounded-sm flex justify-center items-center border border-neutral-500 max-sm:size-8 hover:bg-white hover:border-white transition-colors duration-300"
                     >
                       <Image src="/images/mail.png" alt="mail-icon" width={30} height={30} />
-                    </Link>
+                    </a>
                   </div>
                 </div>
               </div>
