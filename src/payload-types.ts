@@ -70,6 +70,7 @@ export interface Config {
     users: User;
     media: Media;
     pages: Page;
+    blogs: Blog;
     'contact-submissions': ContactSubmission;
     'payload-kv': PayloadKv;
     'payload-jobs': PayloadJob;
@@ -87,6 +88,7 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
+    blogs: BlogsSelect<false> | BlogsSelect<true>;
     'contact-submissions': ContactSubmissionsSelect<false> | ContactSubmissionsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
@@ -465,43 +467,6 @@ export interface Page {
         blockType: 'blog';
       }
     | {
-        posts?:
-          | {
-              title: string;
-              slug?: string | null;
-              source?: string | null;
-              date?: string | null;
-              /**
-               * A short summary shown on the blog detail page below the title.
-               */
-              excerpt?: string | null;
-              image: string | Media;
-              /**
-               * Full blog article content shown on the detail page.
-               */
-              content?: {
-                root: {
-                  type: string;
-                  children: {
-                    type: any;
-                    version: number;
-                    [k: string]: unknown;
-                  }[];
-                  direction: ('ltr' | 'rtl') | null;
-                  format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-                  indent: number;
-                  version: number;
-                };
-                [k: string]: unknown;
-              } | null;
-              id?: string | null;
-            }[]
-          | null;
-        id?: string | null;
-        blockName?: string | null;
-        blockType: 'blogPage';
-      }
-    | {
         heading?: string | null;
         description?: string | null;
         faqs?:
@@ -817,6 +782,58 @@ export interface Page {
   _status?: ('draft' | 'published') | null;
 }
 /**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "blogs".
+ */
+export interface Blog {
+  id: string;
+  title: string;
+  slug?: string | null;
+  source?: string | null;
+  date?: string | null;
+  /**
+   * A short summary shown on the blog listing and detail page below the title.
+   */
+  excerpt?: string | null;
+  image: string | Media;
+  /**
+   * Full blog article content shown on the detail page.
+   */
+  content?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  publishedAt?: string | null;
+  meta?: {
+    /**
+     * Title shown in search engine results. Recommended: 50–60 characters.
+     */
+    title?: string | null;
+    /**
+     * Description shown in search engine results. Recommended: 150–160 characters.
+     */
+    description?: string | null;
+    /**
+     * Image shown when shared on social media. Recommended: 1200×630px.
+     */
+    image?: (string | null) | Media;
+  };
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
  * Messages submitted via the Contact Us form on the website.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -964,6 +981,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'pages';
         value: string | Page;
+      } | null)
+    | ({
+        relationTo: 'blogs';
+        value: string | Blog;
       } | null)
     | ({
         relationTo: 'contact-submissions';
@@ -1292,24 +1313,6 @@ export interface PagesSelect<T extends boolean = true> {
           | {
               heading?: T;
               description?: T;
-              id?: T;
-              blockName?: T;
-            };
-        blogPage?:
-          | T
-          | {
-              posts?:
-                | T
-                | {
-                    title?: T;
-                    slug?: T;
-                    source?: T;
-                    date?: T;
-                    excerpt?: T;
-                    image?: T;
-                    content?: T;
-                    id?: T;
-                  };
               id?: T;
               blockName?: T;
             };
@@ -1646,6 +1649,30 @@ export interface PagesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "blogs_select".
+ */
+export interface BlogsSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  source?: T;
+  date?: T;
+  excerpt?: T;
+  image?: T;
+  content?: T;
+  publishedAt?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "contact-submissions_select".
  */
 export interface ContactSubmissionsSelect<T extends boolean = true> {
@@ -1867,10 +1894,15 @@ export interface TaskSchedulePublish {
   input: {
     type?: ('publish' | 'unpublish') | null;
     locale?: string | null;
-    doc?: {
-      relationTo: 'pages';
-      value: string | Page;
-    } | null;
+    doc?:
+      | ({
+          relationTo: 'pages';
+          value: string | Page;
+        } | null)
+      | ({
+          relationTo: 'blogs';
+          value: string | Blog;
+        } | null);
     global?: string | null;
     user?: (string | null) | User;
   };

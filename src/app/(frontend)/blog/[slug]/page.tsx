@@ -7,76 +7,44 @@ import { notFound } from 'next/navigation'
 import { getPayload } from 'payload'
 import configPromise from '@/payload.config'
 import RichText from '@/components/RichText'
-import { unstable_cache } from 'next/cache'
 import { draftMode } from 'next/headers'
 import { getGlobals } from '@/lib/getGlobals'
+
+export const dynamic = 'force-dynamic'
 
 type Args = {
   params: Promise<{ slug: string }>
 }
 
-const getCachedAllBlogPosts = unstable_cache(
-  async () => {
-    const payload = await getPayload({ config: configPromise })
-    const pages = await payload.find({
-      collection: 'pages',
-      draft: false,
-      limit: 200,
-    overrideAccess: false,
-      pagination: false,
-    })
+// ─── Fetch a single post by slug ─────────────────────────────────────────────
 
-    const posts: any[] = []
-    for (const page of pages.docs) {
-      const layout = (page as any).layout || []
-      for (const block of layout) {
-        if (
-          (block.blockType === 'blog' || block.blockType === 'blogPage') &&
-          Array.isArray(block.posts)
-        ) {
-          posts.push(...block.posts)
-        }
-      }
-    }
-    return posts
-  },
-  ['all-blog-posts'],
-  { tags: ['pages', 'blog-posts'], revalidate: 3600 },
-)
-
-async function getDraftBlogPosts() {
+async function getBlogPost(slug: string, draft: boolean) {
   const payload = await getPayload({ config: configPromise })
-  const pages = await payload.find({
-    collection: 'pages',
-    draft: true,
+  const result = await payload.find({
+    collection: 'blogs',
+    draft,
+    limit: 1,
+    pagination: false,
+    where: { slug: { equals: slug } },
+    ...(draft ? {} : { overrideAccess: false }),
+  })
+  return result.docs[0] ?? null
+}
+
+// ─── Fetch all slugs for static generation ───────────────────────────────────
+
+export async function generateStaticParams() {
+  const payload = await getPayload({ config: configPromise })
+  const result = await payload.find({
+    collection: 'blogs',
+    draft: false,
     limit: 200,
     pagination: false,
   })
-
-  const posts: any[] = []
-  for (const page of pages.docs) {
-    const layout = (page as any).layout || []
-    for (const block of layout) {
-      if (
-        (block.blockType === 'blog' || block.blockType === 'blogPage') &&
-        Array.isArray(block.posts)
-      ) {
-        posts.push(...block.posts)
-      }
-    }
-  }
-  return posts
+  return result.docs.filter((p) => p.slug).map((p) => ({ slug: p.slug }))
 }
 
-async function getBlogPost(slug: string, draft: boolean) {
-  const posts = draft ? await getDraftBlogPosts() : await getCachedAllBlogPosts()
-  return posts.find((p) => p.slug === slug) ?? null
-}
-
-export async function generateStaticParams() {
-  const posts = await getCachedAllBlogPosts()
-  return posts.filter((p) => p.slug).map((p) => ({ slug: p.slug }))
-}
+// ─── Metadata ────────────────────────────────────────────────────────────────
 
 export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
   const { slug } = await paramsPromise
@@ -85,9 +53,11 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
   if (!post) return {}
   return {
     title: `${post.title} | Blog`,
-    description: post.excerpt ?? '',
+    description: (post as any).excerpt ?? '',
   }
 }
+
+// ─── Page ────────────────────────────────────────────────────────────────────
 
 export default async function BlogDetailPage({ params: paramsPromise }: Args) {
   const { slug } = await paramsPromise
@@ -99,8 +69,8 @@ export default async function BlogDetailPage({ params: paramsPromise }: Args) {
 
   if (!post) return notFound()
 
-  const formattedDate = post.date
-    ? new Date(post.date).toLocaleDateString('en-US', {
+  const formattedDate = (post as any).date
+    ? new Date((post as any).date).toLocaleDateString('en-US', {
         month: 'long',
         day: 'numeric',
         year: 'numeric',
@@ -127,10 +97,10 @@ export default async function BlogDetailPage({ params: paramsPromise }: Args) {
           <div className="space-y-5">
             <div className="flex justify-between items-center">
               <div className="flex flex-col gap-4 font-avenirLtStd text-xs text-neutral-400">
-                {post.source && (
+                {(post as any).source && (
                   <span className="w-max flex items-center gap-1 bg-primary text-white rounded-sm text-base font-avenirLtStd px-5 py-2">
                     <Layers size={16} />
-                    {post.source}
+                    {(post as any).source}
                   </span>
                 )}
                 {formattedDate && (
@@ -160,11 +130,11 @@ export default async function BlogDetailPage({ params: paramsPromise }: Args) {
           </div>
         </div>
 
-        {post.image?.url && (
+        {(post as any).image?.url && (
           <div className="mt-6">
             <div className="relative rounded-2xl overflow-hidden border-2 border-neutral-500">
               <Image
-                src={post.image.url}
+                src={(post as any).image.url}
                 alt={post.title}
                 width={1200}
                 height={600}
@@ -174,16 +144,16 @@ export default async function BlogDetailPage({ params: paramsPromise }: Args) {
           </div>
         )}
 
-        {post.excerpt && (
+        {(post as any).excerpt && (
           <p className="text-neutral-400 text-lg max-md:text-base leading-relaxed">
-            {post.excerpt}
+            {(post as any).excerpt}
           </p>
         )}
 
         <div className="mt-6 pb-12">
           <article>
-            {post.content ? (
-              <RichText data={post.content} />
+            {(post as any).content ? (
+              <RichText data={(post as any).content} />
             ) : (
               <p className="text-neutral-400">No content available for this post.</p>
             )}

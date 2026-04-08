@@ -170,7 +170,7 @@ const ContactForm = (props: Props) => {
     const domain = email.split('@')[1]?.toLowerCase()
 
     if (!email || !emailRegex.test(email) || !allowedDomains.includes(domain)) return false
-    if (!phone || !/^[6-9]\d{9}$/.test(phone)) return false
+    if (!phone || !/^\d{10}$/.test(phone)) return false
     if (!subject) return false
     if (!message || message.length < 10 || message.length > 500) return false
 

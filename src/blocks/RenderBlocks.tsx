@@ -31,7 +31,6 @@ import Innovation from './Blockchain/Innovation/Component'
 import Services from './Blockchain/Services/Component'
 import TransformingBusiness from './Blockchain/TransformingBusiness/Component'
 import DecentralizingFinance from './Blockchain/DecentralizingFinance/Component'
-import BlogPageBlock from './BlogPage/Component'
 
 const blockComponents = {
   banner: Banner,
@@ -44,7 +43,6 @@ const blockComponents = {
   whyChooseUs: WhyChooseUs,
   researchPortfolio: ResearchPortfolio,
   blog: Blog,
-  blogPage: BlogPageBlock,
   faq: Faq,
   //About
   aboutBanner: AboutBanner,

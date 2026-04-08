@@ -57,7 +57,6 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function HomePage() {
   const { isEnabled: draft } = await draftMode()
   const payload = await getPayload({ config })
-  console.log('get home slug draft ::', draft)
 
   const page = await payload.find({
     collection: 'pages',

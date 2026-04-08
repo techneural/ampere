@@ -1,6 +1,5 @@
 import { getPayload } from 'payload'
 import configPromise from '@/payload.config'
-import { unstable_cache } from 'next/cache'
 import { FadeWrapper } from '@/components/animations'
 import BlogCard from '@/components/common/BlogCard'
 
@@ -20,42 +19,20 @@ type Props = {
   description?: string
 }
 
-// ─── Fetch latest 2 posts from BlogPage block (single source of truth) ───────
-
-const getLatest2Posts = unstable_cache(
-  async (): Promise<Post[]> => {
-    const payload = await getPayload({ config: configPromise })
-    const pages = await payload.find({
-      collection: 'pages',
-      draft: false,
-      limit: 200,
-      pagination: false,
-    })
-
-    const posts: Post[] = []
-    for (const page of pages.docs) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const layout = (page as any).layout || []
-      for (const block of layout) {
-        if (block.blockType === 'blogPage' && Array.isArray(block.posts)) {
-          posts.push(...block.posts)
-          // Stop as soon as we have enough
-          if (posts.length >= 2) break
-        }
-      }
-      if (posts.length >= 2) break
-    }
-
-    return posts.slice(0, 2)
-  },
-  ['home-latest-2-blog-posts'],
-  { tags: ['pages', 'blog-posts'], revalidate: 3600 },
-)
-
 // ─── Component ────────────────────────────────────────────────────────────────
 
 const LatestBlogSection = async ({ heading, description }: Props) => {
-  const posts = await getLatest2Posts()
+  const payload = await getPayload({ config: configPromise })
+
+  const result = await payload.find({
+    collection: 'blogs',
+    draft: false,
+    limit: 2,
+    pagination: false,
+    sort: '-date',
+  })
+
+  const posts = result.docs as unknown as Post[]
 
   return (
     <section className="pt-14">
@@ -76,12 +53,10 @@ const LatestBlogSection = async ({ heading, description }: Props) => {
         <div className="container relative grid grid-cols-2 gap-7.5 max-md:flex-col justify-center">
           {posts.length > 0 ? (
             posts.map((item, index) => (
-              <BlogCard key={index} item={item} comingSoon={!item.slug} />
+              <BlogCard key={item.slug ?? index} item={item} comingSoon={!item.slug} />
             ))
           ) : (
-            <p className="text-neutral-400 font-avenirLtStd py-8">
-              No blog posts yet.
-            </p>
+            <p className="text-neutral-400 font-avenirLtStd py-8">No blog posts yet.</p>
           )}
         </div>
       </div>
