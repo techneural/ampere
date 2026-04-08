@@ -22,6 +22,7 @@ const getCachedAllBlogPosts = unstable_cache(
       collection: 'pages',
       draft: false,
       limit: 200,
+    overrideAccess: false,
       pagination: false,
     })
 
@@ -29,7 +30,10 @@ const getCachedAllBlogPosts = unstable_cache(
     for (const page of pages.docs) {
       const layout = (page as any).layout || []
       for (const block of layout) {
-        if (block.blockType === 'blog' && Array.isArray(block.posts)) {
+        if (
+          (block.blockType === 'blog' || block.blockType === 'blogPage') &&
+          Array.isArray(block.posts)
+        ) {
           posts.push(...block.posts)
         }
       }
@@ -53,7 +57,10 @@ async function getDraftBlogPosts() {
   for (const page of pages.docs) {
     const layout = (page as any).layout || []
     for (const block of layout) {
-      if (block.blockType === 'blog' && Array.isArray(block.posts)) {
+      if (
+        (block.blockType === 'blog' || block.blockType === 'blogPage') &&
+        Array.isArray(block.posts)
+      ) {
         posts.push(...block.posts)
       }
     }
@@ -161,9 +168,8 @@ export default async function BlogDetailPage({ params: paramsPromise }: Args) {
                 alt={post.title}
                 width={1200}
                 height={600}
-                className="w-full h-120 max-md:h-64 object-cover"
+                className="w-full h-auto object-cover"
               />
-              {/* <div className="absolute inset-0 bg-linear-to-t from-black/50 via-transparent to-transparent" /> */}
             </div>
           </div>
         )}

@@ -460,6 +460,11 @@ export interface Page {
     | {
         heading?: string | null;
         description?: string | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'blog';
+      }
+    | {
         posts?:
           | {
               title: string;
@@ -494,7 +499,7 @@ export interface Page {
           | null;
         id?: string | null;
         blockName?: string | null;
-        blockType: 'blog';
+        blockType: 'blogPage';
       }
     | {
         heading?: string | null;
@@ -1287,6 +1292,12 @@ export interface PagesSelect<T extends boolean = true> {
           | {
               heading?: T;
               description?: T;
+              id?: T;
+              blockName?: T;
+            };
+        blogPage?:
+          | T
+          | {
               posts?:
                 | T
                 | {

@@ -8,24 +8,45 @@ import BlogListPage from '@/components/common/BlogListPage'
 const getCachedBlogPosts = unstable_cache(
   async () => {
     const payload = await getPayload({ config: configPromise })
-    const pages = await payload.find({
+
+    // First: try to find the page whose slug is 'blog' directly
+    const blogPage = await payload.find({
       collection: 'pages',
       draft: false,
-      limit: 200,
+      limit: 1,
       pagination: false,
+      where: {
+        or: [{ slug: { equals: 'blog' } }, { slug: { equals: '/blog' } }],
+      },
     })
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const posts: any[] = []
-    for (const page of pages.docs) {
+
+    const targetPages =
+      blogPage.docs.length > 0
+        ? blogPage.docs // found the blog page directly
+        : (
+            await payload.find({
+              // fallback: scan all pages (same as before)
+              collection: 'pages',
+              draft: false,
+              limit: 200,
+              pagination: false,
+            })
+          ).docs
+
+    for (const page of targetPages) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const layout = (page as any).layout || []
       for (const block of layout) {
-        if (block.blockType === 'blog' && Array.isArray(block.posts)) {
+        if (block.blockType === 'blogPage' && Array.isArray(block.posts)) {
           posts.push(...block.posts)
         }
       }
     }
+
+    console.log('[/blog] getCachedBlogPosts → found', posts.length, 'posts')
     return posts
   },
   ['blog-page-posts'],

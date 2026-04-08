@@ -14,6 +14,7 @@ import { CustomHardwarePortfolio } from '@/blocks/Home/CustomHardwarePortfolio/c
 import { WhyChooseUs } from '@/blocks/Home/WhyChooseUs/config'
 import { ResearchPortfolio } from '@/blocks/Home/ResearchPortfolio/config'
 import { Blog } from '@/blocks/Home/Blog/config'
+import { BlogPage } from '@/blocks/BlogPage/config'
 import { Faq } from '@/blocks/Home/Faq/config'
 
 //About
@@ -103,6 +104,7 @@ export const Pages: CollectionConfig = {
                 WhyChooseUs,
                 ResearchPortfolio,
                 Blog,
+                BlogPage,
                 Faq,
                 AboutBanner,
                 OurMission,
