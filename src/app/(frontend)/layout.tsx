@@ -11,6 +11,8 @@ import { NavigationLoader, PageTransition } from '@/components/animations'
 import { getServerSideURL } from '@/utilities/getURL'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 import { Toaster } from 'react-hot-toast'
+import { draftMode } from 'next/headers'
+import { AdminBar } from '@/components/AdminBar'
 
 const montserrat = Montserrat({
   subsets: ['latin'],
@@ -48,6 +50,7 @@ const avenirLtStd = localFont({
 export default async function RootLayout(props: { children: React.ReactNode }) {
   const { children } = props
   const { header, footer } = await getGlobals()
+  const { isEnabled } = await draftMode()
 
   return (
     <html lang="en">
@@ -57,6 +60,11 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
       >
         <NavigationLoader />
         <PageTransition className="flex flex-col min-h-dvh">
+          <AdminBar
+            adminBarProps={{
+              preview: isEnabled,
+            }}
+          />
           <Header data={header} />
           <main className="flex-1 bg-[url('/images/bg-fixed.png')] bg-fixed bg-no-repeat bg-cover bg-center">
             {children}

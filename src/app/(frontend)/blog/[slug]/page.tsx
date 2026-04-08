@@ -1,20 +1,20 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowLeft, Calendar, Tag, Share2 } from 'lucide-react'
+import { ArrowLeft, Layers } from 'lucide-react'
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getPayload } from 'payload'
 import configPromise from '@/payload.config'
 import RichText from '@/components/RichText'
 import { unstable_cache } from 'next/cache'
+import { draftMode } from 'next/headers'
+import { getGlobals } from '@/lib/getGlobals'
 
 type Args = {
   params: Promise<{ slug: string }>
 }
 
-// ─── Cached fetch helpers ─────────────────────────────────────────────────────
-
-// Fetch all blog posts once and cache the result
 const getCachedAllBlogPosts = unstable_cache(
   async () => {
     const payload = await getPayload({ config: configPromise })
@@ -25,10 +25,8 @@ const getCachedAllBlogPosts = unstable_cache(
       pagination: false,
     })
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const posts: any[] = []
     for (const page of pages.docs) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const layout = (page as any).layout || []
       for (const block of layout) {
         if (block.blockType === 'blog' && Array.isArray(block.posts)) {
@@ -42,23 +40,41 @@ const getCachedAllBlogPosts = unstable_cache(
   { tags: ['pages', 'blog-posts'], revalidate: 3600 },
 )
 
-async function getBlogPost(slug: string) {
-  const posts = await getCachedAllBlogPosts()
-  return posts.find((p) => p.slug === slug) ?? null
+async function getDraftBlogPosts() {
+  const payload = await getPayload({ config: configPromise })
+  const pages = await payload.find({
+    collection: 'pages',
+    draft: true,
+    limit: 200,
+    pagination: false,
+  })
+
+  const posts: any[] = []
+  for (const page of pages.docs) {
+    const layout = (page as any).layout || []
+    for (const block of layout) {
+      if (block.blockType === 'blog' && Array.isArray(block.posts)) {
+        posts.push(...block.posts)
+      }
+    }
+  }
+  return posts
 }
 
-// ─── Static params ─────────────────────────────────────────────────────────────
+async function getBlogPost(slug: string, draft: boolean) {
+  const posts = draft ? await getDraftBlogPosts() : await getCachedAllBlogPosts()
+  return posts.find((p) => p.slug === slug) ?? null
+}
 
 export async function generateStaticParams() {
   const posts = await getCachedAllBlogPosts()
   return posts.filter((p) => p.slug).map((p) => ({ slug: p.slug }))
 }
 
-// ─── Metadata ──────────────────────────────────────────────────────────────────
-
 export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
   const { slug } = await paramsPromise
-  const post = await getBlogPost(slug)
+  const { isEnabled: draft } = await draftMode()
+  const post = await getBlogPost(slug, draft)
   if (!post) return {}
   return {
     title: `${post.title} | Blog`,
@@ -66,11 +82,14 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
   }
 }
 
-// ─── Page ──────────────────────────────────────────────────────────────────────
-
 export default async function BlogDetailPage({ params: paramsPromise }: Args) {
   const { slug } = await paramsPromise
-  const post = await getBlogPost(slug)
+  const { isEnabled: draft } = await draftMode()
+  const post = await getBlogPost(slug, draft)
+  const { footer } = await getGlobals()
+
+  const socialLinks = footer?.socialLinks || []
+
   if (!post) return notFound()
 
   const formattedDate = post.date
@@ -82,57 +101,60 @@ export default async function BlogDetailPage({ params: paramsPromise }: Args) {
     : null
 
   return (
-    <section className="min-h-screen">
+    <section className="min-h-screen bg-neutral-300">
       <div className="container">
         <div className="pt-8">
           <Link
-            href="/"
+            href="/blog"
             className="group inline-flex items-center gap-2 text-neutral-400 hover:text-white font-avenirLtStd text-sm transition-colors duration-200"
           >
             <ArrowLeft
               size={15}
               className="group-hover:-translate-x-1 transition-transform duration-200"
             />
-            Back to Home
+            Back to Blog
           </Link>
         </div>
 
         <div className="pt-8 pb-0">
           <div className="space-y-5">
-            <div className="flex flex-wrap items-center gap-4 font-avenirLtStd text-xs text-neutral-400">
-              {post.source && (
-                <span className="flex items-center gap-1.5 text-primary border border-primary/30 rounded-sm px-2.5 py-1">
-                  <Tag size={11} />
-                  {post.source}
-                </span>
-              )}
-              {formattedDate && (
-                <span className="flex items-center gap-1.5">
-                  <Calendar size={11} />
-                  {formattedDate}
-                </span>
-              )}
+            <div className="flex justify-between items-center">
+              <div className="flex flex-col gap-4 font-avenirLtStd text-xs text-neutral-400">
+                {post.source && (
+                  <span className="w-max flex items-center gap-1 bg-primary text-white rounded-sm text-base font-avenirLtStd px-5 py-2">
+                    <Layers size={16} />
+                    {post.source}
+                  </span>
+                )}
+                {formattedDate && (
+                  <span className="flex items-center gap-1.5 text-neutral-400 text-base">
+                    {formattedDate}
+                  </span>
+                )}
+              </div>
+
+              <div className="flex items-center justify-end gap-1.5 text-neutral-400">
+                Share:
+                <div className="flex gap-1">
+                  {socialLinks.map((item: any, index: number) => (
+                    <Link key={index} href={item.url || '#'} target="_blank">
+                      <div className="relative flex items-center justify-center size-9 rounded-lg bg-neutral-300 border border-neutral-800">
+                        {item?.icon?.url && (
+                          <Image src={item.icon.url} alt={item.name} width={30} height={30} />
+                        )}
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
             </div>
 
-            <h1 className="text-4xl max-md:text-2xl font-bold leading-tight">{post.title}</h1>
-
-            {post.excerpt && (
-              <p className="text-neutral-400 text-lg max-md:text-base leading-relaxed">
-                {post.excerpt}
-              </p>
-            )}
-
-            <div className="flex items-center justify-end pt-2 border-t border-neutral-500">
-              <button className="flex items-center gap-2 border border-neutral-500 hover:border-primary text-neutral-400 hover:text-white rounded-sm px-3 py-1.5 text-xs font-avenirLtStd transition-colors duration-200">
-                <Share2 size={12} />
-                Share
-              </button>
-            </div>
+            <h1>{post.title}</h1>
           </div>
         </div>
 
         {post.image?.url && (
-          <div className="mt-10">
+          <div className="mt-6">
             <div className="relative rounded-2xl overflow-hidden border-2 border-neutral-500">
               <Image
                 src={post.image.url}
@@ -141,12 +163,18 @@ export default async function BlogDetailPage({ params: paramsPromise }: Args) {
                 height={600}
                 className="w-full h-120 max-md:h-64 object-cover"
               />
-              <div className="absolute inset-0 bg-linear-to-t from-black/50 via-transparent to-transparent" />
+              {/* <div className="absolute inset-0 bg-linear-to-t from-black/50 via-transparent to-transparent" /> */}
             </div>
           </div>
         )}
 
-        <div className="mt-14 pb-20">
+        {post.excerpt && (
+          <p className="text-neutral-400 text-lg max-md:text-base leading-relaxed">
+            {post.excerpt}
+          </p>
+        )}
+
+        <div className="mt-6 pb-12">
           <article>
             {post.content ? (
               <RichText data={post.content} />

@@ -1,7 +1,11 @@
-import { draftMode } from 'next/headers'
+// /app/next/exit-preview/route.ts
 
-export async function GET(): Promise<Response> {
+import { draftMode } from 'next/headers'
+import { redirect } from 'next/navigation'
+
+export async function GET() {
   const draft = await draftMode()
   draft.disable()
-  return new Response('Draft mode is disabled')
+
+  redirect('/')
 }

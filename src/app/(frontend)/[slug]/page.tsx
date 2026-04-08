@@ -68,10 +68,12 @@ const Page = async ({ params: paramsPromise }: Args) => {
   const { isEnabled: draft } = await draftMode()
   const { slug } = await paramsPromise
   const decodedSlug = decodeURIComponent(slug)
+  console.log('getpages slug draft ::', draft)
 
   const page = await getPage(decodedSlug)
 
   if (!page) return notFound()
+
   return (
     <>
       {draft && <LivePreviewListener />}

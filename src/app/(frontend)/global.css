@@ -60,6 +60,7 @@
   --color-gray-100: #171717;
   --color-gray-200: #2f2f2f;
   --color-gray-300: #fefefe;
+  --color-gray-400: #e0e0e0;
 
   --color-border: #dcdfe5;
 }
@@ -74,7 +75,7 @@
   }
 
   h2 {
-    @apply font-avenirLtStd text-3xl max-2xl:text-3xl max-xl:text-2xl max-lg:text-2xl max-md:text-2xl max-sm:text-xl leading-snug wrap-break-word;
+    @apply font-avenirLtStd font-medium text-3xl max-2xl:text-3xl max-xl:text-2xl max-lg:text-2xl max-md:text-2xl max-sm:text-xl leading-snug wrap-break-word;
   }
 
   h3 {

@@ -112,9 +112,9 @@ export async function sendAdminNotification(data: ContactEmailData) {
   `
 
   await transporter.sendMail({
-    from: `"Website Contact Form" <${fromEmail}>`,
+    from: fromEmail,            // ✅ your domain email
     to: adminEmail,
-    replyTo: data.email,
+    replyTo: data.email,        // ✅ user email here
     subject: subjectLine,
     html,
   })
@@ -206,7 +206,7 @@ export async function sendUserConfirmation(data: ContactEmailData) {
   `
 
   await transporter.sendMail({
-    from: `"${fromName}" <${fromEmail}>`,
+    from: fromEmail,
     to: data.email,
     subject: `We received your message, ${data.name.split(' ')[0]}!`,
     html,

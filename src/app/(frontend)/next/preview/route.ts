@@ -27,10 +27,10 @@ export async function GET(req: NextRequest): Promise<Response> {
     return new Response('This endpoint can only be used for relative previews', { status: 500 })
   }
 
-  let user
+  let authResult
 
   try {
-    user = await payload.auth({
+    authResult = await payload.auth({
       req: req as unknown as PayloadRequest,
       headers: req.headers,
     })
@@ -41,7 +41,7 @@ export async function GET(req: NextRequest): Promise<Response> {
 
   const draft = await draftMode()
 
-  if (!user) {
+  if (!authResult?.user) {
     draft.disable()
     return new Response('You are not allowed to preview this page', { status: 403 })
   }

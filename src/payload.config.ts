@@ -24,7 +24,6 @@ export default buildConfig({
       beforeDashboard: ['@/components/BeforeDashboard'],
       afterNavLinks: ['@/components/AfterNavLinks'],
       afterLogin: ['@/components/AfterLogin'],
-
     },
     user: Users.slug,
     livePreview: {

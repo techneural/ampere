@@ -7,12 +7,13 @@ import { getPayload } from 'payload'
 import configPromise from '@/payload.config'
 import RichText from '@/components/RichText'
 import { unstable_cache } from 'next/cache'
+import { draftMode } from 'next/headers'
 
 type Args = {
   params: Promise<{ slug: string }>
 }
 
-// ─── Cached fetch helpers ─────────────────────────────────────────────────────
+// ─── Cached fetch helpers (published only, for static/production) ─────────────
 
 const getCachedAllServices = unstable_cache(
   async () => {
@@ -41,8 +42,32 @@ const getCachedAllServices = unstable_cache(
   { tags: ['pages', 'services'], revalidate: 3600 },
 )
 
-async function getService(slug: string) {
-  const services = await getCachedAllServices()
+// Draft-aware fetch (bypasses cache so preview always sees latest content)
+async function getDraftServices() {
+  const payload = await getPayload({ config: configPromise })
+  const pages = await payload.find({
+    collection: 'pages',
+    draft: true,
+    limit: 200,
+    pagination: false,
+  })
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const services: any[] = []
+  for (const page of pages.docs) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const layout = (page as any).layout || []
+    for (const block of layout) {
+      if (block.blockType === 'mainServices' && Array.isArray(block.services)) {
+        services.push(...block.services)
+      }
+    }
+  }
+  return services
+}
+
+async function getService(slug: string, draft: boolean) {
+  const services = draft ? await getDraftServices() : await getCachedAllServices()
   return services.find((s) => s.slug === slug) ?? null
 }
 
@@ -57,7 +82,8 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
   const { slug } = await paramsPromise
-  const service = await getService(slug)
+  const { isEnabled: draft } = await draftMode()
+  const service = await getService(slug, draft)
   if (!service) return {}
   return {
     title: `${service.title} | Services`,
@@ -69,7 +95,8 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
 
 export default async function ServiceDetailPage({ params: paramsPromise }: Args) {
   const { slug } = await paramsPromise
-  const service = await getService(slug)
+  const { isEnabled: draft } = await draftMode()
+  const service = await getService(slug, draft)
   if (!service) return notFound()
 
   return (
