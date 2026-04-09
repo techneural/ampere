@@ -22,7 +22,7 @@ export default buildConfig({
   admin: {
     components: {
       beforeLogin: ['@/components/BeforeLogin'],
-      beforeDashboard: ['@/components/BeforeDashboard'],
+      beforeDashboard: [],
       afterNavLinks: ['@/components/AfterNavLinks'],
       afterLogin: ['@/components/AfterLogin'],
     },
