@@ -76,7 +76,7 @@ const Header = ({ data }: any) => {
 
       {/* MOBILE MENU */}
       <div
-        className={`fixed top-0 right-0 h-screen w-72 bg-neutral z-50 transform transition-transform duration-300 md:hidden ${
+        className={`fixed top-0 right-0 h-screen w-72 bg-neutral z-50 transform transition-transform duration-300 md:hidden max-[20rem]:w-full ${
           open ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
@@ -84,7 +84,7 @@ const Header = ({ data }: any) => {
           <X size={26} />
         </div>
 
-        <ul className="flex flex-col pt-10 px-6 pb-6 gap-3">
+        <ul className="flex flex-col pt-10 px-6 pb-6 gap-3 max-sm:px-0 max-sm:pb-4 max-sm:gap-1">
           {menu.map((item: any, index: number) => {
             const isActive = pathname === item.path
 
@@ -105,8 +105,8 @@ const Header = ({ data }: any) => {
           })}
         </ul>
 
-        <div className="px-6 py-3">
-          <CalendlyButton label={ctaLabel} calendlyUrl={calendlyUrl} className="w-full" />
+        <div className="px-6 py-3 max-sm:py-0 max-sm:px-4">
+          <CalendlyButton label={ctaLabel} calendlyUrl={calendlyUrl} className="w-full max-sm:btn-xs" />
         </div>
       </div>
     </>

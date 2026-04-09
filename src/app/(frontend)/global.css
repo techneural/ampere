@@ -71,7 +71,7 @@
   }
 
   h1 {
-    @apply font-bold text-[3.125rem] max-md:text-3xl max-sm:text-3xl leading-tight wrap-break-word;
+    @apply font-bold text-[3.125rem] max-md:text-3xl max-sm:text-2xl leading-tight wrap-break-word;
   }
 
   h2 {

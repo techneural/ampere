@@ -18,6 +18,30 @@ type Args = {
 
 // ─── Fetch a single post by slug ─────────────────────────────────────────────
 
+type ShareItem = {
+  name: string
+  icon: string
+  getHref: (url: string, title?: string) => string
+}
+
+const socialLinks: ShareItem[] = [
+  {
+    name: 'Facebook',
+    icon: '/images/facebook.png',
+    getHref: (url) => `https://www.facebook.com/sharer/sharer.php?u=${url}`,
+  },
+  {
+    name: 'LinkedIn',
+    icon: '/images/linkedin.png',
+    getHref: (url) => `https://www.linkedin.com/sharing/share-offsite/?url=${url}`,
+  },
+  {
+    name: 'X',
+    icon: '/images/x.png',
+    getHref: (url, title) => `https://twitter.com/intent/tweet?url=${url}&text=${title}`,
+  },
+]
+
 async function getBlogPost(slug: string, draft: boolean) {
   const payload = await getPayload({ config: configPromise })
   const result = await payload.find({
@@ -107,10 +131,10 @@ export default async function BlogDetailPage({ params: paramsPromise }: Args) {
       {draft && <LivePreviewListener />}
       <section className="min-h-screen bg-neutral-300">
         <div className="container">
-          <div className="pt-8">
+          <div className="pt-8 max-sm:pt-4">
             <Link
               href="/blog"
-              className="group inline-flex items-center gap-2 text-neutral-400 hover:text-white font-avenirLtStd text-sm transition-colors duration-200"
+              className="group inline-flex items-center gap-2 text-neutral-400 hover:text-white font-avenirLtStd text-sm transition-colors duration-200 max-sm:text-xs"
             >
               <ArrowLeft
                 size={15}
@@ -120,51 +144,42 @@ export default async function BlogDetailPage({ params: paramsPromise }: Args) {
             </Link>
           </div>
 
-          <div className="pt-8 pb-0">
+          <div className="pt-8 pb-0 max-sm:pt-4">
             <div className="space-y-5">
-              <div className="flex justify-between items-center">
-                <div className="flex flex-col gap-4 font-avenirLtStd text-xs text-neutral-400">
+              <div className="flex justify-between items-center max-sm:flex-col max-sm:items-start max-sm:gap-3">
+                <div className="flex flex-col gap-4 font-avenirLtStd text-xs text-neutral-400 max-sm:flex-row max-sm:justify-between max-sm:w-full">
                   {(post as any).source && (
-                    <span className="w-max flex items-center gap-1 bg-primary text-white rounded-sm text-base font-avenirLtStd px-5 py-2">
-                      <Layers size={16} />
+                    <span className="w-max flex items-center gap-1 bg-primary text-white rounded-sm text-base font-avenirLtStd px-5 py-2 max-sm:p-2 max-sm:text-xs">
+                      <Layers size={16} className="max-sm:size-3" />
                       {(post as any).source}
                     </span>
                   )}
                   {formattedDate && (
-                    <span className="flex items-center gap-1.5 text-neutral-400 text-base">
+                    <span className="flex items-center gap-1.5 text-neutral-400 text-base max-sm:text-xs">
                       {formattedDate}
                     </span>
                   )}
                 </div>
 
-                <div className="flex items-center justify-end gap-1.5 text-neutral-400">
+                <div className="flex items-center justify-end gap-1.5 text-neutral-400 max-sm:text-xs">
                   Share:
                   <div className="flex gap-1">
-                    <Link
-                      href={`https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`}
-                      target="_blank"
-                      className="relative flex items-center justify-center size-9 rounded-lg bg-neutral-300 border border-neutral-800"
-                    >
-                      <Image src="/images/facebook.png" alt="Facebook" width={30} height={30} />
-                    </Link>
-
-                    {/* LinkedIn */}
-                    <Link
-                      href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`}
-                      target="_blank"
-                      className="relative flex items-center justify-center size-9 rounded-lg bg-neutral-300 border border-neutral-800"
-                    >
-                      <Image src="/images/linkedin.png" alt="Linkedin" width={30} height={30} />
-                    </Link>
-
-                    {/* X (Twitter) */}
-                    <Link
-                      href={`https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`}
-                      target="_blank"
-                      className="relative flex items-center justify-center size-9 rounded-lg bg-neutral-300 border border-neutral-800"
-                    >
-                      <Image src="/images/x.png" alt="X" width={30} height={30} />
-                    </Link>
+                    {socialLinks.map((item) => (
+                      <Link
+                        key={item.name}
+                        href={item.getHref(encodedUrl, encodedTitle)}
+                        target="_blank"
+                        className="relative flex items-center justify-center size-9 rounded-lg bg-neutral-300 border border-neutral-800"
+                      >
+                        <Image
+                          src={item.icon}
+                          alt={item.name}
+                          width={30}
+                          height={30}
+                          className="max-sm:size-6"
+                        />
+                      </Link>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -198,7 +213,7 @@ export default async function BlogDetailPage({ params: paramsPromise }: Args) {
               {(post as any).content ? (
                 <RichText data={(post as any).content} />
               ) : (
-                <p className="text-neutral-400">No content available for this blog.</p>
+                <p className="text-neutral-400 text-center">No content available for this blog.</p>
               )}
             </article>
           </div>
