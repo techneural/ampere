@@ -50,7 +50,7 @@ const LatestBlogSection = async ({ heading, description }: Props) => {
       </div>
 
       <div className="bg-neutral-300 mt-14 py-8 max-xl:py-10">
-        <div className="container relative grid grid-cols-2 gap-7.5 max-md:flex-col justify-center">
+        <div className="container relative grid grid-cols-2 gap-7.5 max-md:flex-col justify-center max-md:grid-cols-1">
           {posts.length > 0 ? (
             posts.map((item, index) => (
               <BlogCard key={item.slug ?? index} item={item} comingSoon={!item.slug} />

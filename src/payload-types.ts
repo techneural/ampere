@@ -788,9 +788,12 @@ export interface Page {
 export interface Blog {
   id: string;
   title: string;
-  slug?: string | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
   source?: string | null;
-  date?: string | null;
   /**
    * A short summary shown on the blog listing and detail page below the title.
    */
@@ -829,6 +832,7 @@ export interface Blog {
      */
     image?: (string | null) | Media;
   };
+  date?: string | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -1653,9 +1657,9 @@ export interface PagesSelect<T extends boolean = true> {
  */
 export interface BlogsSelect<T extends boolean = true> {
   title?: T;
+  generateSlug?: T;
   slug?: T;
   source?: T;
-  date?: T;
   excerpt?: T;
   image?: T;
   content?: T;
@@ -1667,6 +1671,7 @@ export interface BlogsSelect<T extends boolean = true> {
         description?: T;
         image?: T;
       };
+  date?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;

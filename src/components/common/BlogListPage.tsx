@@ -40,6 +40,8 @@ const BlogListPage = ({ posts }: Props) => {
     return ['All', ...cats]
   }, [posts])
 
+  const visibleCategories = categories.slice(0, 5)
+
   // Filter posts by category + search
   const filteredPosts = useMemo(() => {
     const q = searchQuery.toLowerCase().trim()
@@ -77,82 +79,132 @@ const BlogListPage = ({ posts }: Props) => {
   }
 
   return (
-    <section className="min-h-screen py-16">
-      <div className="container">
-        <div className="flex flex-wrap items-center gap-3 mb-10">
-          <div className="flex flex-wrap gap-2.5 flex-1">
+    <>
+      <section className="min-h-screen py-16">
+        <div className="container">
+          <div className="flex items-center gap-3 mb-10 max-lg:flex-col">
+            <div className="flex flex-wrap gap-2.5 flex-1">
+              {visibleCategories.map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => handleCategoryChange(cat)}
+                  className={`btn btn-md rounded-lg border max-md:btn-xs ${
+                    activeCategory === cat
+                      ? 'bg-transparent text-white border-primary'
+                      : 'bg-linear-to-t from-[#151515] via-neutral-200 to-transparent text-neutral-400 border-neutral-500 hover:border-neutral-400'
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))}
+
+              {categories.length > 5 && (
+                <button
+                  onClick={() =>
+                    (document.getElementById('category_modal') as HTMLDialogElement)?.showModal()
+                  }
+                  className="btn btn-md rounded-lg border border-neutral-500 text-neutral-400 hover:text-white"
+                >
+                  + More
+                </button>
+              )}
+            </div>
+
+            {/* Search */}
+            <form
+              onSubmit={handleSearchSubmit}
+              className="flex items-center bg-neutral-200 border border-neutral-500 rounded-lg overflow-hidden w-full lg:w-100"
+            >
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={handleSearch}
+                placeholder="Enter Key Words"
+                className="flex-1 bg-transparent px-4 py-[1.094rem] text-sm font-avenirLtStd text-white placeholder:text-neutral-400 outline-none max-md:py-2 max-md:px-3"
+              />
+              <button
+                type="submit"
+                className="shrink-0 bg-primary px-5.5 py-[1.188rem] flex items-center justify-center hover:bg-primary/90 transition-colors duration-200 max-md:p-3"
+              >
+                <Search size={16} className="text-white" />
+              </button>
+            </form>
+          </div>
+
+          {/* ── Grid ───────────────────────────────────────────────────── */}
+          {paginatedPosts.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {paginatedPosts.map((post, index) => (
+                <BlogCard key={post.slug ?? index} item={post} comingSoon={!post.slug} />
+              ))}
+            </div>
+          ) : (
+            <div className="flex flex-col items-center justify-center py-24 text-neutral-400 font-avenirLtStd">
+              <Search size={40} className="mb-4 opacity-40" />
+              <p className="text-lg">No posts found.</p>
+              <p className="text-sm mt-1 opacity-60">Try a different category or keyword.</p>
+            </div>
+          )}
+
+          {/* ── Pagination ─────────────────────────────────────────────── */}
+          {/* {totalPages > 1 && ( */}
+          <div className="flex justify-center items-center gap-2.5 mt-12">
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              <button
+                key={page}
+                onClick={() => setCurrentPage(page)}
+                className={`size-8 rounded-sm text-sm font-avenirLtStd transition-colors duration-200 cursor-pointer
+                  ${
+                    currentPage === page
+                      ? 'bg-primary text-white'
+                      : 'bg-neutral-200 border border-neutral-500 text-neutral-400 hover:border-neutral-400 hover:text-white'
+                  }`}
+              >
+                {page}
+              </button>
+            ))}
+          </div>
+          {/* )} */}
+        </div>
+      </section>
+
+      <dialog id="category_modal" className="modal">
+        <div className="modal-box bg-[#151515] max-w-md max-h-[80vh] overflow-y-auto">
+          {/* Header */}
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-lg text-white">All Categories</h3>
+            <form method="dialog">
+              <button className="text-neutral-400 hover:text-white">✕</button>
+            </form>
+          </div>
+
+          {/* Category List */}
+          <div className="flex flex-wrap gap-2">
             {categories.map((cat) => (
               <button
                 key={cat}
-                onClick={() => handleCategoryChange(cat)}
-                className={`btn btn-md rounded-lg border ${
+                onClick={() => {
+                  handleCategoryChange(cat)
+                  ;(document.getElementById('category_modal') as HTMLDialogElement)?.close()
+                }}
+                className={`px-3 py-1.5 rounded-md text-sm border border-neutral-500 ${
                   activeCategory === cat
-                    ? 'bg-transparent text-white border-primary'
-                    : 'bg-linear-to-t from-[#151515] via-neutral-200 to-transparent text-neutral-400 border-neutral-500 hover:border-neutral-400'
+                    ? 'bg-primary text-white'
+                    : 'border-neutral-500 text-neutral-400 hover:text-white'
                 }`}
               >
                 {cat}
               </button>
             ))}
           </div>
-
-          {/* Search */}
-          <form
-            onSubmit={handleSearchSubmit}
-            className="flex items-center bg-neutral-200 border border-neutral-500 rounded-lg overflow-hidden min-w-100"
-          >
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={handleSearch}
-              placeholder="Enter Key Words"
-              className="flex-1 bg-transparent px-4 py-[1.094rem] text-sm font-avenirLtStd text-white placeholder:text-neutral-400 outline-none"
-            />
-            <button
-              type="submit"
-              className="bg-primary px-5.5 py-[1.188rem] flex items-center justify-center hover:bg-primary/90 transition-colors duration-200"
-            >
-              <Search size={16} className="text-white" />
-            </button>
-          </form>
         </div>
 
-        {/* ── Grid ───────────────────────────────────────────────────── */}
-        {paginatedPosts.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            {paginatedPosts.map((post, index) => (
-              <BlogCard key={post.slug ?? index} item={post} comingSoon={!post.slug} />
-            ))}
-          </div>
-        ) : (
-          <div className="flex flex-col items-center justify-center py-24 text-neutral-400 font-avenirLtStd">
-            <Search size={40} className="mb-4 opacity-40" />
-            <p className="text-lg">No posts found.</p>
-            <p className="text-sm mt-1 opacity-60">Try a different category or keyword.</p>
-          </div>
-        )}
-
-        {/* ── Pagination ─────────────────────────────────────────────── */}
-        {/* {totalPages > 1 && ( */}
-        <div className="flex justify-center items-center gap-2.5 mt-12">
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-            <button
-              key={page}
-              onClick={() => setCurrentPage(page)}
-              className={`size-8 rounded-sm text-sm font-avenirLtStd transition-colors duration-200 cursor-pointer
-                  ${
-                    currentPage === page
-                      ? 'bg-primary text-white'
-                      : 'bg-neutral-200 border border-neutral-500 text-neutral-400 hover:border-neutral-400 hover:text-white'
-                  }`}
-            >
-              {page}
-            </button>
-          ))}
-        </div>
-        {/* )} */}
-      </div>
-    </section>
+        {/* Backdrop */}
+        <form method="dialog" className="modal-backdrop">
+          <button>close</button>
+        </form>
+      </dialog>
+    </>
   )
 }
 

@@ -54,7 +54,7 @@ const jsxConverters: JSXConvertersFunction = ({ defaultConverters }) => ({
 
     if (isCheckList) {
       return (
-        <li className="flex items-start gap-3 text-gray-400 text-2xl leading-relaxed font-montserrat max-md:text-base">
+        <li className="flex items-start gap-3 text-gray-400 text-2xl leading-relaxed font-montserrat max-md:text-sm">
           <span
             className={`mt-1 size-4 rounded-sm border shrink-0 flex items-center justify-center text-[10px] ${
               isChecked ? 'bg-primary border-primary text-white' : 'border-neutral-500'
@@ -68,8 +68,8 @@ const jsxConverters: JSXConvertersFunction = ({ defaultConverters }) => ({
     }
 
     return (
-      <li className="flex items-start gap-3 text-gray-400 text-2xl leading-relaxed font-montserrat max-md:text-base">
-        <Play fill="#e0e0e0" stroke="#e0e0e0" className="mt-1" />
+      <li className="flex items-start gap-3 text-gray-400 text-2xl leading-relaxed font-montserrat max-md:text-sm">
+        <Play fill="#e0e0e0" stroke="#e0e0e0" className="mt-0.5 min-w-5 h-5" />
         <span className="leading-snug">{nodesToJSX({ nodes: node.children })}</span>
       </li>
     )

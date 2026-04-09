@@ -1,8 +1,7 @@
-import type { CollectionConfig } from 'payload'
+import { slugField, type CollectionConfig } from 'payload'
 import { authenticated } from '@/access/authenticated'
 import { authenticatedOrPublished } from '@/access/authenticatedOrPublished'
 import { populatePublishedAt } from '@/hooks/populatePublishedAt'
-import { formatSlug } from '@/utilities/formatSlug'
 import { revalidateBlog, revalidateBlogDelete } from './hooks/revalidateBlog'
 import { generatePreviewPath } from '@/utilities/generatePreviewPath'
 
@@ -18,6 +17,11 @@ export const Blogs: CollectionConfig = {
   defaultPopulate: {
     title: true,
     slug: true,
+    meta: {           // ← add this entire block
+      title: true,
+      description: true,
+      image: true,
+    },
   },
 
   admin: {
@@ -46,6 +50,7 @@ export const Blogs: CollectionConfig = {
       type: 'text',
       required: true,
     },
+    slugField(),
 
     {
       type: 'tabs',
@@ -54,33 +59,10 @@ export const Blogs: CollectionConfig = {
           label: 'Content',
           fields: [
             {
-              name: 'slug',
-              type: 'text',
-              admin: { position: 'sidebar' },
-              hooks: {
-                beforeChange: [
-                  ({ value, siblingData }) =>
-                    formatSlug((siblingData?.title as string) ?? value ?? ''),
-                ],
-              },
-            },
-            {
               name: 'source',
               type: 'text',
               label: 'Category / Source',
               admin: { position: 'sidebar' },
-            },
-            {
-              name: 'date',
-              type: 'date',
-              label: 'Publish Date',
-              admin: {
-                position: 'sidebar',
-                date: {
-                  pickerAppearance: 'dayOnly',
-                  displayFormat: 'MMM d, yyyy',
-                },
-              },
             },
             {
               name: 'excerpt',
@@ -149,6 +131,18 @@ export const Blogs: CollectionConfig = {
           ],
         },
       ],
+    },
+    {
+      name: 'date',
+      type: 'date',
+      label: 'Publish Date',
+      admin: {
+        position: 'sidebar',
+        date: {
+          pickerAppearance: 'dayOnly',
+          displayFormat: 'MMM d, yyyy',
+        },
+      },
     },
   ],
 
