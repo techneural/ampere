@@ -141,29 +141,31 @@ const BlogListPage = ({ posts }: Props) => {
           ) : (
             <div className="flex flex-col items-center justify-center py-24 text-neutral-400 font-avenirLtStd">
               <Search size={40} className="mb-4 opacity-40" />
-              <p className="text-lg">No posts found.</p>
+              <p className="text-lg">No blogs found.</p>
               <p className="text-sm mt-1 opacity-60">Try a different category or keyword.</p>
             </div>
           )}
 
           {/* ── Pagination ─────────────────────────────────────────────── */}
           {/* {totalPages > 1 && ( */}
-          <div className="flex justify-center items-center gap-2.5 mt-12">
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-              <button
-                key={page}
-                onClick={() => setCurrentPage(page)}
-                className={`size-8 rounded-sm text-sm font-avenirLtStd transition-colors duration-200 cursor-pointer
+          {paginatedPosts.length > 0 && (
+            <div className="flex justify-center items-center gap-2.5 mt-12">
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                <button
+                  key={page}
+                  onClick={() => setCurrentPage(page)}
+                  className={`size-8 rounded-sm text-sm font-avenirLtStd transition-colors duration-200 cursor-pointer
                   ${
                     currentPage === page
                       ? 'bg-primary text-white'
                       : 'bg-neutral-200 border border-neutral-500 text-neutral-400 hover:border-neutral-400 hover:text-white'
                   }`}
-              >
-                {page}
-              </button>
-            ))}
-          </div>
+                >
+                  {page}
+                </button>
+              ))}
+            </div>
+          )}
           {/* )} */}
         </div>
       </section>

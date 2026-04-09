@@ -220,7 +220,7 @@ export default function NavigationLoader() {
           {/* Text */}
           <div className="mb-1 tracking-[0.3em] uppercase text-xs text-white">Ampere Labs</div>
 
-          <div className="mb-5 text-[11px] tracking-widest uppercase text-white/40">
+          <div className="mb-5 text-[11px] tracking-widest uppercase text-primary font-bold">
             {statusText}
           </div>
 
