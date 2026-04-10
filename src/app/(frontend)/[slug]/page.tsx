@@ -42,10 +42,17 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
   const description =
     meta?.description ||
     'Ampere Labs delivers high-performance custom hardware, data center solutions, and deployment-ready AI infrastructure for modern enterprises.'
-  const ogImageUrl = meta?.image?.url
-    ? `${getServerSideURL()}${meta.image.url}`
-    : `${getServerSideURL()}/website-template-OG.webp`
+  const getImageUrl = (url?: string) => {
+    if (!url) return `${getServerSideURL()}/website-template-OG.webp`
 
+    // already full URL (S3, Cloudinary, etc.)
+    if (url.startsWith('http')) return url
+
+    // relative URL from Payload
+    return `${getServerSideURL()}${url}`
+  }
+
+  const ogImageUrl = getImageUrl(meta?.image?.url)
   return {
     title,
     description,
@@ -68,8 +75,6 @@ const Page = async ({ params: paramsPromise }: Args) => {
   const { isEnabled: draft } = await draftMode()
   const { slug } = await paramsPromise
   const decodedSlug = decodeURIComponent(slug)
-  console.log('getpages slug draft ::', draft)
-
   const page = await getPage(decodedSlug)
 
   if (!page) return notFound()

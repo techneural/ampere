@@ -3,22 +3,28 @@ import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import AppButton from '@/components/ui/AppButton'
 import { FadeWrapper } from '@/components/animations'
+import { getPayload } from 'payload'
+import configPromise from '@/payload.config'
 
 type Props = {
   title: string
   description?: string
-  services: {
-    title: string
-    slug?: string
-    description: string
-    link?: string
-    icon: {
-      url: string
-    }
-  }[]
 }
 
-export const MainServicesBlock: React.FC<Props> = ({ title, description, services }) => {
+export const MainServicesBlock: React.FC<Props> = async ({ title, description }) => {
+  const payload = await getPayload({ config: configPromise })
+
+  const result = await payload.find({
+    collection: 'services',
+    draft: false,
+    limit: 100,
+    pagination: false,
+    sort: 'createdAt',
+  })
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const services = result.docs as any[]
+
   return (
     <section className="pt-14">
       <div className="container">
@@ -46,7 +52,8 @@ export const MainServicesBlock: React.FC<Props> = ({ title, description, service
           </div>
 
           {services?.map((item, index) => {
-            // const href = item.slug ? `/services/${item.slug}` : item.link || '#'
+            const href = item.slug ? `/service/${item.slug}` : '#'
+
             return (
               <div key={index} className="group flex flex-col max-md:text-center">
                 <div className="flex-1">
@@ -62,21 +69,20 @@ export const MainServicesBlock: React.FC<Props> = ({ title, description, service
                     )}
                   </div>
 
-                  {/* <Link href={href}> */}
-                  <Link href="/coming-soon">
+                  <Link href={href}>
                     <FadeWrapper delay={0.4}>
-                      <h3 className="max-xl:mb-3 mb-5 group-hover:text-primary">{item.title}</h3>
+                      <h3 className="max-xl:mb-3 mb-5 group-hover:text-primary line-clamp-2">{item.title}</h3>
                     </FadeWrapper>
                   </Link>
                   <FadeWrapper delay={0.5}>
-                    <p className="font-avenirLtStd text-neutral-400">{item.description}</p>
+                    <p className="font-avenirLtStd text-neutral-400 line-clamp-4">{item.cardDescription}</p>
                   </FadeWrapper>
                 </div>
 
                 <FadeWrapper delay={0.6}>
                   <AppButton
-                    // href={href}
-                    href="/coming-soon"
+                    href={href}
+                    // href="/coming-soon"
                     label={
                       <>
                         Learn more

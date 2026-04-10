@@ -32,10 +32,18 @@ export async function generateMetadata(): Promise<Metadata> {
   const description =
     meta?.description ||
     'Ampere Labs delivers high-performance custom hardware, data center solutions, and deployment-ready AI infrastructure for modern enterprises.'
-  const ogImageUrl = meta?.image?.url
-    ? `${getServerSideURL()}${meta.image.url}`
-    : `${getServerSideURL()}/website-template-OG.webp`
 
+  const getImageUrl = (url?: string) => {
+    if (!url) return `${getServerSideURL()}/website-template-OG.webp`
+
+    // if already full URL (S3, CDN, etc.)
+    if (url.startsWith('http')) return url
+
+    // if relative (local upload)
+    return `${getServerSideURL()}${url}`
+  }
+
+  const ogImageUrl = getImageUrl(meta?.image?.url)
   return {
     title,
     description,

@@ -62,6 +62,7 @@
   --color-gray-300: #fefefe;
   --color-gray-400: #e0e0e0;
 
+  --color-black-100: #0c0c0c;
   --color-border: #dcdfe5;
 }
 
@@ -83,7 +84,7 @@
   }
 
   h4 {
-    @apply font-avenirLtStd font-semibold text-xl max-2xl:text-lg max-xl:text-lg max-lg:text-base max-md:text-lg max-sm:text-sm max-[22.5rem]:text-xs;
+    @apply font-avenirLtStd text-xl max-2xl:text-lg max-xl:text-lg max-lg:text-base max-md:text-lg max-sm:text-sm max-[22.5rem]:text-xs;
   }
 
   h5 {

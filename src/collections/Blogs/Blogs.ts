@@ -17,7 +17,7 @@ export const Blogs: CollectionConfig = {
   defaultPopulate: {
     title: true,
     slug: true,
-    meta: {           // ← add this entire block
+    meta: {
       title: true,
       description: true,
       image: true,

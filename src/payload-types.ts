@@ -71,6 +71,7 @@ export interface Config {
     media: Media;
     pages: Page;
     blogs: Blog;
+    services: Service;
     'contact-submissions': ContactSubmission;
     'payload-kv': PayloadKv;
     'payload-jobs': PayloadJob;
@@ -89,6 +90,7 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
     blogs: BlogsSelect<false> | BlogsSelect<true>;
+    services: ServicesSelect<false> | ServicesSelect<true>;
     'contact-submissions': ContactSubmissionsSelect<false> | ContactSubmissionsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
@@ -339,42 +341,6 @@ export interface Page {
     | {
         title?: string | null;
         description?: string | null;
-        services?:
-          | {
-              title: string;
-              slug?: string | null;
-              description?: string | null;
-              /**
-               * A short summary shown on the service detail page below the title.
-               */
-              excerpt?: string | null;
-              icon: string | Media;
-              /**
-               * Hero image shown on the service detail page.
-               */
-              image?: (string | null) | Media;
-              /**
-               * Full service detail content shown on the detail page.
-               */
-              content?: {
-                root: {
-                  type: string;
-                  children: {
-                    type: any;
-                    version: number;
-                    [k: string]: unknown;
-                  }[];
-                  direction: ('ltr' | 'rtl') | null;
-                  format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-                  indent: number;
-                  version: number;
-                };
-                [k: string]: unknown;
-              } | null;
-              link?: string | null;
-              id?: string | null;
-            }[]
-          | null;
         id?: string | null;
         blockName?: string | null;
         blockType: 'mainServices';
@@ -838,6 +804,105 @@ export interface Blog {
   _status?: ('draft' | 'published') | null;
 }
 /**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "services".
+ */
+export interface Service {
+  id: string;
+  title: string;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  /**
+   * Small icon shown on the home page service card.
+   */
+  icon?: (string | null) | Media;
+  /**
+   * Short description shown on the home page service card.
+   */
+  cardDescription?: string | null;
+  /**
+   * Full-width background video shown behind the service title.
+   */
+  heroVideo?: (string | null) | Media;
+  /**
+   * Large title shown on the hero banner (e.g. "Decoding risk: A new approach to operational oversight").
+   */
+  heroTitle?: string | null;
+  heroCtaLabel?: string | null;
+  heroCtaLink?: string | null;
+  approachLabel?: string | null;
+  /**
+   * Text shown beside the approach image.
+   */
+  approachText?: string | null;
+  approachImage?: (string | null) | Media;
+  /**
+   * Small text above the tabs (e.g. "We help companies turn complexity into clarity").
+   */
+  featuresTagline?: string | null;
+  features?:
+    | {
+        tabTitle: string;
+        /**
+         * Image shown on the left side of the feature tabs.
+         */
+        featureImage?: (string | null) | Media;
+        contentTitle?: string | null;
+        contentDescription?: string | null;
+        ctaLabel?: string | null;
+        ctaLink?: string | null;
+        /**
+         * Items shown as a list with icons (e.g. Discovery audit, Planning brief).
+         */
+        listItems?:
+          | {
+              icon?: (string | null) | Media;
+              label: string;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Small label above the heading (e.g. "Clear, Modular Engagements Focused on Results").
+   */
+  timelineLabel?: string | null;
+  timelineHeading?: string | null;
+  timelineImage?: (string | null) | Media;
+  timelineSteps?:
+    | {
+        /**
+         * e.g. "1 week - Discovery Audit"
+         */
+        stepLabel: string;
+        stepDescription?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  workWithUsLabel?: string | null;
+  workWithUsHeading?: string | null;
+  ctaCards?:
+    | {
+        cardTitle: string;
+        cardDescription?: string | null;
+        cardLink?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    image?: (string | null) | Media;
+  };
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
  * Messages submitted via the Contact Us form on the website.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -989,6 +1054,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'blogs';
         value: string | Blog;
+      } | null)
+    | ({
+        relationTo: 'services';
+        value: string | Service;
       } | null)
     | ({
         relationTo: 'contact-submissions';
@@ -1211,19 +1280,6 @@ export interface PagesSelect<T extends boolean = true> {
           | {
               title?: T;
               description?: T;
-              services?:
-                | T
-                | {
-                    title?: T;
-                    slug?: T;
-                    description?: T;
-                    excerpt?: T;
-                    icon?: T;
-                    image?: T;
-                    content?: T;
-                    link?: T;
-                    id?: T;
-                  };
               id?: T;
               blockName?: T;
             };
@@ -1678,6 +1734,73 @@ export interface BlogsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "services_select".
+ */
+export interface ServicesSelect<T extends boolean = true> {
+  title?: T;
+  generateSlug?: T;
+  slug?: T;
+  icon?: T;
+  cardDescription?: T;
+  heroVideo?: T;
+  heroTitle?: T;
+  heroCtaLabel?: T;
+  heroCtaLink?: T;
+  approachLabel?: T;
+  approachText?: T;
+  approachImage?: T;
+  featuresTagline?: T;
+  features?:
+    | T
+    | {
+        tabTitle?: T;
+        featureImage?: T;
+        contentTitle?: T;
+        contentDescription?: T;
+        ctaLabel?: T;
+        ctaLink?: T;
+        listItems?:
+          | T
+          | {
+              icon?: T;
+              label?: T;
+              id?: T;
+            };
+        id?: T;
+      };
+  timelineLabel?: T;
+  timelineHeading?: T;
+  timelineImage?: T;
+  timelineSteps?:
+    | T
+    | {
+        stepLabel?: T;
+        stepDescription?: T;
+        id?: T;
+      };
+  workWithUsLabel?: T;
+  workWithUsHeading?: T;
+  ctaCards?:
+    | T
+    | {
+        cardTitle?: T;
+        cardDescription?: T;
+        cardLink?: T;
+        id?: T;
+      };
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "contact-submissions_select".
  */
 export interface ContactSubmissionsSelect<T extends boolean = true> {
@@ -1907,6 +2030,10 @@ export interface TaskSchedulePublish {
       | ({
           relationTo: 'blogs';
           value: string | Blog;
+        } | null)
+      | ({
+          relationTo: 'services';
+          value: string | Service;
         } | null);
     global?: string | null;
     user?: (string | null) | User;

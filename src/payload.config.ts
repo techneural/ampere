@@ -10,6 +10,7 @@ import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages/Pages'
 import { Blogs } from './collections/Blogs/Blogs'
+import { Services } from './collections/Services/Services'
 import { Header } from './globals/Header'
 import { Footer } from './globals/Footer'
 import { ContactSubmissions } from './collections/ContactSubmissions'
@@ -59,7 +60,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Pages, Blogs, ContactSubmissions],
+  collections: [Users, Media, Pages, Blogs, Services, ContactSubmissions],
   globals: [Header, Footer],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
