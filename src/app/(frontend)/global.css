@@ -160,7 +160,8 @@
   }
 
   .heading_b_border {
-    @apply inline-block border-b border-primary;
+    /* @apply inline-block border-b border-primary; */
+    @apply underline decoration-primary underline-offset-10 max-sm:leading-5.5 max-sm:underline-offset-6;
   }
 
   .custom-pagination .swiper-pagination-bullet {

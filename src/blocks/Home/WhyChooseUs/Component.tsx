@@ -35,10 +35,10 @@ const WhyChooseUs = ({
             <h3>{title}</h3>
           </FadeWrapper>
           {highlightText && (
-            <div className="w-max max-md:mx-auto">
+            <div className="sm:w-max max-md:mx-auto">
               <div className="bg-neutral-200 flex items-center rounded-sm w-max h-11 px-6 max-lg:px-3">
                 <FadeWrapper delay={0.4}>
-                  <h3 className="md:text-lg xl:text-[1.625rem]">{highlightText}</h3>
+                  <h3 className="md:text-lg xl:text-[1.625rem] text-xs text-wrap">{highlightText}</h3>
                 </FadeWrapper>
               </div>
 

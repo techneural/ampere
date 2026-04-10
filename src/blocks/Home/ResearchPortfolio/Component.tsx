@@ -42,7 +42,7 @@ const ResearchPortfolio = ({ heading, description, cards, buttonText, buttonLink
                     className="w-full h-auto"
                   />
 
-                  <div className="absolute bottom-0 z-10 p-7">
+                  <div className="absolute bottom-0 z-10 p-7 max-sm:p-3">
                     <FadeWrapper delay={0.2}>
                       <h4 className="group-hover:text-primary transition-colors duration-300">
                         {item.title}
@@ -59,7 +59,7 @@ const ResearchPortfolio = ({ heading, description, cards, buttonText, buttonLink
 
                   <div className="w-full h-48 absolute bottom-0 bg-linear-to-t from-black to-transparent"></div>
 
-                  <button className="bg-neutral-200 size-11 rounded-sm flex justify-center items-center absolute top-4 right-4 border border-neutral-500 group-hover:bg-white group-hover:border-white transition-colors duration-300">
+                  <button className="bg-neutral-200 size-11 rounded-sm flex justify-center items-center absolute top-4 right-4 border border-neutral-500 group-hover:bg-white group-hover:border-white transition-colors duration-300 max-sm:size-8">
                     <ArrowUpRight className="text-primary" />
                   </button>
                 </div>
