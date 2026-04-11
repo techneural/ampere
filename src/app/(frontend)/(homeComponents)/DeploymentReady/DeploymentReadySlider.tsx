@@ -28,14 +28,14 @@ const DeploymentReadySlider = ({ items }: Props) => {
           1024: { slidesPerView: 3 },
         }}
         renderItem={(item) => (
-          <div className="group border-2 border-neutral-500 rounded-2xl h-full overflow-hidden">
-            <Link href={item.link || '/'} className="rounded-t-xl relative">
+          <div className="group flex flex-col border-2 border-neutral-500 rounded-2xl h-full overflow-hidden">
+            <Link href={item.link || '/'} className="flex-1 rounded-t-xl relative">
               <Image
                 src={item.image.url}
                 alt={item.title}
                 width={489}
                 height={269}
-                className="w-full h-auto object-cover"
+                className="w-full max-h-65.5 h-full object-cover"
               />
 
               <div className="absolute -bottom-6 right-0 size-[3.938rem] bg-primary rounded-s-lg flex justify-center items-center">

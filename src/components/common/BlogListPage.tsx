@@ -88,7 +88,7 @@ const BlogListPage = ({ posts }: Props) => {
                 <button
                   key={cat}
                   onClick={() => handleCategoryChange(cat)}
-                  className={`btn btn-md rounded-lg border max-md:btn-xs ${
+                  className={`btn btn-xs rounded-lg border ${
                     activeCategory === cat
                       ? 'bg-transparent text-white border-primary'
                       : 'bg-linear-to-t from-[#151515] via-neutral-200 to-transparent text-neutral-400 border-neutral-500 hover:border-neutral-400'
@@ -103,7 +103,7 @@ const BlogListPage = ({ posts }: Props) => {
                   onClick={() =>
                     (document.getElementById('category_modal') as HTMLDialogElement)?.showModal()
                   }
-                  className="btn btn-md rounded-lg border border-neutral-500 text-neutral-400 hover:text-white"
+                  className="btn btn-xs rounded-lg border border-neutral-500 text-neutral-400 hover:text-white"
                 >
                   + More
                 </button>
@@ -113,18 +113,18 @@ const BlogListPage = ({ posts }: Props) => {
             {/* Search */}
             <form
               onSubmit={handleSearchSubmit}
-              className="flex items-center bg-neutral-200 border border-neutral-500 rounded-lg overflow-hidden w-full lg:w-100"
+              className="flex items-center bg-neutral-200 border border-neutral-500 rounded-lg overflow-hidden w-full lg:w-80"
             >
               <input
                 type="text"
                 value={searchQuery}
                 onChange={handleSearch}
                 placeholder="Enter Key Words"
-                className="flex-1 bg-transparent px-4 py-[1.094rem] text-sm font-avenirLtStd text-white placeholder:text-neutral-400 outline-none max-md:py-2 max-md:px-3"
+                className="flex-1 bg-transparent text-sm font-avenirLtStd text-white placeholder:text-neutral-400 outline-none py-2 px-3"
               />
               <button
                 type="submit"
-                className="shrink-0 bg-primary px-5.5 py-[1.188rem] flex items-center justify-center hover:bg-primary/90 transition-colors duration-200 max-md:p-3"
+                className="shrink-0 bg-primary flex items-center justify-center hover:bg-primary/90 transition-colors duration-200 p-3"
               >
                 <Search size={16} className="text-white" />
               </button>
