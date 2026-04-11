@@ -6,7 +6,7 @@ export const dynamic = 'force-dynamic'
 
 import { getServerSideURL } from '@/utilities/getURL'
 
-const imageUrl = 'https://teamwallet.s3.eu-north-1.amazonaws.com/media/Ampere-labs.png'
+const imageUrl = process.env.NEXT_PUBLIC_IMAGE_URL
 
 export const metadata = {
   title: 'Blog | Ampere Labs',

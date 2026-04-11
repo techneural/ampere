@@ -1,22 +1,27 @@
 import type { Metadata } from 'next'
-import { getServerSideURL } from './getURL'
+
+const imageUrl = process.env.NEXT_PUBLIC_IMAGE_URL || 'https://teamwallet.s3.eu-north-1.amazonaws.com/media/logo-bg.png'
 
 const defaultOpenGraph: Metadata['openGraph'] = {
   type: 'website',
-  description: 'An open-source website built with Payload and Next.js.',
+  title: 'Ampere Labs',
+  description: 'Ampere Labs',
+  siteName: 'Ampere Labs',
+  url: process.env.NEXT_PUBLIC_SERVER_URL,
   images: [
     {
-      url: `${getServerSideURL()}/website-template-OG.webp`,
+      url: imageUrl,
+      width: 1200,
+      height: 630,
     },
   ],
-  siteName: 'Ampere Labs',
-  title: 'Ampere Labs',
 }
 
 export const mergeOpenGraph = (og?: Metadata['openGraph']): Metadata['openGraph'] => {
   return {
     ...defaultOpenGraph,
     ...og,
+    url: og?.url || defaultOpenGraph.url,
     images: og?.images ? og.images : defaultOpenGraph.images,
   }
 }

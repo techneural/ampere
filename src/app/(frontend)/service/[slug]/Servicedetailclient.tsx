@@ -1,5 +1,6 @@
 'use client'
 
+import { FadeWrapper } from '@/components/animations'
 import AppButton from '@/components/ui/AppButton'
 import Image from 'next/image'
 import { useState } from 'react'
@@ -34,7 +35,9 @@ export default function ServiceDetailClient({ featuresTagline, features }: Props
         {/* Tagline */}
         {featuresTagline && (
           <div className="text-center">
-            <h4 className="heading_b_border">{featuresTagline}</h4>
+            <FadeWrapper>
+              <h4 className="heading_b_border">{featuresTagline}</h4>
+            </FadeWrapper>
           </div>
         )}
 
@@ -68,11 +71,11 @@ export default function ServiceDetailClient({ featuresTagline, features }: Props
             )}
 
             {active.listItems && active.listItems.length > 0 && (
-              <div className="h-63 w-[25.313rem] overflow-auto mt-4 bg-neutral-200 backdrop-blur-sm rounded-xl border border-neutral-500 p-6 space-y-6 absolute -bottom-20 left-1/2 -translate-x-1/2 max-md:w-auto max-md:static max-md:translate-none max-sm:h-33.5 max-sm:p-4 max-sm:space-y-3">
+              <div className="h-63 w-[25.313rem] overflow-auto mt-4 bg-neutral-200 backdrop-blur-sm rounded-xl border border-neutral-500 p-6 space-y-6 absolute -bottom-20 left-1/2 -translate-x-1/2 max-md:w-auto max-md:static max-md:translate-none max-sm:p-4 max-sm:space-y-3 max-sm:h-auto">
                 {active.listItems.map((item, i) => (
-                  <div key={i} className="flex items-center gap-3">
+                  <div key={i} className="flex items-center gap-3 group cursor-pointer">
                     {item.icon?.url ? (
-                      <div className="shrink-0 size-8 flex items-center justify-center">
+                      <div className="shrink-0 size-8 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
                         <Image
                           src={item.icon.url}
                           alt={item.label}
@@ -84,7 +87,7 @@ export default function ServiceDetailClient({ featuresTagline, features }: Props
                     ) : (
                       <div className="shrink-0 size-2 rounded-full bg-primary" />
                     )}
-                    <h3 className="max-sm:text-xs">{item.label}</h3>
+                    <h3 className="max-sm:text-xs transition-colors duration-300 group-hover:text-primary">{item.label}</h3>
                   </div>
                 ))}
               </div>
@@ -93,9 +96,17 @@ export default function ServiceDetailClient({ featuresTagline, features }: Props
 
           {/* Right: Content */}
           <div className="space-y-5 pt-2 max-sm:text-center">
-            {active.contentTitle && <h4 className="heading_b_border">{active.contentTitle}</h4>}
+            {active.contentTitle && (
+              <FadeWrapper delay={0.2}>
+                <h4 className="heading_b_border">{active.contentTitle}</h4>
+              </FadeWrapper>
+            )}
 
-            {active.contentDescription && <h3> {active.contentDescription}</h3>}
+            {active.contentDescription && (
+              <FadeWrapper delay={0.3}>
+                <h3>{active.contentDescription}</h3>
+              </FadeWrapper>
+            )}
             {active.ctaLabel && (
               <div className="mt-9">
                 <AppButton href={active.ctaLink || '#'} label={active.ctaLabel} />

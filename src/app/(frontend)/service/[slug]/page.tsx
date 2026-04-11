@@ -10,6 +10,7 @@ import { draftMode } from 'next/headers'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 import ServiceDetailClient from './Servicedetailclient'
 import AppButton from '@/components/ui/AppButton'
+import { FadeWrapper } from '@/components/animations'
 
 export const dynamic = 'force-dynamic'
 
@@ -17,7 +18,7 @@ type Args = {
   params: Promise<{ slug: string }>
 }
 
-const defaultImageUrl = 'https://teamwallet.s3.eu-north-1.amazonaws.com/media/Ampere-labs.png'
+const defaultImageUrl = process.env.NEXT_PUBLIC_IMAGE_URL
 
 async function getService(slug: string, draft: boolean) {
   const payload = await getPayload({ config: configPromise })
@@ -51,9 +52,9 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
 
   const meta = (service as any).meta
   const title = meta?.title || service.title
-  const description = meta?.description || (service as any).heroTitle || ''
+  const description = meta?.description || (service as any).cardDescription || ''
   const imageUrl = meta?.image?.url || defaultImageUrl
-  const url = `${process.env.NEXT_PUBLIC_SERVER_URL}/services/${slug}`
+  const url = `${process.env.NEXT_PUBLIC_SERVER_URL}/service/${slug}`
 
   return {
     title: `${title} | Services`,
@@ -130,17 +131,26 @@ export default async function ServiceDetailPage({ params: paramsPromise }: Args)
           <section className="bg-neutral-200 py-14 max-md:py-10">
             <div className="container grid grid-cols-2 gap-4 max-md:grid-cols-1 max-md:gap-8">
               <div className="space-y-5 max-sm:text-center">
-                {s.approachLabel && <h4 className="heading_b_border">{s.approachLabel}</h4>}
-                {s.approachText && <h3>{s.approachText}</h3>}
+                {s.approachLabel && (
+                  <FadeWrapper>
+                    <h4 className="heading_b_border">{s.approachLabel}</h4>
+                  </FadeWrapper>
+                )}
+
+                {s.approachText && (
+                  <FadeWrapper delay={0.2}>
+                    <h3>{s.approachText}</h3>
+                  </FadeWrapper>
+                )}
               </div>
               {s.approachImage?.url && (
-                <div className="relative rounded-xl overflow-hidden border border-neutral-500">
+                <div className="relative rounded-xl overflow-hidden border border-neutral-500 group">
                   <Image
                     src={s.approachImage.url}
                     alt="Our approach"
                     width={560}
                     height={403}
-                    className="object-cover"
+                    className="w-full object-cover transition-transform duration-300 ease-in-out group-hover:scale-110"
                   />
                 </div>
               )}
@@ -157,8 +167,16 @@ export default async function ServiceDetailPage({ params: paramsPromise }: Args)
         {s.timelineSteps?.length > 0 && (
           <section className="pt-20 max-md:pt-10 relative">
             <div className="container text-center mb-10 space-y-4">
-              {s.timelineLabel && <h4 className="heading_b_border">{s.timelineLabel}</h4>}
-              {s.timelineHeading && <h3 className="max-w-4xl mx-auto">{s.timelineHeading}</h3>}
+              {s.timelineLabel && (
+                <FadeWrapper>
+                  <h4 className="heading_b_border">{s.timelineLabel}</h4>
+                </FadeWrapper>
+              )}
+              {s.timelineHeading && (
+                <FadeWrapper delay={0.2}>
+                  <h3 className="max-w-4xl mx-auto">{s.timelineHeading}</h3>
+                </FadeWrapper>
+              )}
             </div>
 
             <div className="bg-base-200 py-10">
@@ -166,7 +184,10 @@ export default async function ServiceDetailPage({ params: paramsPromise }: Args)
                 <div className="w-[45%] relative max-lg:w-auto">
                   {s.timelineSteps.map((step: any, i: number) => (
                     <div key={i} className="relative">
-                      <h4 className="heading_b_border">{step.stepLabel}</h4>
+                      <FadeWrapper delay={0.3}>
+                        <h4 className="heading_b_border">{step.stepLabel}</h4>
+                      </FadeWrapper>
+
                       {step.stepDescription && (
                         <h3 className="pt-5 pl-9 pb-8 min-h-45 max-md:pl-0 max-sm:min-h-auto last:min-h-auto">
                           {step.stepDescription}
@@ -188,13 +209,13 @@ export default async function ServiceDetailPage({ params: paramsPromise }: Args)
                 </div>
 
                 {s.timelineImage?.url && (
-                  <div className="w-[55%] sticky top-36 h-max max-lg:w-auto  max-md:static">
+                  <div className="w-[55%] sticky top-36 h-max max-lg:w-auto max-md:static group">
                     <div className="relative rounded-xl overflow-hidden border border-neutral-500 aspect-square max-md:aspect-video">
                       <Image
                         src={s.timelineImage.url}
                         alt="Engagement timeline"
                         fill
-                        className="object-cover"
+                        className="object-cover transition-transform duration-300 ease-in-out group-hover:scale-110"
                       />
                     </div>
                   </div>
@@ -207,9 +228,15 @@ export default async function ServiceDetailPage({ params: paramsPromise }: Args)
         {/* Work With Us */}
         <section className="pt-14 max-md:pt-10">
           <div className="container text-center mb-10">
-            {s.workWithUsLabel && <h4 className="heading_b_border mb-6">{s.workWithUsLabel} </h4>}
+            {s.workWithUsLabel && (
+              <FadeWrapper>
+                <h4 className="heading_b_border mb-6">{s.workWithUsLabel} </h4>
+              </FadeWrapper>
+            )}
             {s.workWithUsHeading && (
-              <h3 className="whitespace-pre-line leading-relaxed">{s.workWithUsHeading}</h3>
+              <FadeWrapper delay={0.3}>
+                <h3 className="whitespace-pre-line leading-relaxed">{s.workWithUsHeading}</h3>
+              </FadeWrapper>
             )}
           </div>
 
@@ -236,7 +263,10 @@ export default async function ServiceDetailPage({ params: paramsPromise }: Args)
                   className="group flex flex-col justify-between gap-4 bg-neutral-200 border-2 border-neutral-500 rounded-xl p-6 hover:border-primary transition-colors duration-300"
                 >
                   <div className="space-y-2">
-                    <h4>{card.cardTitle}</h4>
+                    <FadeWrapper delay={0.3}>
+                      <h4>{card.cardTitle}</h4>
+                    </FadeWrapper>
+
                     {card.cardDescription && (
                       <div className="h-32.5 bg-black-100 text-neutral-400 p-4 rounded-xl flex flex-col justify-between relative">
                         {card.cardDescription}
