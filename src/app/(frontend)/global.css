@@ -216,7 +216,7 @@ select:-webkit-autofill {
 }
 
 .grecaptcha-badge {
-  z-index: 10;
+  z-index: 20;
 }
 
 @keyframes glow-medium {
