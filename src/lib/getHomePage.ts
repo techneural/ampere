@@ -2,16 +2,18 @@
 import { getPayload } from 'payload'
 import config from '@/payload.config'
 import { unstable_cache } from 'next/cache'
+import { draftMode } from 'next/headers'
+
+const { isEnabled : draft} = await draftMode()
 
 const getCachedHomePage = unstable_cache(
   async () => {
     const payload = await getPayload({ config })
     const res = await payload.find({
       collection: 'pages',
-      draft: false,
+      draft: draft,
       limit: 1,
       pagination: false,
-      overrideAccess: false,
       where: {
         or: [
           { slug: { equals: 'home' } },
