@@ -422,6 +422,7 @@ const ContactForm = (props: Props) => {
                 variant="primary"
                 size="lg"
                 type="submit"
+                className='max-sm:btn-block'
                 isLoading={status === 'loading'}
                 disabled={status === 'loading' || !isFormValidExceptCheckbox() || !form.agreed}
               />
