@@ -823,10 +823,15 @@ export interface Service {
    * Short description shown on the home page service card.
    */
   cardDescription?: string | null;
+  heroMediaType?: ('video' | 'image') | null;
   /**
    * Full-width background video shown behind the service title.
    */
   heroVideo?: (string | null) | Media;
+  /**
+   * Full-width background image shown behind the service title.
+   */
+  heroImage?: (string | null) | Media;
   /**
    * Large title shown on the hero banner (e.g. "Decoding risk: A new approach to operational oversight").
    */
@@ -1742,7 +1747,9 @@ export interface ServicesSelect<T extends boolean = true> {
   slug?: T;
   icon?: T;
   cardDescription?: T;
+  heroMediaType?: T;
   heroVideo?: T;
+  heroImage?: T;
   heroTitle?: T;
   heroCtaLabel?: T;
   heroCtaLink?: T;

@@ -1,6 +1,9 @@
 import type { Metadata } from 'next'
 
-const imageUrl = process.env.NEXT_PUBLIC_IMAGE_URL || 'https://teamwallet.s3.eu-north-1.amazonaws.com/media/logo-bg.png'
+const baseUrl =
+  process.env.NEXT_PUBLIC_SITE_URL || 'https://www.amperelabs.com'
+
+const imageUrl = `${baseUrl}/website-template-OG.webp`
 
 const defaultOpenGraph: Metadata['openGraph'] = {
   type: 'website',
@@ -17,11 +20,13 @@ const defaultOpenGraph: Metadata['openGraph'] = {
   ],
 }
 
-export const mergeOpenGraph = (og?: Metadata['openGraph']): Metadata['openGraph'] => {
+export const mergeOpenGraph = (
+  og?: Metadata['openGraph']
+): Metadata['openGraph'] => {
   return {
     ...defaultOpenGraph,
     ...og,
     url: og?.url || defaultOpenGraph.url,
-    images: og?.images ? og.images : defaultOpenGraph.images,
+    images: og?.images || defaultOpenGraph.images,
   }
 }

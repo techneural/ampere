@@ -11,14 +11,13 @@ import { LivePreviewListener } from '@/components/LivePreviewListener'
 import ServiceDetailClient from './Servicedetailclient'
 import AppButton from '@/components/ui/AppButton'
 import { FadeWrapper } from '@/components/animations'
+import { getServerSideURL } from '@/utilities/getURL'
 
 export const dynamic = 'force-dynamic'
 
 type Args = {
   params: Promise<{ slug: string }>
 }
-
-const defaultImageUrl = process.env.NEXT_PUBLIC_IMAGE_URL
 
 async function getService(slug: string, draft: boolean) {
   const payload = await getPayload({ config: configPromise })
@@ -53,7 +52,7 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
   const meta = (service as any).meta
   const title = meta?.title || service.title
   const description = meta?.description || (service as any).cardDescription || ''
-  const imageUrl = meta?.image?.url || defaultImageUrl
+  const imageUrl = meta?.image?.url || `${getServerSideURL()}/website-template-OG.webp`
   const url = `${process.env.NEXT_PUBLIC_SERVER_URL}/service/${slug}`
 
   return {
@@ -91,21 +90,34 @@ export default async function ServiceDetailPage({ params: paramsPromise }: Args)
       <div className="min-h-screen">
         {/* Hero Banner */}
         <section className="relative min-h-[calc(100vh-71px)] flex flex-col justify-center overflow-hidden">
-          {s.heroVideo?.url && (
-            <video
-              autoPlay
-              muted
-              loop
-              playsInline
-              className="absolute top-0 left-0 w-full h-full object-cover"
-            >
-              <source src={s.heroVideo.url} type="video/mp4" />
-            </video>
+          {/* Media (Video or Image) */}
+          {(s.heroVideo?.url || s.heroImage?.url) && (
+            <>
+              {s.heroMediaType === 'video' && s.heroVideo?.url ? (
+                <video
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  className="absolute top-0 left-0 w-full h-full object-cover"
+                >
+                  <source src={s.heroVideo.url} type="video/mp4" />
+                </video>
+              ) : s.heroImage?.url ? (
+                <Image
+                  src={s.heroImage.url}
+                  alt={s.heroTitle || service.title}
+                  fill
+                  priority
+                  className="object-cover"
+                />
+              ) : null}
+            </>
           )}
 
           <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/30 to-transparent" />
 
-          <div className="absolute top-6 left-1/2 -translate-x-1/2 w-full container z-10">
+          <div className="absolute top-6 left-1/2 -translate-x-1/2 w-full container z-20">
             <Link
               href="/"
               className="group inline-flex items-center gap-2 text-white/70 hover:text-primary font-avenirLtStd text-sm transition-colors duration-200"
