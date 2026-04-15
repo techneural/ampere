@@ -3,8 +3,7 @@
 import Image from 'next/image'
 import { useState } from 'react'
 import type { Media } from '@/payload-types'
-import { motion } from 'framer-motion'
-import { blurChild, BlurStagger, FadeWrapper } from '@/components/animations'
+import { BlurStagger, FadeWrapper } from '@/components/animations'
 
 type Props = {
   heading?: string
