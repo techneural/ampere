@@ -5,12 +5,17 @@ import {
   InlineToolbarFeature,
   lexicalEditor,
 } from '@payloadcms/richtext-lexical'
+import { authenticated } from '@/access/authenticated'
+import { anyone } from '@/access/anyone'
 
 export const Media: CollectionConfig = {
   slug: 'media',
   folders: true,
   access: {
-    read: () => true,
+    create: authenticated,
+    delete: authenticated,
+    read: anyone,
+    update: authenticated,
   },
   fields: [
     {

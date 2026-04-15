@@ -81,6 +81,7 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
   const title = meta?.title || post.title
   const description = meta?.description || (post as any).excerpt || ''
   const imageUrl = meta?.image?.url || (post as any).image?.url
+  
   const url = `${process.env.NEXT_PUBLIC_SERVER_URL}/blog/${slug}`
 
   return {
