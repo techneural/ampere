@@ -50,12 +50,8 @@ const MemberCard = ({
           isEven ? 'order-2 text-start max-md:text-center' : 'order-1 text-end max-md:text-center'
         }`}
       >
-        <motion.h3 variants={blurChild} className="text-primary">
-          {item.name}
-        </motion.h3>
-        <motion.p variants={blurChild} className="font-avenirLtStd text-gray-300">
-          {item.role}
-        </motion.p>
+        <h3 className="text-primary">{item.name}</h3>
+        <p className="font-avenirLtStd text-gray-300">{item.role}</p>
 
         {content1 && (
           <div>
