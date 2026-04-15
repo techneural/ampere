@@ -12,6 +12,8 @@ export async function generateMetadata(): Promise<Metadata> {
   const home = await getHomePage()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const meta = (home as any)?.meta
+  console.log('meta ::', meta)
+  console.log('home ::', home)
 
   const title = meta?.title || 'Ampere Labs'
   const description =
@@ -19,12 +21,14 @@ export async function generateMetadata(): Promise<Metadata> {
     'Ampere Labs delivers high-performance custom hardware, data center solutions, and deployment-ready AI infrastructure for modern enterprises.'
 
   const getImageUrl = (url?: string) => {
-    if (!url) return `${getServerSideURL()}/website-template-OG.webp` 
+    if (!url) return `${getServerSideURL()}/website-template-OG.webp`
     if (url.startsWith('http')) return url
     return `${getServerSideURL()}${url}`
   }
 
   const ogImageUrl = getImageUrl(meta?.image?.url)
+  console.log('ogImageUrl:', ogImageUrl)
+  console.log('meta?.image?.url', meta?.image?.url)
 
   return {
     title,
