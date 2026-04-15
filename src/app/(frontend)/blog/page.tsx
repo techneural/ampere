@@ -5,32 +5,24 @@ import BlogListPage from '@/components/common/BlogListPage'
 export const dynamic = 'force-dynamic'
 
 import { getServerSideURL } from '@/utilities/getURL'
-
-const imageUrl = process.env.NEXT_PUBLIC_IMAGE_URL
+import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 
 export const metadata = {
   title: 'Blog | Ampere Labs',
   description: 'Explore expert perspectives, emerging technologies, and proven strategies.',
-  openGraph: {
+  openGraph: mergeOpenGraph({
     title: 'Blog | Ampere Labs',
     description: 'Explore expert perspectives, emerging technologies, and proven strategies.',
     url: `${getServerSideURL()}/blog`,
-    images: [
-      {
-        url: imageUrl,
-        width: 1200,
-        height: 630,
-        alt: 'Ampere Labs Blog',
-      },
-    ],
-  },
+  }),
   twitter: {
     card: 'summary_large_image',
     title: 'Blog | Ampere Labs',
     description: 'Explore expert perspectives, emerging technologies, and proven strategies.',
-    images: [imageUrl],
+    images: [`${getServerSideURL()}/website-template-OG.webp`],
   },
 }
+
 export default async function BlogPage() {
   const payload = await getPayload({ config: configPromise })
 

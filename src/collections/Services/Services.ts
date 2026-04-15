@@ -77,12 +77,35 @@ export const Services: CollectionConfig = {
                     label: 'Hero',
                     fields: [
                         {
+                            name: 'heroMediaType',
+                            type: 'select',
+                            label: 'Hero Media Type',
+                            defaultValue: 'video',
+                            options: [
+                                { label: 'Video', value: 'video' },
+                                { label: 'Image', value: 'image' },
+                            ],
+                        },
+
+                        {
                             name: 'heroVideo',
                             type: 'upload',
                             relationTo: 'media',
                             label: 'Hero Background Video',
                             admin: {
                                 description: 'Full-width background video shown behind the service title.',
+                                condition: (_, siblingData) => siblingData.heroMediaType === 'video',
+                            },
+                        },
+
+                        {
+                            name: 'heroImage',
+                            type: 'upload',
+                            relationTo: 'media',
+                            label: 'Hero Background Image',
+                            admin: {
+                                description: 'Full-width background image shown behind the service title.',
+                                condition: (_, siblingData) => siblingData.heroMediaType === 'image',
                             },
                         },
                         {
