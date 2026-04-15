@@ -2,8 +2,7 @@ import { getPayload } from 'payload'
 import configPromise from '@/payload.config'
 import BlogListPage from '@/components/common/BlogListPage'
 
-export const dynamic = 'force-dynamic'
-
+export const revalidate = 60
 import { getServerSideURL } from '@/utilities/getURL'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 

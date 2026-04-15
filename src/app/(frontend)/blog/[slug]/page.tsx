@@ -10,8 +10,7 @@ import RichText from '@/components/RichText'
 import { draftMode } from 'next/headers'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 
-export const dynamic = 'force-dynamic'
-
+export const revalidate = 60
 type Args = {
   params: Promise<{ slug: string }>
 }

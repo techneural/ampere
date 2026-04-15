@@ -13,7 +13,7 @@ import AppButton from '@/components/ui/AppButton'
 import { FadeWrapper } from '@/components/animations'
 import { getServerSideURL } from '@/utilities/getURL'
 
-export const dynamic = 'force-dynamic'
+ export const revalidate = 60
 
 type Args = {
   params: Promise<{ slug: string }>
