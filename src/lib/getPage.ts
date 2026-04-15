@@ -1,23 +1,31 @@
+// src/lib/getPage.ts
 import { getPayload } from 'payload'
 import config from '@/payload.config'
-import { draftMode } from 'next/headers'
+import { unstable_cache } from 'next/cache'
+
+const getCachedPage = (slug: string) =>
+  unstable_cache(
+    async () => {
+      const payload = await getPayload({ config })
+      const res = await payload.find({
+        collection: 'pages',
+        draft: false,
+        limit: 1,
+        pagination: false,
+        overrideAccess: false,
+        where: { slug: { equals: slug } },
+      })
+      return res.docs[0] || null
+    },
+    [`page-${slug}`],
+    { tags: [`page-${slug}`, 'pages'], revalidate: 60 },
+  )()
 
 export const getPage = async (slug: string) => {
-  const { isEnabled: draft } = await draftMode()
-  const payload = await getPayload({ config })
-
-  const res = await payload.find({
-    collection: 'pages',
-    draft: draft,
-    limit: 1,
-    pagination: false,
-    overrideAccess: draft,
-    where: {
-      slug: {
-        equals: slug,
-      },
-    },
-  })
-
-  return res.docs[0] || null
+  try {
+    return await getCachedPage(slug)
+  } catch (error) {
+    console.error('Error fetching page:', error)
+    return null
+  }
 }

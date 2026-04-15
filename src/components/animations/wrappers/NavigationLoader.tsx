@@ -122,24 +122,29 @@ export default function NavigationLoader() {
   const [progress, setProgress] = useState(0)
   const [visible, setVisible] = useState(false)
   const [statusText, setStatusText] = useState('Initializing')
-  const isMounted = useRef(false)
+
+  // Track which paths have already been loaded
+  const visitedPaths = useRef<Set<string>>(new Set())
 
   useEffect(() => {
-    // Skip the very first mount — only show on actual route changes
-    if (!isMounted.current) {
-      isMounted.current = true
+    // If this path was already visited before, skip the loader entirely
+    if (visitedPaths.current.has(pathname)) {
       return
     }
 
+    // Mark this path as visited
+    visitedPaths.current.add(pathname)
+
+    // Show loader for first-time visits only
     setVisible(true)
     setProgress(0)
     setStatusText('Initializing')
 
     const steps = [
       { to: 30, delay: 0, text: 'Initializing' },
-      { to: 60, delay: 400, text: 'Loading assets' },
-      { to: 85, delay: 900, text: 'Calibrating' },
-      { to: 100, delay: 1400, text: 'Ready' },
+      { to: 60, delay: 150, text: 'Loading assets' },
+      { to: 85, delay: 350, text: 'Calibrating' },
+      { to: 100, delay: 550, text: 'Ready' },
     ]
 
     const timers = steps.map(({ to, delay, text }) =>
@@ -149,7 +154,7 @@ export default function NavigationLoader() {
       }, delay),
     )
 
-    const hideTimer = setTimeout(() => setVisible(false), 2000)
+    const hideTimer = setTimeout(() => setVisible(false), 800)
 
     return () => {
       timers.forEach(clearTimeout)

@@ -1,30 +1,15 @@
-export const dynamic = 'force-dynamic'
+export const revalidate = 60
 
-import { getPayload } from 'payload'
-import config from '@/payload.config'
 import { RenderBlocks } from '@/blocks/RenderBlocks'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 import { draftMode } from 'next/headers'
 import { Metadata } from 'next'
 import { getServerSideURL } from '@/utilities/getURL'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
+import { getHomePage } from '@/lib/getHomePage'
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { isEnabled: draft } = await draftMode()
-
-  const payload = await getPayload({ config })
-
-  const page = await payload.find({
-    collection: 'pages',
-    draft: draft,
-    limit: 1,
-    pagination: false,
-    where: {
-      or: [{ slug: { equals: 'home' } }, { slug: { equals: '/home' } }, { slug: { equals: '/' } }],
-    },
-  })
-
-  const home = page.docs?.[0]
+  const home = await getHomePage()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const meta = (home as any)?.meta
 
@@ -35,11 +20,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
   const getImageUrl = (url?: string) => {
     if (!url) return `${getServerSideURL()}/website-template-OG.webp`
-
-    // if already full URL (S3, CDN, etc.)
     if (url.startsWith('http')) return url
-
-    // if relative (local upload)
     return `${getServerSideURL()}${url}`
   }
 
@@ -64,20 +45,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function HomePage() {
   const { isEnabled: draft } = await draftMode()
-  const payload = await getPayload({ config })
-
-  const page = await payload.find({
-    collection: 'pages',
-    draft: draft,
-    limit: 1,
-    pagination: false,
-    overrideAccess: draft,
-    where: {
-      or: [{ slug: { equals: 'home' } }, { slug: { equals: '/home' } }, { slug: { equals: '/' } }],
-    },
-  })
-
-  const home = page.docs?.[0]
+  const home = await getHomePage()
 
   return (
     <>
