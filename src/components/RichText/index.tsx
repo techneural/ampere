@@ -13,7 +13,7 @@ import { Play } from 'lucide-react'
 const jsxConverters: JSXConvertersFunction = ({ defaultConverters }) => ({
   ...defaultConverters,
   paragraph: ({ node, nodesToJSX }) => (
-    <p className="font-montserrat text-neutral-400 font-medium  mb-9 last:mb-0">
+    <p className="font-montserrat text-neutral-400 font-medium mb-5 last:mb-0">
       {nodesToJSX({ nodes: node.children })}
     </p>
   ),
