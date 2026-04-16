@@ -30,7 +30,7 @@ export default async function BlogPage() {
     draft: false,
     limit: 200,
     pagination: false,
-    sort: '-date',
+    sort: '-publishedAt',
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

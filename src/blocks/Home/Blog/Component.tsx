@@ -29,7 +29,7 @@ const LatestBlogSection = async ({ heading, description }: Props) => {
     draft: false,
     limit: 2,
     pagination: false,
-    sort: '-date',
+    sort: '-publishedAt',
   })
 
   const posts = result.docs as unknown as Post[]

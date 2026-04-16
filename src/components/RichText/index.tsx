@@ -68,7 +68,7 @@ const jsxConverters: JSXConvertersFunction = ({ defaultConverters }) => ({
 
     return (
       <li className="flex items-start gap-3 text-gray-400 font-montserrat">
-        <Play fill="#e0e0e0" stroke="#e0e0e0" className="mt-0.5 min-w-5 h-5" />
+        <Play fill="#e0e0e0" stroke="#e0e0e0" className="mt-0.5 w-4 h-4 shrink-0" />
         <span className="leading-snug">{nodesToJSX({ nodes: node.children })}</span>
       </li>
     )
