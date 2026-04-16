@@ -81,7 +81,7 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
   const title = meta?.title || post.title
   const description = meta?.description || (post as any).excerpt || ''
   const imageUrl = meta?.image?.url || (post as any).image?.url
-  
+
   const url = `${process.env.NEXT_PUBLIC_SERVER_URL}/blog/${slug}`
 
   return {
@@ -113,8 +113,8 @@ export default async function BlogDetailPage({ params: paramsPromise }: Args) {
 
   if (!post) return notFound()
 
-  const formattedDate = (post as any).date
-    ? new Date((post as any).date).toLocaleDateString('en-US', {
+  const formattedDate = (post as any).publishedAt
+    ? new Date((post as any).publishedAt).toLocaleDateString('en-US', {
         month: 'long',
         day: 'numeric',
         year: 'numeric',

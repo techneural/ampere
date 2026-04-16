@@ -8,7 +8,7 @@ import React from 'react'
 type BlogItem = {
   title: string
   image?: { url?: string }
-  date?: string
+  publishedAt?: string
   source?: string
   slug?: string
 }
@@ -53,7 +53,7 @@ const BlogCard: React.FC<BlogCardProps> = ({ item, comingSoon }) => {
             </div>
           )}
 
-          {item.date && (
+          {item.publishedAt && (
             <div className="flex items-center gap-1 max-md:gap-0">
               <Image
                 src="/images/calender.png"
@@ -63,7 +63,7 @@ const BlogCard: React.FC<BlogCardProps> = ({ item, comingSoon }) => {
                 className="max-md:size-5"
               />
               <p>
-                {new Date(item.date).toLocaleDateString('en-US', {
+                {new Date(item.publishedAt).toLocaleDateString('en-US', {
                   month: 'short',
                   day: 'numeric',
                   year: 'numeric',

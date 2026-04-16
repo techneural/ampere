@@ -759,6 +759,7 @@ export interface Blog {
    */
   generateSlug?: boolean | null;
   slug: string;
+  publishedAt?: string | null;
   source?: string | null;
   /**
    * A short summary shown on the blog listing and detail page below the title.
@@ -783,7 +784,6 @@ export interface Blog {
     };
     [k: string]: unknown;
   } | null;
-  publishedAt?: string | null;
   meta?: {
     /**
      * Title shown in search engine results. Recommended: 50–60 characters.
@@ -798,7 +798,6 @@ export interface Blog {
      */
     image?: (string | null) | Media;
   };
-  date?: string | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -1720,11 +1719,11 @@ export interface BlogsSelect<T extends boolean = true> {
   title?: T;
   generateSlug?: T;
   slug?: T;
+  publishedAt?: T;
   source?: T;
   excerpt?: T;
   image?: T;
   content?: T;
-  publishedAt?: T;
   meta?:
     | T
     | {
@@ -1732,7 +1731,6 @@ export interface BlogsSelect<T extends boolean = true> {
         description?: T;
         image?: T;
       };
-  date?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;

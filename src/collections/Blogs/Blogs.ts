@@ -25,7 +25,7 @@ export const Blogs: CollectionConfig = {
   },
 
   admin: {
-    defaultColumns: ['title', 'source', 'date', 'updatedAt'],
+    defaultColumns: ['title', 'source', 'publishedAt', 'updatedAt'],
     useAsTitle: 'title',
     livePreview: {
       url: ({ data, req }) =>
@@ -51,7 +51,18 @@ export const Blogs: CollectionConfig = {
       required: true,
     },
     slugField(),
-
+    {
+      name: 'publishedAt',
+      type: 'date',
+      label: 'Publish Date',
+      admin: {
+        position: 'sidebar',
+        date: {
+          pickerAppearance: 'dayOnly',
+          displayFormat: 'MMM d, yyyy',
+        },
+      },
+    },
     {
       type: 'tabs',
       tabs: [
@@ -87,11 +98,6 @@ export const Blogs: CollectionConfig = {
                 description:
                   'Full blog article content shown on the detail page.',
               },
-            },
-            {
-              name: 'publishedAt',
-              type: 'date',
-              admin: { position: 'sidebar' },
             },
           ],
         },
@@ -131,18 +137,6 @@ export const Blogs: CollectionConfig = {
           ],
         },
       ],
-    },
-    {
-      name: 'date',
-      type: 'date',
-      label: 'Publish Date',
-      admin: {
-        position: 'sidebar',
-        date: {
-          pickerAppearance: 'dayOnly',
-          displayFormat: 'MMM d, yyyy',
-        },
-      },
     },
   ],
 
