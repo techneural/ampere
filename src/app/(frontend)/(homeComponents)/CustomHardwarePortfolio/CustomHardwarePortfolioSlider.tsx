@@ -1,10 +1,10 @@
 'use client'
 
 import Image from 'next/image'
-import Link from 'next/link'
-import { ArrowRight } from 'lucide-react'
+// import Link from 'next/link'
+// import { ArrowRight } from 'lucide-react'
 import SwiperContainer from '@/components/ui/SwiperContainer'
-import AppButton from '@/components/ui/AppButton'
+// import AppButton from '@/components/ui/AppButton'
 import { FadeWrapper } from '@/components/animations'
 
 type Props = {
@@ -28,7 +28,8 @@ const CustomHardwarePortfolioSlider = ({ items }: Props) => {
           1024: { slidesPerView: 3 },
         }}
         renderItem={(item) => (
-          <Link href={item.link || '/'} className="group">
+          // <Link href={item.link || '/'} className="group">
+          <div className="group">
             <div className="border-2 border-neutral-500 rounded-2xl h-full overflow-hidden">
               <div className="rounded-t-xl overflow-hidden">
                 <Image
@@ -65,11 +66,11 @@ const CustomHardwarePortfolioSlider = ({ items }: Props) => {
                 </div>
               </div>
             </div>
-          </Link>
+          </div>
         )}
       />
 
-      <div className="max-md:text-center">
+      {/* <div className="max-md:text-center">
         <FadeWrapper delay={0.6}>
           <AppButton
             label={
@@ -81,7 +82,7 @@ const CustomHardwarePortfolioSlider = ({ items }: Props) => {
             className="md:absolute right-4 -bottom-2 z-10 max-md:mt-10"
           />
         </FadeWrapper>
-      </div>
+      </div> */}
     </>
   )
 }

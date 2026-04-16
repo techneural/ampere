@@ -1,9 +1,9 @@
 'use client'
 
 import Image from 'next/image'
-import Link from 'next/link'
-import { ArrowRight, ArrowUpRight } from 'lucide-react'
-import AppButton from '@/components/ui/AppButton'
+// import Link from 'next/link'
+// import { ArrowRight, ArrowUpRight } from 'lucide-react'
+// import AppButton from '@/components/ui/AppButton'
 import { motion } from 'framer-motion'
 import { blurChild, BlurStagger, FadeWrapper } from '@/components/animations'
 
@@ -24,7 +24,8 @@ type Props = {
   buttonLink?: string
 }
 
-const ResearchPortfolio = ({ heading, description, cards, buttonText, buttonLink }: Props) => {
+// const ResearchPortfolio = ({ heading, description, cards, buttonText, buttonLink }: Props) => {
+const ResearchPortfolio = ({ heading, description, cards }: Props) => {
   return (
     <section className="bg-neutral-200 py-14 relative">
       <div className="container">
@@ -32,7 +33,8 @@ const ResearchPortfolio = ({ heading, description, cards, buttonText, buttonLink
           {/* Cards */}
           <div className="flex flex-col gap-8">
             {cards?.map((item, index) => (
-              <Link href={item.link || '/'} key={index} className="group">
+              // <Link href={item.link || '/'} key={index} className="group">
+              <div key={index} className="group">
                 <div className="relative border-2 border-neutral-500 rounded-2xl overflow-hidden">
                   <Image
                     src={item.image?.url}
@@ -59,11 +61,11 @@ const ResearchPortfolio = ({ heading, description, cards, buttonText, buttonLink
 
                   <div className="w-full h-48 absolute bottom-0 bg-linear-to-t from-black to-transparent"></div>
 
-                  <button className="bg-neutral-200 size-11 rounded-sm flex justify-center items-center absolute top-4 right-4 border border-neutral-500 group-hover:bg-white group-hover:border-white transition-colors duration-300 max-sm:size-8">
+                  {/* <button className="bg-neutral-200 size-11 rounded-sm flex justify-center items-center absolute top-4 right-4 border border-neutral-500 group-hover:bg-white group-hover:border-white transition-colors duration-300 max-sm:size-8">
                     <ArrowUpRight className="text-primary" />
-                  </button>
+                  </button> */}
                 </div>
-              </Link>
+              </div>
             ))}
           </div>
 
@@ -82,7 +84,7 @@ const ResearchPortfolio = ({ heading, description, cards, buttonText, buttonLink
         </div>
 
         {/* Bottom Button */}
-        {buttonText && (
+        {/* {buttonText && (
           <div className="text-center">
             <FadeWrapper delay={0.2}>
               <AppButton
@@ -97,7 +99,7 @@ const ResearchPortfolio = ({ heading, description, cards, buttonText, buttonLink
               />
             </FadeWrapper>
           </div>
-        )}
+        )} */}
       </div>
     </section>
   )

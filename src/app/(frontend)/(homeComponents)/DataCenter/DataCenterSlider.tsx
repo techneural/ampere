@@ -1,10 +1,10 @@
 'use client'
 
 import Image from 'next/image'
-import Link from 'next/link'
-import { ArrowRight, ArrowUpRight } from 'lucide-react'
+// import Link from 'next/link'
+// import { ArrowRight, ArrowUpRight } from 'lucide-react'
 import SwiperContainer from '@/components/ui/SwiperContainer'
-import AppButton from '@/components/ui/AppButton'
+// import AppButton from '@/components/ui/AppButton'
 import { FadeWrapper } from '@/components/animations'
 
 type Props = {
@@ -32,7 +32,8 @@ const DataCenterSlider = ({ items }: Props) => {
             <FadeWrapper delay={0.3}>
               <h4 className="text-neutral-600 font-normal mb-4">{item.title}</h4>
             </FadeWrapper>
-            <Link href={item.link || '/'} className="overflow-hidden">
+            {/* <Link href={item.link || '/'} className="overflow-hidden"> */}
+            <div className="overflow-hidden">
               <Image
                 src={item.image.url}
                 alt={item.image.alt || item.title}
@@ -40,15 +41,15 @@ const DataCenterSlider = ({ items }: Props) => {
                 height={314}
                 className="w-full h-78.5 max-md:h-60 rounded-xl object-cover"
               />
-            </Link>
+            </div>
 
-            <Link href={item.link || '/'}>
-              <FadeWrapper delay={0.4}>
-                <h4 className="mt-4 group-hover:text-primary transition-colors duration-300">
-                  {item.title}
-                </h4>
-              </FadeWrapper>
-            </Link>
+            {/* <Link href={item.link || '/'}> */}
+            <FadeWrapper delay={0.4}>
+              <h4 className="mt-4 group-hover:text-primary transition-colors duration-300">
+                {item.title}
+              </h4>
+            </FadeWrapper>
+            {/* </Link> */}
 
             <div className="flex justify-between gap-3 mt-2">
               <div className="bg-neutral-200 flex items-center rounded-sm max-w-87.5 h-11 px-3">
@@ -57,12 +58,12 @@ const DataCenterSlider = ({ items }: Props) => {
                 </FadeWrapper>
               </div>
 
-              <Link
+              {/* <Link
                 href={item.link || '/'}
                 className="bg-neutral-200 min-w-11 h-11 flex justify-center items-center border border-neutral-500 rounded-sm group-hover:bg-white transition-colors duration-300"
               >
                 <ArrowUpRight className="text-primary" />
-              </Link>
+              </Link> */}
             </div>
             <FadeWrapper delay={0.6}>
               <p className="font-avenirLtStd text-neutral-400 mt-4">{item.description}</p>
@@ -71,7 +72,7 @@ const DataCenterSlider = ({ items }: Props) => {
         )}
       />
 
-      <div className="max-md:text-center">
+      {/* <div className="max-md:text-center">
         <FadeWrapper delay={0.6}>
           <AppButton
             label={
@@ -83,7 +84,7 @@ const DataCenterSlider = ({ items }: Props) => {
             className="md:absolute right-4 -bottom-2 z-10 max-md:mt-10"
           />
         </FadeWrapper>
-      </div>
+      </div> */}
     </>
   )
 }
