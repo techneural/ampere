@@ -21,7 +21,7 @@ const montserrat = Montserrat({
 })
 
 const avenirLtStd = localFont({
-  src: [
+  src: [ 
     {
       path: '../../../public/fonts/avenirLtStd/AvenirLTStd-Light.otf',
       weight: '300',
