@@ -70,7 +70,8 @@ const ResearchPortfolio = ({ heading, description, cards }: Props) => {
           </div>
 
           {/* Right Content */}
-          <div className="h-max text-end space-y-7 sticky top-55 max-md:mt-0 max-md:text-center max-md:static">
+          {/* <div className="h-max text-end space-y-7 sticky top-55 max-md:mt-0 max-md:text-center max-md:static"> */}
+          <div className="h-max text-end space-y-7 max-md:mt-0 max-md:text-center">
             <FadeWrapper>
               <h4 className="heading_b_border">{heading}</h4>
             </FadeWrapper>
