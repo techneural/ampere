@@ -13,7 +13,7 @@ import { Play } from 'lucide-react'
 const jsxConverters: JSXConvertersFunction = ({ defaultConverters }) => ({
   ...defaultConverters,
   paragraph: ({ node, nodesToJSX }) => (
-    <p className="font-montserrat text-sm text-neutral-400 font-medium mb-5 last:mb-0">
+    <p className="font-montserrat lg:text-sm text-neutral-400 font-medium mb-5 last:mb-0">
       {nodesToJSX({ nodes: node.children })}
     </p>
   ),
@@ -53,7 +53,7 @@ const jsxConverters: JSXConvertersFunction = ({ defaultConverters }) => ({
 
     if (isCheckList) {
       return (
-        <li className="flex items-start gap-3 text-gray-400 font-montserrat">
+        <li className="flex items-start gap-3 text-gray-400 font-montserrat lg:text-sm text-xs">
           <span
             className={`mt-1 size-4 rounded-sm border shrink-0 flex items-center justify-center text-[10px] ${
               isChecked ? 'bg-primary border-primary text-white' : 'border-neutral-500'
@@ -67,7 +67,7 @@ const jsxConverters: JSXConvertersFunction = ({ defaultConverters }) => ({
     }
 
     return (
-      <li className="flex items-start gap-3 text-gray-400 font-montserrat">
+      <li className="flex items-start gap-3 text-gray-400 font-montserrat lg:text-sm text-xs">
         <Play fill="#e0e0e0" stroke="#e0e0e0" className="mt-0.5 w-4 h-4 shrink-0" />
         <span className="leading-snug">{nodesToJSX({ nodes: node.children })}</span>
       </li>
