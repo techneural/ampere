@@ -13,7 +13,7 @@ import { Play } from 'lucide-react'
 const jsxConverters: JSXConvertersFunction = ({ defaultConverters }) => ({
   ...defaultConverters,
   paragraph: ({ node, nodesToJSX }) => (
-    <p className="font-montserrat text-neutral-400 font-medium mb-5 last:mb-0">
+    <p className="font-montserrat text-sm text-neutral-400 font-medium mb-5 last:mb-0">
       {nodesToJSX({ nodes: node.children })}
     </p>
   ),
@@ -21,9 +21,9 @@ const jsxConverters: JSXConvertersFunction = ({ defaultConverters }) => ({
   heading: ({ node, nodesToJSX }) => {
     const tag = node.tag as 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
     const styles: Record<string, string> = {
-      h2: 'mb-3',
-      h3: 'mb-3',
-      h4: 'mb-2',
+      h2: 'mb-3 font-bold',
+      h3: 'mb-3 font-bold',
+      h4: 'mb-2 font-bold',
       h5: 'mb-2',
       h6: 'text-neutral-400 mb-2 uppercase tracking-widest',
     }

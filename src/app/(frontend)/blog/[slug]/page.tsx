@@ -184,13 +184,13 @@ export default async function BlogDetailPage({ params: paramsPromise }: Args) {
                 </div>
               </div>
 
-              <h1>{post.title}</h1>
+              <h2 className="font-bold">{post.title}</h2>
             </div>
           </div>
 
           {(post as any).image?.url && (
             <div className="mt-6">
-              <div className="relative rounded-2xl overflow-hidden border-2 border-neutral-500">
+              <div className="relative rounded-2xl overflow-hidden border-2 border-neutral-500 max-w-3xl mx-auto">
                 <Image
                   src={(post as any).image.url}
                   alt={post.title}
