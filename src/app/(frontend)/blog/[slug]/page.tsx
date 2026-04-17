@@ -135,7 +135,7 @@ export default async function BlogDetailPage({ params: paramsPromise }: Args) {
             <Link
               href="/blog"
               className="group inline-flex items-center gap-2 text-neutral-400 hover:text-white font-avenirLtStd text-sm transition-colors duration-200 max-sm:text-xs"
-            >
+            > 
               <ArrowLeft
                 size={15}
                 className="group-hover:-translate-x-1 transition-transform duration-200"
