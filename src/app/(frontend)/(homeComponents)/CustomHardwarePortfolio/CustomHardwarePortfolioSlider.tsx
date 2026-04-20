@@ -29,15 +29,15 @@ const CustomHardwarePortfolioSlider = ({ items }: Props) => {
         }}
         renderItem={(item) => (
           // <Link href={item.link || '/'} className="group">
-          <div className="group">
+          <div className="group h-full">
             <div className="border-2 border-neutral-500 rounded-2xl h-full overflow-hidden">
               <div className="rounded-t-xl overflow-hidden">
                 <Image
                   src={item?.image?.url}
                   alt={item.title}
                   width={489}
-                  height={314}
-                  className="w-full object-cover"
+                  height={280}
+                  className="w-full h-70 object-cover"
                 />
               </div>
 
