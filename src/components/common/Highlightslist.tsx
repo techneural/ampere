@@ -1,3 +1,5 @@
+'use client'
+
 import Marquee from 'react-fast-marquee'
 
 export interface Highlight<TVariant extends string = string> {
@@ -11,6 +13,7 @@ export interface HighlightsListProps<TVariant extends string = string> {
   variantClassMap: Record<TVariant, string>
   primaryVariant?: TVariant
   marqueeSpeed?: number
+  enableMarquee?: boolean
 }
 
 export function HighlightsList<TVariant extends string = string>({
@@ -19,39 +22,37 @@ export function HighlightsList<TVariant extends string = string>({
   variantClassMap,
   primaryVariant = 'primary' as TVariant,
   marqueeSpeed = 40,
+  enableMarquee = false, // 🔑 default = frozen text
 }: HighlightsListProps<TVariant>) {
-  // let primaryIndex = 0
-
   return (
     <div
-      className={`${maxHeight} overflow-y-auto scrollbar-none bg-base-200 rounded-2xl py-4 border-2 border-neutral-500 overflow-hidden`}
+      className={`${maxHeight} overflow-y-auto scrollbar-none bg-base-200 rounded-2xl py-4 border-2 border-neutral-500`}
     >
-      <div>
+      <div className="flex flex-col gap-3">
         {highlights.map((highlight, i) => {
-          if (highlight.variant === primaryVariant) {
-            // const currentPrimaryIndex = primaryIndex++
-            const isEven = i % 2 === 0
+          const isPrimary = highlight.variant === primaryVariant
+          const isEven = i % 2 === 0
 
+          const textElement = (
+            <p
+              className={`${
+                variantClassMap[highlight.variant]
+              } ${isPrimary ? 'px-4 animate-glow' : 'px-6'} leading-relaxed whitespace-nowrap`}
+            >
+              {highlight.text}
+            </p>
+          )
+
+          // ✅ If marquee disabled → render static text
+          if (!enableMarquee) {
             return (
-              <Marquee
-                key={i}
-                speed={marqueeSpeed}
-                gradient={false}
-                autoFill
-                direction={isEven ? 'left' : 'right'}
-                pauseOnHover
-              >
-                <p
-                  className={`${variantClassMap[highlight.variant]} px-4 animate-glow leading-relaxed`}
-                >
-                  {highlight.text}
-                </p>
-              </Marquee>
+              <div key={i}>
+                {textElement}
+              </div>
             )
           }
 
-          const isEven = i % 2 === 0
-
+          // ✅ If marquee enabled → scrolling version
           return (
             <Marquee
               key={i}
@@ -61,11 +62,7 @@ export function HighlightsList<TVariant extends string = string>({
               direction={isEven ? 'left' : 'right'}
               pauseOnHover
             >
-              <p
-                className={`${variantClassMap[highlight.variant]} px-6 whitespace-nowrap leading-snug`}
-              >
-                {highlight.text}
-              </p>
+              {textElement}
             </Marquee>
           )
         })}
