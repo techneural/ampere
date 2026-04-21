@@ -3,7 +3,7 @@
 import { NextRequest, NextResponse } from 'next/server'
  
 const PAYLOAD_TOKEN = 'payload-token'
-const TOTP_COOKIE   = 'totp-verified'
+const TOTP_COOKIE = 'totp-verified'
  
 const BYPASS = [
   '/admin/login',
@@ -39,13 +39,18 @@ export function middleware(req: NextRequest) {
   }
  
   // ── After login: /admin (dashboard) → redirect to homepage ───────────────
-  if (pathname === '/admin') {
-    const payloadTokenAdmin = req.cookies.get(PAYLOAD_TOKEN)?.value
-    if (payloadTokenAdmin) {
-      return NextResponse.redirect(new URL('/', req.nextUrl.origin))
-    }
-  }
+  // ── Protect admin routes ─────────────────────────────
+  if (pathname.startsWith('/admin')) {
+    const payloadToken = req.cookies.get(PAYLOAD_TOKEN)?.value
  
+    // If NOT logged in → go to login
+    if (!payloadToken) {
+      return NextResponse.redirect(new URL('/admin/login', req.nextUrl.origin))
+    }
+ 
+    // If logged in → allow admin
+    return NextResponse.next()
+  }
   // ── Let other BYPASS paths through (password reset, TOTP, etc.) ────────────
   if (BYPASS.some((p) => pathname.startsWith(p))) return NextResponse.next()
  
@@ -68,10 +73,10 @@ export function middleware(req: NextRequest) {
   if (!payloadToken) return NextResponse.next()
  
   try {
-    const parts  = payloadToken.split('.')
+    const parts = payloadToken.split('.')
     const claims = JSON.parse(atob(parts[1]!))
     const totpEnabled = claims?.totpEnabled as boolean | undefined
-    const userId      = claims?.id          as string | undefined
+    const userId = claims?.id as string | undefined
  
     if (!totpEnabled) return NextResponse.next()
  
@@ -94,4 +99,5 @@ export const config = {
   // Runs on ALL routes so we can redirect frontend paths → /admin/login
   matcher: ['/', '/((?!_next|favicon|api).*)'],
 }
+ 
  
