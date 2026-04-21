@@ -22,10 +22,14 @@ const Banner = (props: any) => {
       )}
 
       <div className="container text-center z-10">
-        <div className="max-w-137.5 mx-auto relative py-10">
+        <div className="relative py-10">
           <div className="absolute inset-0 -z-10 blur-3xl bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.9)_0%,rgba(0,0,0,0)_90%)]"></div>
 
-          {title && <h1 className="mb-3">{title}</h1>}
+          {title && (
+            <div className="max-w-137.5 mx-auto">
+              <h1 className="mb-3">{title}</h1>
+            </div>
+          )}
 
           {subtitle && <h2 className="mb-6">{subtitle}</h2>}
 
