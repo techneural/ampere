@@ -1919,10 +1919,6 @@ export interface Header {
   cta: {
     label: string;
     href: string;
-    /**
-     * Your Calendly scheduling link (e.g. https://calendly.com/your-name/30min). When set, the CTA button will open a Calendly popup instead of navigating to a URL.
-     */
-    calendlyUrl?: string | null;
   };
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -1974,7 +1970,6 @@ export interface HeaderSelect<T extends boolean = true> {
     | {
         label?: T;
         href?: T;
-        calendlyUrl?: T;
       };
   updatedAt?: T;
   createdAt?: T;

@@ -6,7 +6,8 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { Menu, X } from 'lucide-react'
 import { usePathname } from 'next/navigation'
-import CalendlyButton from './CalendlyButton'
+// import CalendlyButton from './CalendlyButton'
+import AppButton from '../ui/AppButton'
 
 const Header = ({ data }: any) => {
   const [open, setOpen] = useState(false)
@@ -15,7 +16,7 @@ const Header = ({ data }: any) => {
   const pathname = usePathname()
 
   const ctaLabel = data?.cta?.label || 'Book an Appointment'
-  const calendlyUrl = data?.cta?.calendlyUrl || ''
+  const calendlyHref = data?.cta?.href || '#'
 
   return (
     <>
@@ -56,7 +57,14 @@ const Header = ({ data }: any) => {
 
           {/* CTA */}
           <div className="flex-1 text-end">
-            <CalendlyButton label={ctaLabel} calendlyUrl={calendlyUrl} className="max-md:hidden" />
+            <AppButton
+              label={ctaLabel}
+              href={calendlyHref}
+              variant="primary"
+              size="lg"
+              className="max-md:hidden"
+            />
+            {/* <CalendlyButton label={ctaLabel} calendlyUrl={calendlyUrl} className="max-md:hidden" /> */}
           </div>
 
           {/* MOBILE MENU BTN */}
@@ -106,7 +114,15 @@ const Header = ({ data }: any) => {
         </ul>
 
         <div className="px-6 py-3 max-sm:py-0 max-sm:px-4">
-          <CalendlyButton label={ctaLabel} calendlyUrl={calendlyUrl} className="w-full max-sm:btn-xs" />
+          <AppButton
+            label={ctaLabel}
+            href={calendlyHref}
+            variant="primary"
+            size="lg"
+            className="w-full max-sm:btn-xs"
+            onClick={() => setOpen(true)}
+          />
+          {/* <CalendlyButton label={ctaLabel} calendlyUrl={calendlyUrl} className="w-full max-sm:btn-xs" /> */}
         </div>
       </div>
     </>
