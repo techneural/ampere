@@ -46,6 +46,12 @@ export const ContactSubmissions: CollectionConfig = {
       admin: { readOnly: true },
     },
     {
+      name: 'country',
+      type: 'text',
+      label: 'Country',
+      admin: { readOnly: true },
+    },
+    {
       name: 'message',
       type: 'textarea',
       label: 'Message',

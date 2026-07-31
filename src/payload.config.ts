@@ -14,6 +14,7 @@ import { Services } from './collections/Services/Services'
 import { Header } from './globals/Header'
 import { Footer } from './globals/Footer'
 import { ContactSubmissions } from './collections/ContactSubmissions'
+import { LegalPages } from './collections/LegalPages'
 import { generatePreviewPath } from './utilities/generatePreviewPath'
 
 const filename = fileURLToPath(import.meta.url)
@@ -60,7 +61,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Pages, Blogs, Services, ContactSubmissions],
+  collections: [Users, Media, Pages, Blogs, Services, ContactSubmissions, LegalPages],
   globals: [Header, Footer],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',

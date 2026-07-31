@@ -21,11 +21,11 @@ const jsxConverters: JSXConvertersFunction = ({ defaultConverters }) => ({
   heading: ({ node, nodesToJSX }) => {
     const tag = node.tag as 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
     const styles: Record<string, string> = {
-      h2: 'mb-3 font-bold',
-      h3: 'mb-3 font-bold',
-      h4: 'mb-2 font-bold',
+      h2: 'mb-3 font-medium',
+      h3: 'mb-3 font-medium',
+      h4: 'mb-2 font-medium',
       h5: 'mb-2',
-      h6: 'text-neutral-400 mb-2 uppercase tracking-widest',
+      h6: 'text-white mb-2 uppercase tracking-widest',
     }
     const Tag = tag
     return (

@@ -73,6 +73,7 @@ export interface Config {
     blogs: Blog;
     services: Service;
     'contact-submissions': ContactSubmission;
+    'legal-pages': LegalPage;
     'payload-kv': PayloadKv;
     'payload-jobs': PayloadJob;
     'payload-folders': FolderInterface;
@@ -92,6 +93,7 @@ export interface Config {
     blogs: BlogsSelect<false> | BlogsSelect<true>;
     services: ServicesSelect<false> | ServicesSelect<true>;
     'contact-submissions': ContactSubmissionsSelect<false> | ContactSubmissionsSelect<true>;
+    'legal-pages': LegalPagesSelect<false> | LegalPagesSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
     'payload-folders': PayloadFoldersSelect<false> | PayloadFoldersSelect<true>;
@@ -918,6 +920,7 @@ export interface ContactSubmission {
   email: string;
   phone?: string | null;
   subject?: string | null;
+  country?: string | null;
   message: string;
   status?: ('new' | 'in_progress' | 'resolved' | 'spam') | null;
   /**
@@ -926,6 +929,54 @@ export interface ContactSubmission {
   adminNotes?: string | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * Manage legal documents (Terms & Conditions, Privacy Policy).
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "legal-pages".
+ */
+export interface LegalPage {
+  id: string;
+  title: string;
+  /**
+   * Determines the URL path where this document is served.
+   */
+  slug: 'terms' | 'privacy-policy';
+  /**
+   * Shown at the top of the page as “Last updated”.
+   */
+  lastUpdated: string;
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  meta?: {
+    /**
+     * Title shown in search engine results. Recommended: 50–60 characters.
+     */
+    title?: string | null;
+    /**
+     * Description shown in search engine results. Recommended: 150–160 characters.
+     */
+    description?: string | null;
+    image?: (string | null) | Media;
+  };
+  publishedAt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1066,6 +1117,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'contact-submissions';
         value: string | ContactSubmission;
+      } | null)
+    | ({
+        relationTo: 'legal-pages';
+        value: string | LegalPage;
       } | null)
     | ({
         relationTo: 'payload-folders';
@@ -1813,11 +1868,33 @@ export interface ContactSubmissionsSelect<T extends boolean = true> {
   email?: T;
   phone?: T;
   subject?: T;
+  country?: T;
   message?: T;
   status?: T;
   adminNotes?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "legal-pages_select".
+ */
+export interface LegalPagesSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  lastUpdated?: T;
+  content?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+      };
+  publishedAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -2034,6 +2111,10 @@ export interface TaskSchedulePublish {
       | ({
           relationTo: 'services';
           value: string | Service;
+        } | null)
+      | ({
+          relationTo: 'legal-pages';
+          value: string | LegalPage;
         } | null);
     global?: string | null;
     user?: (string | null) | User;

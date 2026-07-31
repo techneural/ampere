@@ -11,6 +11,7 @@ import FormInput from '@/components/ui/FormInput'
 import AppButton from '@/components/ui/AppButton'
 import { FadeWrapper } from '@/components/animations'
 import toast from 'react-hot-toast'
+import { COUNTRY_NAMES } from '@/data/countries'
 
 // ── Types ─────────────────────────────────────────────────────────────
 type Props = {
@@ -31,6 +32,7 @@ type FormState = {
   email: string
   phone: string
   subject: string
+  country: string
   message: string
   agreed: boolean
 }
@@ -68,6 +70,7 @@ const ContactForm = (props: Props) => {
     email: '',
     phone: '',
     subject: '',
+    country: '',
     message: '',
     agreed: false,
   })
@@ -122,6 +125,8 @@ const ContactForm = (props: Props) => {
 
     if (!subject) errs.subject = 'Please select a subject.'
 
+    if (!form.country.trim()) errs.country = 'Please select a country.'
+
     if (!message) errs.message = 'Message is required.'
     else if (message.length < 10) errs.message = 'Message must be at least 10 characters.'
     else if (message.length > 500) errs.message = 'Message must not exceed 500 characters.'
@@ -131,7 +136,8 @@ const ContactForm = (props: Props) => {
     return errs
   }
 
-  // ── Real-time validation (safe now) ─────────────────────────────────
+  // Re-run validation whenever the form changes, but only surface errors for
+  // fields the user has already blurred (or after a submit attempt).
   useEffect(() => {
     const errs = validate()
     setErrors(errs)
@@ -148,9 +154,16 @@ const ContactForm = (props: Props) => {
           ...prev,
           [field]: field === 'phone' ? value.replace(/\D/g, '') : value,
         }))
-
-        setTouched((prev) => ({ ...prev, [field]: true }))
       },
+    [],
+  )
+
+  // Errors surface on blur, not while typing — flagging errors on the first
+  // keystroke reads as the form arguing with you.
+  const handleBlur = useCallback(
+    (field: keyof FormState) => () => {
+      setTouched((prev) => ({ ...prev, [field]: true }))
+    },
     [],
   )
 
@@ -158,24 +171,6 @@ const ContactForm = (props: Props) => {
     setForm((prev) => ({ ...prev, agreed: e.target.checked }))
     setTouched((prev) => ({ ...prev, agreed: true }))
   }, [])
-
-  const isFormValidExceptCheckbox = () => {
-    const name = form.name.trim()
-    const email = form.email.trim()
-    const phone = form.phone.replace(/\D/g, '')
-    const subject = form.subject.trim()
-    const message = form.message.trim()
-
-    if (!name || name.length < 3 || name.length > 50 || !/^[a-zA-Z\s]+$/.test(name)) return false
-    const domain = email.split('@')[1]?.toLowerCase()
-
-    if (!email || !emailRegex.test(email) || !allowedDomains.includes(domain)) return false
-    if (!phone || !/^\d{10}$/.test(phone)) return false
-    if (!subject) return false
-    if (!message || message.length < 10 || message.length > 500) return false
-
-    return true
-  }
 
   // ── Submit ─────────────────────────────────────────────────────────
   const handleSubmit = async (e: React.FormEvent) => {
@@ -191,6 +186,7 @@ const ContactForm = (props: Props) => {
       email: true,
       phone: true,
       subject: true,
+      country: true,
       message: true,
       agreed: true,
     })
@@ -222,6 +218,7 @@ const ContactForm = (props: Props) => {
           email: form.email.trim(),
           phone: form.phone.trim(),
           subject: form.subject,
+          country: form.country,
           message: form.message.trim(),
           recaptchaToken,
         }),
@@ -241,6 +238,7 @@ const ContactForm = (props: Props) => {
         email: '',
         phone: '',
         subject: '',
+        country: '',
         message: '',
         agreed: false,
       })
@@ -302,6 +300,7 @@ const ContactForm = (props: Props) => {
                   placeholder="Williams Christidass"
                   value={form.name}
                   onChange={handleChange('name')}
+                  onBlur={handleBlur('name')}
                   required
                 />
                 {touched.name && errors.name && (
@@ -316,6 +315,7 @@ const ContactForm = (props: Props) => {
                   placeholder="wills234@gmail.com"
                   value={form.email}
                   onChange={handleChange('email')}
+                  onBlur={handleBlur('email')}
                   required
                 />
                 {touched.email && errors.email && (
@@ -329,6 +329,7 @@ const ContactForm = (props: Props) => {
                   placeholder="Enter your number"
                   value={form.phone}
                   onChange={handleChange('phone')}
+                  onBlur={handleBlur('phone')}
                   required
                 />
                 {touched.phone && errors.phone && (
@@ -342,10 +343,25 @@ const ContactForm = (props: Props) => {
                   options={subjects?.map((s) => s.label) || []}
                   value={form.subject}
                   onChange={handleChange('subject')}
+                  onBlur={handleBlur('subject')}
                   required
                 />
                 {touched.subject && errors.subject && (
                   <p className="text-error text-xs mt-1">{errors.subject}</p>
+                )}
+              </div>
+
+              <div>
+                <FormSelect
+                  label="Country"
+                  options={COUNTRY_NAMES}
+                  value={form.country}
+                  onChange={handleChange('country')}
+                  onBlur={handleBlur('country')}
+                  required
+                />
+                {touched.country && errors.country && (
+                  <p className="text-error text-xs mt-1">{errors.country}</p>
                 )}
               </div>
 
@@ -355,6 +371,7 @@ const ContactForm = (props: Props) => {
                   placeholder="Enter your message"
                   value={form.message}
                   onChange={handleChange('message')}
+                  onBlur={handleBlur('message')}
                   required
                 />
                 {touched.message && errors.message && (
@@ -367,19 +384,18 @@ const ContactForm = (props: Props) => {
                   className="my-5"
                   checked={form.agreed}
                   onChange={handleCheckbox}
-                  disabled={!isFormValidExceptCheckbox()}
                   label={
                     <>
                       By sending this form, I agree to the{' '}
                       <Link
-                        href="/"
+                        href="/terms"
                         className="underline text-lg max-2xl:text-base max-xl:text-base max-lg:text-base max-md:text-base max-sm:text-sm"
                       >
-                        Terms of Service
+                        Terms of Condition
                       </Link>{' '}
                       and{' '}
                       <Link
-                        href="/"
+                        href="/privacy-policy"
                         className="underline text-lg max-2xl:text-base max-xl:text-base max-lg:text-base max-md:text-base max-sm:text-sm"
                       >
                         Privacy Policy
@@ -393,7 +409,7 @@ const ContactForm = (props: Props) => {
               </div>
 
               {/* reCAPTCHA v3 badge note */}
-              {siteKey && (
+              {/* {siteKey && (
                 <p className="text-xs text-white">
                   This site is protected by reCAPTCHA and the Google{' '}
                   <a
@@ -411,20 +427,20 @@ const ContactForm = (props: Props) => {
                     rel="noopener noreferrer"
                     className="underline"
                   >
-                    Terms of Service
+                    Terms and Conditions
                   </a>{' '}
                   apply.
                 </p>
-              )}
+              )} */}
 
               <AppButton
                 label={status === 'loading' ? 'Sending…' : 'Submit'}
                 variant="primary"
                 size="lg"
                 type="submit"
-                className='max-sm:btn-block'
+                className="max-sm:btn-block"
                 isLoading={status === 'loading'}
-                disabled={status === 'loading' || !isFormValidExceptCheckbox() || !form.agreed}
+                disabled={status === 'loading'}
               />
             </form>
           </div>

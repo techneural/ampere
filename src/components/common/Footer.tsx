@@ -82,8 +82,16 @@ const Footer = ({ data }: any) => {
             )}
           </div>
 
-          <div>
-            © {new Date().getFullYear()} {data?.copyright}
+          <div className="flex items-center gap-4 flex-wrap justify-center">
+            <Link href="/privacy-policy" className="hover:text-primary hover:underline">
+              Privacy Policy
+            </Link>
+            <Link href="/terms" className="hover:text-primary hover:underline">
+              Terms &amp; Conditions
+            </Link>
+            <span>
+              © {new Date().getFullYear()} {data?.copyright}
+            </span>
           </div>
         </div>
       </div>

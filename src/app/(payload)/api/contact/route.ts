@@ -1,5 +1,5 @@
 // src/app/(payload)/api/contact/route.ts
-import { NextRequest, NextResponse } from 'next/server'
+import { after, NextRequest, NextResponse } from 'next/server'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import { sendAdminNotification, sendUserConfirmation } from '@/lib/sendContactEmail'
@@ -31,6 +31,7 @@ export async function POST(req: NextRequest) {
         email?: string
         phone?: string
         subject?: string
+        country?: string
         message?: string
         recaptchaToken?: string
     }
@@ -41,7 +42,7 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 })
     }
 
-    const { name, email, phone, subject, message, recaptchaToken } = body
+    const { name, email, phone, subject, country, message, recaptchaToken } = body
 
     // 1. Basic validation
     if (!name?.trim() || !email?.trim() || !message?.trim()) {
@@ -79,6 +80,7 @@ export async function POST(req: NextRequest) {
             email: email.trim().toLowerCase(),
             phone: phone?.trim() || undefined,
             subject: subject?.trim() || undefined,
+            country: country?.trim() || undefined,
             message: message.trim(),
             status: 'new',
         },
@@ -91,17 +93,21 @@ export async function POST(req: NextRequest) {
         email: email.trim().toLowerCase(),
         phone: phone?.trim() || undefined,
         subject: subject?.trim() || undefined,
+        country: country?.trim() || undefined,
         message: message.trim(),
     }
 
-    await Promise.allSettled([
-        sendAdminNotification(emailData).catch((err) =>
-            console.error('[contact] Admin notification failed:', err),
-        ),
-        sendUserConfirmation(emailData).catch((err) =>
-            console.error('[contact] User confirmation failed:', err),
-        ),
-    ])
+    // Defer Mailjet sends past the response — the submission is already saved.
+    after(async () => {
+        await Promise.allSettled([
+            sendAdminNotification(emailData).catch((err) =>
+                console.error('[contact] Admin notification failed:', err),
+            ),
+            sendUserConfirmation(emailData).catch((err) =>
+                console.error('[contact] User confirmation failed:', err),
+            ),
+        ])
+    })
 
     return NextResponse.json({ message: 'Message received. We will be in touch soon!' }, { status: 201 })
 }

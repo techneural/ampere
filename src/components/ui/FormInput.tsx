@@ -6,6 +6,7 @@ type Props = {
   maxLength?: number
   required?: boolean
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
+  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void
 }
 
 const FormInput = ({
@@ -14,6 +15,7 @@ const FormInput = ({
   type = 'text',
   value,
   onChange,
+  onBlur,
   maxLength = 50,
   required = false,
 }: Props) => {
@@ -29,6 +31,7 @@ const FormInput = ({
         placeholder={placeholder}
         value={value}
         onChange={onChange}
+        onBlur={onBlur}
         maxLength={maxLength}
         className="w-full input input-primary input-bordered bg-base-100 max-sm:input-md"
       />

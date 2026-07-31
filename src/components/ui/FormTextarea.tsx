@@ -5,6 +5,7 @@ type Props = {
   maxLength?: number
   required?: boolean
   onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void
+  onBlur?: (e: React.FocusEvent<HTMLTextAreaElement>) => void
 }
 
 const FormTextarea = ({
@@ -12,6 +13,7 @@ const FormTextarea = ({
   placeholder,
   value,
   onChange,
+  onBlur,
   maxLength = 500,
   required = false,
 }: Props) => {
@@ -26,6 +28,7 @@ const FormTextarea = ({
         placeholder={placeholder}
         value={value}
         onChange={onChange}
+        onBlur={onBlur}
         className="w-full textarea textarea-primary textarea-bordered bg-base-100"
         maxLength={maxLength}
         rows={4}

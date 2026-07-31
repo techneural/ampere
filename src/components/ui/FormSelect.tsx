@@ -3,10 +3,11 @@ type Props = {
   options: string[]
   value?: string
   onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void
+  onBlur?: (e: React.FocusEvent<HTMLSelectElement>) => void
   required?: boolean
 }
 
-const FormSelect = ({ label, options, value, onChange, required = false }: Props) => {
+const FormSelect = ({ label, options, value, onChange, onBlur, required = false }: Props) => {
   return (
     <div className="flex flex-col gap-2">
       <label className="label">
@@ -18,6 +19,7 @@ const FormSelect = ({ label, options, value, onChange, required = false }: Props
       <select
         value={value ?? ''}
         onChange={onChange}
+        onBlur={onBlur}
         className="w-full select select-bordered text-neutral-400 select-primary bg-base-100"
       >
         <option value="" disabled>

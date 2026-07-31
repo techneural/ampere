@@ -60,14 +60,14 @@ const ContactForm = () => {
                 <>
                   By sending this form, I agree to the{' '}
                   <Link
-                    href="/"
+                    href="/terms"
                     className="underline text-lg max-2xl:text-base max-xl:text-base max-lg:text-base max-md:text-base max-sm:text-base"
                   >
-                    Terms of Service
+                    Terms of Condition
                   </Link>{' '}
                   and{' '}
                   <Link
-                    href="/"
+                    href="/privacy-policy"
                     className="underline text-lg max-2xl:text-base max-xl:text-base max-lg:text-base max-md:text-base max-sm:text-base"
                   >
                     Privacy Policy
